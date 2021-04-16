@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e -o pipefail
+
+OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
+APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
+
+
+oc adm inspect namespace/$OPERATOR_NS --dest-dir=must-gather || echo "Error getting logs from ${OPERATOR_NS}"
+oc adm inspect namespace/$MONITORING_NS --dest-dir=must-gather  || echo "Error getting logs from ${MONITORING_NS}"
+oc adm inspect namespace/$APPLICATIONS_NS --dest-dir=must-gather  || echo "Error getting logs from ${APPLICATIONS_NS}"
+
+
+exit 0
+
+
