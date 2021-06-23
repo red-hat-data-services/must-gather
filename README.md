@@ -14,7 +14,7 @@ The must-gather script currently collects data from following namespaces
 ## Usage
 
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:v0.0.1
+oc adm must-gather --image=quay.io/modh/must-gather:v1.0.0
 ```
 ## Developer Guide
 
