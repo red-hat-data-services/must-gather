@@ -8,6 +8,7 @@ for Red Hat OpenShift Data Science.
 The must-gather script currently collects data from following namespaces
 
 - redhat-ods-operator
+- rhods-notebooks
 - redhat-ods-applications
 - redhat-ods-monitoring
 
@@ -30,6 +31,7 @@ To collect data for custom repositories for Open Data Hub set the following vari
 
 ```
 export OPERATOR_NS= <name-for-operator-namespace>
+export NOTEBOOKS_NS= <name-for-notebooks-namespace>
 export MONITORING_NS= <name-for-monitoring-namespace>
 export APPLICATIONS_NS= <name-for-applications-namespace>
 
