@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+function version() {
+  version=''
+
+  # get version from odh/rhods csv
+  csv_name=$(oc get csv|grep rhods|awk '{print $1}')
+  [[ z == z"${version}" && z != z"${csv_name}" ]] && version=$(oc get csv $(oc get csv|grep rhods|awk '{print $1}') -o json|jq .spec.version |xargs)
+
+  # if version not found, get version from rhods operator
+  operator_name=$(oc get pod -n redhat-ods-operator --ignore-not-found |grep rhods-operator |awk '{print $1}')
+  [[ z != z"${operator_name}" ]] && version=$(oc exec ${operator_name} -n redhat-ods-operator -c rhods-operator -- env|grep OPERATOR_CONDITION_NAME|awk -F'=' '{print $2}'|     sed -n -r -e 's/.*([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(:?\.[[:digit:]])?(:?-[^@]+)?).*/\1/p')
+
+  # if version still not found, use Unknown
+  [[ z == z"${version}" ]] && version="Unknown"
+
+  echo ${version}
+}

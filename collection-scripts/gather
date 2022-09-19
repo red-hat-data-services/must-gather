@@ -1,16 +1,19 @@
 #!/bin/bash
 
-set -e -o pipefail
+# generate /must-gather/version file
+. version
+echo "opendatahub/must-gather" > /must-gather/version
+version >> /must-gather/version
 
 OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
 MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
 APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
 
-
 oc adm inspect namespace/$OPERATOR_NS --dest-dir=must-gather || echo "Error getting logs from ${OPERATOR_NS}"
+oc adm inspect namespace/$NOTEBOOKS_NS --dest-dir=must-gather || echo "Error getting logs from ${NOTEBOOKS_NS}"
 oc adm inspect namespace/$MONITORING_NS --dest-dir=must-gather  || echo "Error getting logs from ${MONITORING_NS}"
 oc adm inspect namespace/$APPLICATIONS_NS --dest-dir=must-gather  || echo "Error getting logs from ${APPLICATIONS_NS}"
-
 
 exit 0
 
