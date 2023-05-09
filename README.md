@@ -12,6 +12,9 @@ The must-gather script currently collects data from following namespaces
 - redhat-ods-applications
 - redhat-ods-monitoring
 
+The script collects data from all the namespaces that has -
+- `DataSciencePipelinesApplication` instances
+
 ## Usage
 
 ```
