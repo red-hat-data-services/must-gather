@@ -9,3 +9,5 @@ do
 oc adm inspect namespace/"$i" --dest-dir=must-gather || echo "Error getting logs from $i"
 
 done
+
+sync
