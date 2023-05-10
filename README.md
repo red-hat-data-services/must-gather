@@ -18,7 +18,7 @@ The script collects data from all the namespaces that has -
 ## Usage
 
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:v1.0.0
+oc adm must-gather --image=quay.io/modh/must-gather:stable
 ```
 ## Developer Guide
 
