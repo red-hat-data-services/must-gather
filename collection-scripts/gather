@@ -15,6 +15,8 @@ oc adm inspect namespace/$NOTEBOOKS_NS --dest-dir=must-gather || echo "Error get
 oc adm inspect namespace/$MONITORING_NS --dest-dir=must-gather  || echo "Error getting logs from ${MONITORING_NS}"
 oc adm inspect namespace/$APPLICATIONS_NS --dest-dir=must-gather  || echo "Error getting logs from ${APPLICATIONS_NS}"
 
-exit 0
+/usr/bin/gather_data_science_pipelines
+# force disk flush to ensure that all data gathered is accessible in the copy container
+sync
 
 

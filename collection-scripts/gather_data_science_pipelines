@@ -1,0 +1,13 @@
+#!/bin/bash
+
+datasciencepipelines=$(oc get DataSciencePipelinesApplication --all-namespaces -o=jsonpath='{range .items[*]}{.metadata.namespace}{"\n"}{end}')
+
+# Get logs from all Data Science Pipelines Application namespaces
+for i in $datasciencepipelines;
+do
+# Get pod logs for all the pods in Data Science Pipelines Application namespaces
+oc adm inspect namespace/"$i" --dest-dir=must-gather || echo "Error getting logs from $i"
+
+done
+
+sync
