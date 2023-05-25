@@ -1,0 +1,12 @@
+#!/bin/bash
+
+inferenceservices=$(oc get inferenceservice --all-namespaces -o=jsonpath='{range .items[*]}{.metadata.namespace}{"\n"}{end}')
+
+# Get logs from all Inferenceservices namespaces
+for i in $inferenceservices;
+do
+# Get pod logs for all the pods in Inferenceservices namespaces
+oc adm inspect namespace/"$i" --dest-dir=must-gather || echo "Error getting logs from $i"
+
+done
+
