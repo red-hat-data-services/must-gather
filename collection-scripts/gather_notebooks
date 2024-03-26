@@ -1,12 +1,7 @@
 #!/bin/bash
 
-notebooks=$(oc get notebook --all-namespaces -o=jsonpath='{range .items[*]}{.metadata.namespace}{"\n"}{end}')
+source "common.sh"
+resources=("notebooks")
 
-# Get logs from all notebook namespaces
-for i in $notebooks;
-do
-# Get pod logs for all the pods in Notebook namespaces
-oc adm inspect namespace/"$i" --dest-dir=must-gather || echo "Error getting logs from $i"
-
-done
-
+nslist=$(get_all_namespace "$resources")
+run_mustgather "$nslist"
