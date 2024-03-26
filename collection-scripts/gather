@@ -17,6 +17,10 @@ oc adm inspect namespace/$NOTEBOOKS_NS --dest-dir="$DST_DIR" || echo "Error gett
 oc adm inspect namespace/$MONITORING_NS --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
 oc adm inspect namespace/$APPLICATIONS_NS --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
 
+# add DSCI and DSC
+get_operator_resource dscinitialization
+get_operator_resource datasciencecluster
+
 # set component or default to all
 component=${COMPONENT:-all}
 case "$component" in

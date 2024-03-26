@@ -12,7 +12,9 @@ The must-gather script currently collects data from following default namespaces
 - redhat-ods-applications
 - redhat-ods-monitoring
 
-The script collects data from all the namespaces that has
+and datasciencecluster and dscinitialization instances from cluster
+
+This script also collects data from all the namespaces that has
 
 - `DataSciencePipelinesApplication` instances for Data Science Pipeline component
 - `appwrappers` `quotasubtrees` `gschedulingspecs` for Codeflare component

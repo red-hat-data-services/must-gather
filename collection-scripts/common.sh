@@ -38,3 +38,8 @@ function version() {
 
   echo ${version}
 }
+
+function get_operator_resource() {
+    CR=$(oc get $1 --no-headers | awk '{print $1}')
+    oc adm inspect "$1"/"$CR" --dest-dir "$DST_DIR" || echo "Error collecting info from ${CR}"
+}
