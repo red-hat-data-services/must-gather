@@ -38,6 +38,18 @@ export COMPONENT=kserve
 oc adm must-gather --image=quay.io/modh/must-gather:stable
 ```
 
+To collect for specific date(RFC3339):
+
+```
+export MUST_GATHER_SINCE_TIME=2024-03-28_16:01:23Z
+```
+
+To collect newer than a relative duration like 5s, 2m, or 3h
+
+```
+export MUST_GATHER_SINCE=3h
+```
+
 ## Developer Guide
 
 To build custom image :

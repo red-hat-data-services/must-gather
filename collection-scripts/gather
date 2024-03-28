@@ -2,6 +2,10 @@
 
 source "common.sh"
 
+# for new flag to get since and since-time
+get_log_collection_args
+
+
 # generate /must-gather/version file
 echo "opendatahub/must-gather" > /must-gather/version
 version >> /must-gather/version
@@ -12,10 +16,10 @@ NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
 MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
 APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
 
-oc adm inspect namespace/$OPERATOR_NS --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
-oc adm inspect namespace/$NOTEBOOKS_NS --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
-oc adm inspect namespace/$MONITORING_NS --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
-oc adm inspect namespace/$APPLICATIONS_NS --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
+oc adm inspect ${log_collection_args} namespace/$OPERATOR_NS --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
+oc adm inspect ${log_collection_args} namespace/$NOTEBOOKS_NS --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
+oc adm inspect ${log_collection_args} namespace/$MONITORING_NS --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
+oc adm inspect ${log_collection_args} namespace/$APPLICATIONS_NS --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
 
 # add DSCI and DSC
 get_operator_resource dscinitialization
