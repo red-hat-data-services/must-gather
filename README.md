@@ -31,7 +31,8 @@ To collect all
 oc adm must-gather --image=quay.io/modh/must-gather:stable
 ```
 
-To collect for only one component 'kserve':
+To collect for only one component  use env variable COMPONENT.
+for example to 'kserve':
 
 ```
 export COMPONENT=kserve
