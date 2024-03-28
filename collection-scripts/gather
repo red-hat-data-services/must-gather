@@ -34,7 +34,7 @@ case "$component" in
     "modelmesh")
         /usr/bin/gather_serving
         ;;
-    "ksever")
+    "kserve")
         /usr/bin/gather_serving
         ;;
     "dashboard")
