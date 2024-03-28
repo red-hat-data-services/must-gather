@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source "common.sh"
+resources=("clusterqueues" "localqueues" "multikueueclusters" "multikueueconfigs" "provisioningrequestconfigs" "resourceflavors" "workloads" "workloadpriorityclasses")
+
+nslist=$(get_all_namespace "$resources")
+run_mustgather "$nslist"
