@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "common.sh"
+source common.sh
 
 # for new flag to get since and since-time
 get_log_collection_args
@@ -16,10 +16,10 @@ NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
 MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
 APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
 
-oc adm inspect ${log_collection_args} namespace/$OPERATOR_NS --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
-oc adm inspect ${log_collection_args} namespace/$NOTEBOOKS_NS --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
-oc adm inspect ${log_collection_args} namespace/$MONITORING_NS --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
-oc adm inspect ${log_collection_args} namespace/$APPLICATIONS_NS --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
+oc adm inspect "${log_collection_args}" "namespace/$OPERATOR_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
+oc adm inspect "${log_collection_args}" "namespace/$NOTEBOOKS_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
+oc adm inspect "${log_collection_args}" "namespace/$MONITORING_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
+oc adm inspect "${log_collection_args}" "namespace/$APPLICATIONS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
 
 # add DSCI and DSC
 get_operator_resource dscinitialization
@@ -43,13 +43,14 @@ case "$component" in
     "workbench")
         /usr/bin/gather_notebooks
         ;;
-    "dw")
+    "codeflare")
         /usr/bin/gather_codeflare
+     ;;
+    "kuberay")
         /usr/bin/gather_kuberay
+     ;;
+    "kueue")
         /usr/bin/gather_kueue
-        ;;
-    "mr"
-        echo "TBD."
         ;;
     *) # for all 
         /usr/bin/gather_data_science_pipelines

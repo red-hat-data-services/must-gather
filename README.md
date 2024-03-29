@@ -20,8 +20,8 @@ This script also collects data from all the namespaces that has
 - `appwrappers` `quotasubtrees` `gschedulingspecs` for Codeflare component
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
-- `notebooks` for Workbench component
 - `inferenceservice` `inferencegraphs` for Kserve and ModelMesh component
+- `notebooks` for Workbench component
 
 ## Usage
 
@@ -31,7 +31,18 @@ To collect all
 oc adm must-gather --image=quay.io/modh/must-gather:stable
 ```
 
-To collect for only one component  use env variable COMPONENT.
+To collect for only one component use env variable COMPONENT.
+Full list of supported components see table below:
+| COMPONENT value    | Comments |
+| -------- | ------- |
+| dsp  | Data Science Pipeline    |
+| codeflare    | CodeFlare  |
+| kuberay |  KubeRay     |
+| kueue    | Kueue    |
+| kserve    | Kserve    |
+| modelmesh  | Model Mesh   |
+| workbench | Workbench    |
+
 for example to 'kserve':
 
 ```

@@ -7,4 +7,5 @@ RUN mv /usr/bin/gather /usr/bin/gather_original
 # copy all collection scripts to /usr/bin, including gather
 COPY collection-scripts/* /usr/bin/
 
-ENTRYPOINT /usr/bin/gather
+ENTRYPOINT ["/usr/bin/gather"]
+

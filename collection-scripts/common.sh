@@ -1,19 +1,21 @@
+#!/bin/bash
+
 export DST_DIR="must-gather"
 
 # run must-gather in the namespaces one by one
 function run_mustgather() {
-    for ns in $1; do
-        oc adm inspect ${log_collection_args} "namespace/$ns" --all-namespaces --dest-dir "$DST_DIR" || echo "Error inspecting namespace/$ns"
+    for ns in "$@"; do
+        oc adm inspect "${log_collection_args}" "namespace/$ns" --all-namespaces --dest-dir "$DST_DIR" || echo "Error inspecting namespace/$ns"
     done
 }
 
 # get the list of namespaces where defined resources exist
 function get_all_namespace() {
     local nslist
-    for kind in "$1"; do
+    for kind in "$@"; do
         nslist+=$(oc get "$kind" --all-namespaces -o=jsonpath='{range .items[*]}{.metadata.namespace}{"\n"}{end}')
     done
-    echo $(uniq_list "$nslist")
+    uniq_list "$nslist"
 }
 
 # remove dupplicated namespaces
@@ -27,7 +29,7 @@ function version() {
 
   # get version from rhoai csv
   csv_name=$(oc get csv|grep rhods|awk '{print $1}')
-  [[ z == z"${version}" && z != z"${csv_name}" ]] && version=$(oc get csv $(oc get csv|grep rhods|awk '{print $1}') -o json|jq .spec.version |xargs)
+  [[ z == z"${version}" && z != z"${csv_name}" ]] && version=$(oc get csv "$(oc get csv|grep rhods|awk '{print $1}')" -o json|jq .spec.version |xargs)
 
   # if version not found, get version from rhods operator pod's container
   operator_name=$(oc get pod -n redhat-ods-operator --ignore-not-found |grep redhat-ods-operator |awk '{print $1}')
@@ -40,8 +42,8 @@ function version() {
 }
 
 function get_operator_resource() {
-    CR=$(oc get $1 --no-headers | awk '{print $1}')
-    oc adm inspect ${log_collection_args} "$1"/"$CR" --dest-dir "$DST_DIR" || echo "Error collecting info from ${CR}"
+    CR=$(oc get "$1" --no-headers | awk '{print $1}')
+    oc adm inspect "${log_collection_args}" "$1"/"$CR" --dest-dir "$DST_DIR" || echo "Error collecting info from ${CR}"
 }
 
 
@@ -64,6 +66,7 @@ get_log_collection_args() {
 	# an ISO formatted time. since MUST_GATHER_SINCE and MUST_GATHER_SINCE_TIME
 	# are formatted differently, we re-format them so they can be used
 	# transparently by node-logs invocations.
+	# in RHOAI we do not use below logic for now
 	node_log_collection_args=""
 
 	if [ -n "${MUST_GATHER_SINCE:-}" ]; then

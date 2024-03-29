@@ -1,7 +1,8 @@
 #!/bin/bash
 
-source "common.sh"
+source common.sh
 resources=("DataSciencePipelinesApplication")
 
-nslist=$(get_all_namespace "$resources")
-run_mustgather "$nslist"
+nslist=$(get_all_namespace "${resources[@]}")
+
+run_mustgather "${nslist[@]}"
