@@ -1,6 +1,6 @@
 #!/bin/bash
-
-source "common.sh"
+# shellcheck disable=SC1091
+source common.sh
 resources=("rayclusters" "rayjobs" "rayservices")
 
 nslist=$(get_all_namespace "${resources[@]}")

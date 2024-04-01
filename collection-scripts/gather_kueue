@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# shellcheck disable=SC1091
 source common.sh
 resources=("clusterqueues" "localqueues" "multikueueclusters" "multikueueconfigs" "provisioningrequestconfigs" "resourceflavors" "workloads" "workloadpriorityclasses")
 

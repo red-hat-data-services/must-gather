@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034,SC2086,SC2001
 
 export DST_DIR="must-gather"
 
@@ -37,8 +38,7 @@ function version() {
 
   # if version still not found, use Unknown
   [[ z == z"${version}" ]] && version="Unknown"
-
-  echo ${version}
+  echo "${version}"
 }
 
 function get_operator_resource() {
