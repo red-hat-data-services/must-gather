@@ -24,20 +24,26 @@ function uniq_list() {
     echo "$@" | sort -u
 }
 
-# get the version of rhoai operator
+# get the version of RHOAI operator
 function version() {
   version=''
 
-  # get version from rhoai csv
-  csv_name=$(oc get csv|grep rhods|awk '{print $1}')
-  [[ z == z"${version}" && z != z"${csv_name}" ]] && version=$(oc get csv "$(oc get csv|grep rhods|awk '{print $1}')" -o json|jq .spec.version |xargs)
+  # get version from RHOAI csv
+  csv_name=$(oc get csv | awk '/rhods/{print $1}')
+  if [ -z "${version}" ] && [ -n "${csv_name}" ]; then
+	version=$(oc get csv "${csv_name}" -o json | jq .spec.version | xargs)
+  fi
 
-  # if version not found, get version from rhods operator pod's container
-  operator_name=$(oc get pod -n redhat-ods-operator --ignore-not-found |grep redhat-ods-operator |awk '{print $1}')
-  [[ z != z"${operator_name}" ]] && version=$(oc exec ${operator_name} -n redhat-ods-operator -c manager -- env|grep OPERATOR_CONDITION_NAME|awk -F'=' '{print $2}'| sed -n -r -e 's/.*([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(:?\.[[:digit:]])?(:?-[^@]+)?).*/\1/p')
-
+  # read env variable which set version from operator deployment
+  if [ -z "${version}" ]; then
+    version=$(oc get deployment rhods-operator -n redhat-ods-operator --output=json | jq '.spec.template.spec.containers[0].env[] | select(.name == "OPERATOR_VERSION").value')
+  fi
+ 
   # if version still not found, use Unknown
-  [[ z == z"${version}" ]] && version="Unknown"
+  if [ -z "${version}" ]; then
+	version="Unknown"
+  fi
+  
   echo "${version}"
 }
 
@@ -48,7 +54,7 @@ function get_operator_resource() {
 
 
 # cherrypick from https://github.com/openshift/must-gather/blob/4b03e40e374c2e8096d6043bcfd1c23dd4cd9d0b/collection-scripts/common.sh#L19
-# even we do not run "oc adm node-logs" in rhoai
+# even we do not run "oc adm node-logs" in RHOAI
 get_log_collection_args() {
 	# validation of MUST_GATHER_SINCE and MUST_GATHER_SINCE_TIME is done by the
 	# caller (oc adm must-gather) so it's safe to use the values as they are.
