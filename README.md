@@ -16,10 +16,10 @@ and datasciencecluster and dscinitialization instances from cluster
 
 This script also collects data from all the namespaces that has
 
-- `DataSciencePipelinesApplication` instances for Data Science Pipeline component
+- `datasciencepipelinesapplications` `scheduledworkflow` `spplications` `clusterworkflowtemplates` `cronworkflows` `viewers` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` for Data Science Pipeline component
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
-- `inferenceservice` `inferencegraphs` for Kserve and ModelMesh component
+- `inferenceservice` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` `clusterservingruntimes` for Kserve and ModelMesh component
 - `notebooks` for Workbench component
 
 ## Usage

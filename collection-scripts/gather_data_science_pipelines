@@ -1,7 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 source common.sh
-resources=("DataSciencePipelinesApplication")
+# for both DSPv1 and DSPv2
+resources=("datasciencepipelinesapplications" "scheduledworkflow" "spplications" "clusterworkflowtemplates" "cronworkflows" "viewers" "workfloweventbindings" "workflows" "workflowtaskresults" "workflowtemplates" "workflowtasksets")
 
 nslist=$(get_all_namespace "${resources[@]}")
 

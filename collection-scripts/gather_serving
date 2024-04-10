@@ -1,7 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 source common.sh
-resources=("inferenceservice" "inferencegraphs")
+resources=("inferenceservices" "inferencegraphs" "trainedmodels" "servingruntimes" "clusterstoragecontainers" "predictors" "clusterservingruntimes")
 
 nslist=$(get_all_namespace "${resources[@]}")
 run_mustgather "${nslist[@]}"
