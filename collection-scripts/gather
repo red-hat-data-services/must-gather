@@ -43,12 +43,9 @@ case "$component" in
     "workbench")
         /usr/bin/gather_notebooks
         ;;
-    "codeflare")
-        /usr/bin/gather_codeflare
-     ;;
     "kuberay")
         /usr/bin/gather_kuberay
-     ;;
+        ;;
     "kueue")
         /usr/bin/gather_kueue
         ;;
@@ -56,7 +53,6 @@ case "$component" in
         /usr/bin/gather_data_science_pipelines
         /usr/bin/gather_serving
         /usr/bin/gather_notebooks
-        /usr/bin/gather_codeflare
         /usr/bin/gather_kuberay
         /usr/bin/gather_kueue
         ;;

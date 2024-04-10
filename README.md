@@ -17,7 +17,6 @@ and datasciencecluster and dscinitialization instances from cluster
 This script also collects data from all the namespaces that has
 
 - `DataSciencePipelinesApplication` instances for Data Science Pipeline component
-- `appwrappers` `quotasubtrees` `gschedulingspecs` for Codeflare component
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
 - `inferenceservice` `inferencegraphs` for Kserve and ModelMesh component
@@ -36,7 +35,6 @@ Full list of supported components see table below:
 | COMPONENT value    | Comments |
 | -------- | ------- |
 | dsp  | Data Science Pipeline    |
-| codeflare    | CodeFlare  |
 | kuberay |  KubeRay     |
 | kueue    | Kueue    |
 | kserve    | Kserve    |
