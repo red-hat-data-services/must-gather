@@ -22,7 +22,7 @@ spec:
   - name: git-url
     value: '{{source_url}}'
   - name: output-image
-    value: quay.io/modh/must-gather:{{target_branch}}
+    value: quay.io/modh/must-gather:{{target_branch}}-{{revision}}
   - name: path-context
     value: .
   - name: revision
