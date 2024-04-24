@@ -22,7 +22,7 @@ spec:
   - name: git-url
     value: '{{source_url}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/rhoai-tenant/must-gather/must-gather-poc:{{revision}}
+    value: quay.io/modh/must-gather:{{target_branch}}
   - name: path-context
     value: .
   - name: revision
