@@ -1,0 +1,260 @@
+[renovate : renovate] 2024/04/29 12:35:44 warning: unsuccessful cred copy: ".docker" from "/tekton/creds" to "/": unable to create destination directory: mkdir /.docker: permission denied
+[renovate : renovate] DEBUG: Using RE2 regex engine
+[renovate : renovate] DEBUG: Parsing configs
+[renovate : renovate] DEBUG: Checking for config file in /configs/49275568.js
+[renovate : renovate] DEBUG: File config
+[renovate : renovate]        "config": {
+[renovate : renovate]          "platform": "github",
+[renovate : renovate]          "username": "red-hat-konflux[bot]",
+[renovate : renovate]          "gitAuthor": "red-hat-konflux <123456+red-hat-konflux[bot]@users.noreply.github.com>",
+[renovate : renovate]          "onboarding": false,
+[renovate : renovate]          "requireConfig": "ignored",
+[renovate : renovate]          "repositories": [
+[renovate : renovate]            {
+[renovate : renovate]              "repository": "red-hat-data-services/must-gather",
+[renovate : renovate]              "baseBranches": ["konflux-poc"]
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "enabledManagers": "regex",
+[renovate : renovate]          "customManagers": [
+[renovate : renovate]            {
+[renovate : renovate]              "fileMatch": [".*.env", ".*.json"],
+[renovate : renovate]              "customType": "regex",
+[renovate : renovate]              "datasourceTemplate": "docker",
+[renovate : renovate]              "matchStrings": [
+[renovate : renovate]                "quay.io/modh/must-gather(:.*)?@(?<currentDigest>sha256:[a-f0-9]+)"
+[renovate : renovate]              ],
+[renovate : renovate]              "currentValueTemplate": "konflux-poc-f765a5c24f6dd304d756239a2afe39b1b937e679",
+[renovate : renovate]              "depNameTemplate": "quay.io/modh/must-gather"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "registryAliases": {},
+[renovate : renovate]          "packageRules": [
+[renovate : renovate]            {"matchPackagePatterns": ["*"], "enabled": false},
+[renovate : renovate]            {
+[renovate : renovate]              "matchPackageNames": ["quay.io/modh/must-gather"],
+[renovate : renovate]              "groupName": "Component Update must-gather-poc",
+[renovate : renovate]              "branchName": "rhtap/component-updates/must-gather-poc",
+[renovate : renovate]              "commitMessageTopic": "must-gather-poc",
+[renovate : renovate]              "prFooter": "To execute skipped test pipelines write comment `/ok-to-test`",
+[renovate : renovate]              "recreateWhen": "always",
+[renovate : renovate]              "rebaseWhen": "behind-base-branch",
+[renovate : renovate]              "enabled": true,
+[renovate : renovate]              "followTag": "konflux-poc-f765a5c24f6dd304d756239a2afe39b1b937e679"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "forkProcessing": "enabled",
+[renovate : renovate]          "dependencyDashboard": false
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: CLI config
+[renovate : renovate]        "config": {}
+[renovate : renovate] DEBUG: Env config
+[renovate : renovate]        "config": {"hostRules": [], "token": "***********"}
+[renovate : renovate] DEBUG: Combined config
+[renovate : renovate]        "config": {
+[renovate : renovate]          "platform": "github",
+[renovate : renovate]          "username": "red-hat-konflux[bot]",
+[renovate : renovate]          "gitAuthor": "red-hat-konflux <123456+red-hat-konflux[bot]@users.noreply.github.com>",
+[renovate : renovate]          "onboarding": false,
+[renovate : renovate]          "requireConfig": "ignored",
+[renovate : renovate]          "repositories": [
+[renovate : renovate]            {
+[renovate : renovate]              "repository": "red-hat-data-services/must-gather",
+[renovate : renovate]              "baseBranches": ["konflux-poc"]
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "enabledManagers": "regex",
+[renovate : renovate]          "customManagers": [
+[renovate : renovate]            {
+[renovate : renovate]              "fileMatch": [".*.env", ".*.json"],
+[renovate : renovate]              "customType": "regex",
+[renovate : renovate]              "datasourceTemplate": "docker",
+[renovate : renovate]              "matchStrings": [
+[renovate : renovate]                "quay.io/modh/must-gather(:.*)?@(?<currentDigest>sha256:[a-f0-9]+)"
+[renovate : renovate]              ],
+[renovate : renovate]              "currentValueTemplate": "konflux-poc-f765a5c24f6dd304d756239a2afe39b1b937e679",
+[renovate : renovate]              "depNameTemplate": "quay.io/modh/must-gather"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "registryAliases": {},
+[renovate : renovate]          "packageRules": [
+[renovate : renovate]            {"matchPackagePatterns": ["*"], "enabled": false},
+[renovate : renovate]            {
+[renovate : renovate]              "matchPackageNames": ["quay.io/modh/must-gather"],
+[renovate : renovate]              "groupName": "Component Update must-gather-poc",
+[renovate : renovate]              "branchName": "rhtap/component-updates/must-gather-poc",
+[renovate : renovate]              "commitMessageTopic": "must-gather-poc",
+[renovate : renovate]              "prFooter": "To execute skipped test pipelines write comment `/ok-to-test`",
+[renovate : renovate]              "recreateWhen": "always",
+[renovate : renovate]              "rebaseWhen": "behind-base-branch",
+[renovate : renovate]              "enabled": true,
+[renovate : renovate]              "followTag": "konflux-poc-f765a5c24f6dd304d756239a2afe39b1b937e679"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "forkProcessing": "enabled",
+[renovate : renovate]          "dependencyDashboard": false,
+[renovate : renovate]          "hostRules": [],
+[renovate : renovate]          "token": "***********"
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: Enabling forkProcessing while in non-autodiscover mode
+[renovate : renovate] DEBUG: Found valid git version: 2.39.3
+[renovate : renovate] DEBUG: Setting global hostRules
+[renovate : renovate] DEBUG: Using default github endpoint: https://api.github.com/
+[renovate : renovate] DEBUG: Platform config
+[renovate : renovate]        "platformConfig": {
+[renovate : renovate]          "hostType": "github",
+[renovate : renovate]          "endpoint": "https://api.github.com/",
+[renovate : renovate]          "isGHApp": true,
+[renovate : renovate]          "isGhe": false
+[renovate : renovate]        },
+[renovate : renovate]        "renovateUsername": "red-hat-konflux[bot]"
+[renovate : renovate] DEBUG: Using configured gitAuthor (red-hat-konflux <123456+red-hat-konflux[bot]@users.noreply.github.com>)
+[renovate : renovate] DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+[renovate : renovate] DEBUG: Using baseDir: /tmp/renovate
+[renovate : renovate] DEBUG: Using cacheDir: /tmp/renovate/cache
+[renovate : renovate] DEBUG: Using containerbaseDir: /tmp/renovate/cache/containerbase
+[renovate : renovate] DEBUG: Initializing Renovate internal cache into /tmp/renovate/cache/renovate/renovate-cache-v1
+[renovate : renovate] DEBUG: Commits limit = null
+[renovate : renovate] DEBUG: Setting global hostRules
+[renovate : renovate] DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+[renovate : renovate] DEBUG: validatePresets()
+[renovate : renovate] DEBUG: Reinitializing hostRules for repo
+[renovate : renovate] DEBUG: Clearing hostRules
+[renovate : renovate] DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+[renovate : renovate]  INFO: Repository started (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "renovateVersion": "37.229.2"
+[renovate : renovate] DEBUG: Using localDir: /tmp/renovate/repos/github/red-hat-data-services/must-gather (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PackageFiles.clear() - Package files deleted (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: initRepo("red-hat-data-services/must-gather") (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: hostRules: authentication already set for api.github.com (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Using throttle 200 intervalMs for host api.github.com (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Using queue: host=api.github.com, concurrency=5 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: red-hat-data-services/must-gather default branch = main (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Using app token for git init (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Resetting npmrc (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Resetting npmrc (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: checkOnboarding() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: isOnboarded() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Config file will be ignored (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Repo is onboarded (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: migrateAndValidate() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: No config migration necessary (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Found repo ignorePaths (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "ignorePaths": ["**/node_modules/**", "**/bower_components/**"]
+[renovate : renovate] DEBUG: No vulnerability alerts enabled for repo (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: No vulnerability alerts found (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: baseBranches (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "baseBranches": ["konflux-poc"]
+[renovate : renovate] DEBUG: baseBranch: konflux-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: extract() (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Setting current branch to konflux-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Initializing git repository into /tmp/renovate/repos/github/red-hat-data-services/must-gather (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Performing blobless clone (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: git clone completed (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "durationMs": 291
+[renovate : renovate] DEBUG: latest repository commit (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "latestCommit": {
+[renovate : renovate]          "hash": "202587effcc0b9d77b7b58cf77aad13e2011a7f9",
+[renovate : renovate]          "date": "2023-05-26T11:25:03-04:00",
+[renovate : renovate]          "message": "Merge pull request #7 from VaishnaviHire/rhods_8369",
+[renovate : renovate]          "refs": "HEAD -> main, origin/main, origin/HEAD",
+[renovate : renovate]          "body": "Add Notebooks and Modelmesh scripts from upstream",
+[renovate : renovate]          "author_name": "Vaishnavi Hire",
+[renovate : renovate]          "author_email": "vhire@redhat.com"
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: latest commit (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "branchName": "konflux-poc",
+[renovate : renovate]        "latestCommitDate": "2024-04-29T17:53:59+05:30"
+[renovate : renovate] DEBUG: Using file match: .*.env for manager regex (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Using file match: .*.json for manager regex (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Matched 1 file(s) for manager regex: hack/metadata.env (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: manager extract durations (ms) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "managers": {"regex": 1}
+[renovate : renovate] DEBUG: Found 0 package file(s) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]  INFO: Dependency extraction complete (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "stats": {"managers": {}, "total": {"fileCount": 0, "depCount": 0}}
+[renovate : renovate] DEBUG: baseBranch: konflux-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: PackageFiles.add() - Package file saved for base branch (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Package releases lookups complete (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: branchifyUpgrades (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: detectSemanticCommits() (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: getCommitMessages (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: semanticCommits: detected "unknown" (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: semanticCommits: disabled (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: 0 flattened updates found:  (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Returning 0 branch(es) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: config.repoIsOnboarded=true (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: packageFiles with updates (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "config": {}
+[renovate : renovate] DEBUG: detectSemanticCommits() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: semanticCommits: returning "disabled" from cache (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: processRepo() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Processing 0 branches:  (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculating hourly PRs remaining (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: http cache: saving https://api.github.com/repos/red-hat-data-services/must-gather/pulls?per_page=100&state=all&sort=updated&direction=desc&page=1 (etag=W/"4e1c5ab4a3efbe1191db8ffa8b520024c48784319ec0dd4913665dc596de403f", lastModified=undefined) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: getPrList success (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "pullsTotal": 3,
+[renovate : renovate]        "requestsTotal": 1,
+[renovate : renovate]        "apiQuotaAffected": true
+[renovate : renovate] DEBUG: currentHourStart=2024-04-29T12:00:00.000+00:00 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PR hourly limit remaining: 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculating prConcurrentLimit (10) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: 0 PRs are currently open (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PR concurrent limit remaining: 10 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculated maximum PRs remaining this run: 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PullRequests limit = 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculating hourly PRs remaining (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: currentHourStart=2024-04-29T12:00:00.000+00:00 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PR hourly limit remaining: 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculating branchConcurrentLimit (10) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: 0 already existing branches found:  (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Branch concurrent limit remaining: 10 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculated maximum branches remaining this run: 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Branches limit = 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: ensureDependencyDashboard() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Closing Dependency Dashboard (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Retrieving issueList (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Retrieved 0 issues (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: validateReconfigureBranch() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: No reconfigure branch found (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Removing any stale branches (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: config.repoIsOnboarded=true (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: No renovate branches found (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PackageFiles.clear() - Package files deleted (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Repo is activated (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Branch summary (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "cacheModified": undefined,
+[renovate : renovate]        "baseBranches": [
+[renovate : renovate]          {
+[renovate : renovate]            "branchName": "konflux-poc",
+[renovate : renovate]            "sha": "f765a5c24f6dd304d756239a2afe39b1b937e679"
+[renovate : renovate]          }
+[renovate : renovate]        ],
+[renovate : renovate]        "branches": [],
+[renovate : renovate]        "defaultBranch": "main",
+[renovate : renovate]        "inactiveBranches": []
+[renovate : renovate] DEBUG: Renovate repository PR statistics (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "stats": {"total": 3, "open": 2, "closed": 0, "merged": 1}
+[renovate : renovate] DEBUG: Repository result: done, status: activated, enabled: true, onboarded: true (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Repository timing splits (milliseconds) (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "splits": {"init": 418, "extract": 444, "lookup": 6, "onboarding": 1, "update": 229},
+[renovate : renovate]        "total": 1222
+[renovate : renovate] DEBUG: Package cache statistics (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "get": {"count": 0},
+[renovate : renovate]        "set": {"count": 0}
+[renovate : renovate] DEBUG: http statistics (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "urls": {
+[renovate : renovate]          "https://api.github.com/graphql (POST,200)": 1,
+[renovate : renovate]          "https://api.github.com/repos/red-hat-data-services/must-gather/pulls (GET,200)": 1
+[renovate : renovate]        },
+[renovate : renovate]        "hostStats": {"api.github.com": {"requestCount": 2, "requestAvgMs": 165, "queueAvgMs": 1}},
+[renovate : renovate]        "totalRequests": 2
+[renovate : renovate] DEBUG: Package lookup durations (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: dns cache (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "hosts": []
+[renovate : renovate]  INFO: Repository finished (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "cloned": true,
+[renovate : renovate]        "durationMs": 1222
+[renovate : renovate] DEBUG: Checking file package cache for expired items
+[renovate : renovate] DEBUG: Deleted 0 of 0 file cached entries in 1ms
+
