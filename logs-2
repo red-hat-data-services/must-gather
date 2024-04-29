@@ -1,0 +1,505 @@
+[renovate : renovate] 2024/04/29 13:02:00 warning: unsuccessful cred copy: ".docker" from "/tekton/creds" to "/": unable to create destination directory: mkdir /.docker: permission denied
+[renovate : renovate] DEBUG: Using RE2 regex engine
+[renovate : renovate] DEBUG: Parsing configs
+[renovate : renovate] DEBUG: Checking for config file in /configs/49275568.js
+[renovate : renovate] DEBUG: File config
+[renovate : renovate]        "config": {
+[renovate : renovate]          "platform": "github",
+[renovate : renovate]          "username": "red-hat-konflux[bot]",
+[renovate : renovate]          "gitAuthor": "red-hat-konflux <123456+red-hat-konflux[bot]@users.noreply.github.com>",
+[renovate : renovate]          "onboarding": false,
+[renovate : renovate]          "requireConfig": "ignored",
+[renovate : renovate]          "repositories": [
+[renovate : renovate]            {
+[renovate : renovate]              "repository": "red-hat-data-services/must-gather",
+[renovate : renovate]              "baseBranches": ["konflux-poc"]
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "enabledManagers": "regex",
+[renovate : renovate]          "customManagers": [
+[renovate : renovate]            {
+[renovate : renovate]              "fileMatch": [".*.env", ".*.json"],
+[renovate : renovate]              "customType": "regex",
+[renovate : renovate]              "datasourceTemplate": "docker",
+[renovate : renovate]              "matchStrings": [
+[renovate : renovate]                "quay.io/modh/must-gather(:.*)?@(?<currentDigest>sha256:[a-f0-9]+)"
+[renovate : renovate]              ],
+[renovate : renovate]              "currentValueTemplate": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29",
+[renovate : renovate]              "depNameTemplate": "quay.io/modh/must-gather"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "registryAliases": {},
+[renovate : renovate]          "packageRules": [
+[renovate : renovate]            {"matchPackagePatterns": ["*"], "enabled": false},
+[renovate : renovate]            {
+[renovate : renovate]              "matchPackageNames": ["quay.io/modh/must-gather"],
+[renovate : renovate]              "groupName": "Component Update must-gather-poc",
+[renovate : renovate]              "branchName": "rhtap/component-updates/must-gather-poc",
+[renovate : renovate]              "commitMessageTopic": "must-gather-poc",
+[renovate : renovate]              "prFooter": "To execute skipped test pipelines write comment `/ok-to-test`",
+[renovate : renovate]              "recreateWhen": "always",
+[renovate : renovate]              "rebaseWhen": "behind-base-branch",
+[renovate : renovate]              "enabled": true,
+[renovate : renovate]              "followTag": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "forkProcessing": "enabled",
+[renovate : renovate]          "dependencyDashboard": false
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: CLI config
+[renovate : renovate]        "config": {}
+[renovate : renovate] DEBUG: Env config
+[renovate : renovate]        "config": {"hostRules": [], "token": "***********"}
+[renovate : renovate] DEBUG: Combined config
+[renovate : renovate]        "config": {
+[renovate : renovate]          "platform": "github",
+[renovate : renovate]          "username": "red-hat-konflux[bot]",
+[renovate : renovate]          "gitAuthor": "red-hat-konflux <123456+red-hat-konflux[bot]@users.noreply.github.com>",
+[renovate : renovate]          "onboarding": false,
+[renovate : renovate]          "requireConfig": "ignored",
+[renovate : renovate]          "repositories": [
+[renovate : renovate]            {
+[renovate : renovate]              "repository": "red-hat-data-services/must-gather",
+[renovate : renovate]              "baseBranches": ["konflux-poc"]
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "enabledManagers": "regex",
+[renovate : renovate]          "customManagers": [
+[renovate : renovate]            {
+[renovate : renovate]              "fileMatch": [".*.env", ".*.json"],
+[renovate : renovate]              "customType": "regex",
+[renovate : renovate]              "datasourceTemplate": "docker",
+[renovate : renovate]              "matchStrings": [
+[renovate : renovate]                "quay.io/modh/must-gather(:.*)?@(?<currentDigest>sha256:[a-f0-9]+)"
+[renovate : renovate]              ],
+[renovate : renovate]              "currentValueTemplate": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29",
+[renovate : renovate]              "depNameTemplate": "quay.io/modh/must-gather"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "registryAliases": {},
+[renovate : renovate]          "packageRules": [
+[renovate : renovate]            {"matchPackagePatterns": ["*"], "enabled": false},
+[renovate : renovate]            {
+[renovate : renovate]              "matchPackageNames": ["quay.io/modh/must-gather"],
+[renovate : renovate]              "groupName": "Component Update must-gather-poc",
+[renovate : renovate]              "branchName": "rhtap/component-updates/must-gather-poc",
+[renovate : renovate]              "commitMessageTopic": "must-gather-poc",
+[renovate : renovate]              "prFooter": "To execute skipped test pipelines write comment `/ok-to-test`",
+[renovate : renovate]              "recreateWhen": "always",
+[renovate : renovate]              "rebaseWhen": "behind-base-branch",
+[renovate : renovate]              "enabled": true,
+[renovate : renovate]              "followTag": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "forkProcessing": "enabled",
+[renovate : renovate]          "dependencyDashboard": false,
+[renovate : renovate]          "hostRules": [],
+[renovate : renovate]          "token": "***********"
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: Enabling forkProcessing while in non-autodiscover mode
+[renovate : renovate] DEBUG: Found valid git version: 2.39.3
+[renovate : renovate] DEBUG: Setting global hostRules
+[renovate : renovate] DEBUG: Using default github endpoint: https://api.github.com/
+[renovate : renovate] DEBUG: Platform config
+[renovate : renovate]        "platformConfig": {
+[renovate : renovate]          "hostType": "github",
+[renovate : renovate]          "endpoint": "https://api.github.com/",
+[renovate : renovate]          "isGHApp": true,
+[renovate : renovate]          "isGhe": false
+[renovate : renovate]        },
+[renovate : renovate]        "renovateUsername": "red-hat-konflux[bot]"
+[renovate : renovate] DEBUG: Using configured gitAuthor (red-hat-konflux <123456+red-hat-konflux[bot]@users.noreply.github.com>)
+[renovate : renovate] DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+[renovate : renovate] DEBUG: Using baseDir: /tmp/renovate
+[renovate : renovate] DEBUG: Using cacheDir: /tmp/renovate/cache
+[renovate : renovate] DEBUG: Using containerbaseDir: /tmp/renovate/cache/containerbase
+[renovate : renovate] DEBUG: Initializing Renovate internal cache into /tmp/renovate/cache/renovate/renovate-cache-v1
+[renovate : renovate] DEBUG: Commits limit = null
+[renovate : renovate] DEBUG: Setting global hostRules
+[renovate : renovate] DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+[renovate : renovate] DEBUG: validatePresets()
+[renovate : renovate] DEBUG: Reinitializing hostRules for repo
+[renovate : renovate] DEBUG: Clearing hostRules
+[renovate : renovate] DEBUG: Adding token authentication for api.github.com (hostType=github) to hostRules
+[renovate : renovate]  INFO: Repository started (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "renovateVersion": "37.229.2"
+[renovate : renovate] DEBUG: Using localDir: /tmp/renovate/repos/github/red-hat-data-services/must-gather (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PackageFiles.clear() - Package files deleted (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: initRepo("red-hat-data-services/must-gather") (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: hostRules: authentication already set for api.github.com (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Using throttle 200 intervalMs for host api.github.com (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Using queue: host=api.github.com, concurrency=5 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: red-hat-data-services/must-gather default branch = main (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Using app token for git init (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Resetting npmrc (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Resetting npmrc (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: checkOnboarding() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: isOnboarded() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Config file will be ignored (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Repo is onboarded (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: migrateAndValidate() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: No config migration necessary (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Found repo ignorePaths (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "ignorePaths": ["**/node_modules/**", "**/bower_components/**"]
+[renovate : renovate] DEBUG: No vulnerability alerts enabled for repo (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: No vulnerability alerts found (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: baseBranches (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "baseBranches": ["konflux-poc"]
+[renovate : renovate] DEBUG: baseBranch: konflux-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: extract() (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Setting current branch to konflux-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Initializing git repository into /tmp/renovate/repos/github/red-hat-data-services/must-gather (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Performing blobless clone (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: git clone completed (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "durationMs": 258
+[renovate : renovate] DEBUG: latest repository commit (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "latestCommit": {
+[renovate : renovate]          "hash": "202587effcc0b9d77b7b58cf77aad13e2011a7f9",
+[renovate : renovate]          "date": "2023-05-26T11:25:03-04:00",
+[renovate : renovate]          "message": "Merge pull request #7 from VaishnaviHire/rhods_8369",
+[renovate : renovate]          "refs": "HEAD -> main, origin/main, origin/HEAD",
+[renovate : renovate]          "body": "Add Notebooks and Modelmesh scripts from upstream",
+[renovate : renovate]          "author_name": "Vaishnavi Hire",
+[renovate : renovate]          "author_email": "vhire@redhat.com"
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: latest commit (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "branchName": "konflux-poc",
+[renovate : renovate]        "latestCommitDate": "2024-04-29T18:25:19+05:30"
+[renovate : renovate] DEBUG: Using file match: .*.env for manager regex (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Using file match: .*.json for manager regex (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Matched 1 file(s) for manager regex: hack/metadata.env (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: manager extract durations (ms) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "managers": {"regex": 6}
+[renovate : renovate] DEBUG: Found regex package files (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Found 1 package file(s) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]  INFO: Dependency extraction complete (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "stats": {
+[renovate : renovate]          "managers": {"regex": {"fileCount": 1, "depCount": 1}},
+[renovate : renovate]          "total": {"fileCount": 1, "depCount": 1}
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: baseBranch: konflux-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Dependency quay.io/modh/must-gather has unsupported/unversioned value konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29 (versioning=docker) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: getDigest(https://quay.io, modh/must-gather, konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: getManifestResponse(https://quay.io, modh/must-gather, sha256:c07d831808338a83e8e5aca3680f0d1730cdbd21da9a7f592e4ecd60973f45b4, head) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Using throttle 200 intervalMs for host quay.io (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Using queue: host=quay.io, concurrency=5 (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: HEAD https://quay.io/v2/modh/must-gather/manifests/sha256:c07d831808338a83e8e5aca3680f0d1730cdbd21da9a7f592e4ecd60973f45b4 = (code=ERR_NON_2XX_3XX_RESPONSE, statusCode=404 retryCount=0, duration=28) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Docker Manifest is unknown (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "err": {
+[renovate : renovate]          "name": "HTTPError",
+[renovate : renovate]          "code": "ERR_NON_2XX_3XX_RESPONSE",
+[renovate : renovate]          "timings": {
+[renovate : renovate]            "start": 1714395725466,
+[renovate : renovate]            "socket": 1714395725466,
+[renovate : renovate]            "lookup": 1714395725466,
+[renovate : renovate]            "connect": 1714395725466,
+[renovate : renovate]            "secureConnect": 1714395725466,
+[renovate : renovate]            "upload": 1714395725467,
+[renovate : renovate]            "response": 1714395725493,
+[renovate : renovate]            "end": 1714395725494,
+[renovate : renovate]            "phases": {
+[renovate : renovate]              "wait": 0,
+[renovate : renovate]              "dns": 0,
+[renovate : renovate]              "tcp": 0,
+[renovate : renovate]              "tls": 0,
+[renovate : renovate]              "request": 1,
+[renovate : renovate]              "firstByte": 26,
+[renovate : renovate]              "download": 1,
+[renovate : renovate]              "total": 28
+[renovate : renovate]            }
+[renovate : renovate]          },
+[renovate : renovate]          "message": "Response code 404 (NOT FOUND)",
+[renovate : renovate]          "stack": "HTTPError: Response code 404 (NOT FOUND)\n    at Request.<anonymous> (/home/renovate/node_modules/got/dist/source/as-promise/index.js:118:42)\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)",
+[renovate : renovate]          "options": {
+[renovate : renovate]            "headers": {
+[renovate : renovate]              "user-agent": "RenovateBot/37.229.2 (https://github.com/renovatebot/renovate)",
+[renovate : renovate]              "authorization": "***********",
+[renovate : renovate]              "accept": "application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.docker.distribution.manifest.v2+json, application/vnd.oci.image.manifest.v1+json, application/vnd.oci.image.index.v1+json",
+[renovate : renovate]              "accept-encoding": "gzip, deflate, br"
+[renovate : renovate]            },
+[renovate : renovate]            "url": "https://quay.io/v2/modh/must-gather/manifests/sha256:c07d831808338a83e8e5aca3680f0d1730cdbd21da9a7f592e4ecd60973f45b4",
+[renovate : renovate]            "hostType": "docker",
+[renovate : renovate]            "username": "",
+[renovate : renovate]            "password": "",
+[renovate : renovate]            "method": "HEAD",
+[renovate : renovate]            "http2": false
+[renovate : renovate]          },
+[renovate : renovate]          "response": {
+[renovate : renovate]            "statusCode": 404,
+[renovate : renovate]            "statusMessage": "NOT FOUND",
+[renovate : renovate]            "body": "",
+[renovate : renovate]            "headers": {
+[renovate : renovate]              "date": "Mon, 29 Apr 2024 13:02:05 GMT",
+[renovate : renovate]              "content-type": "application/json",
+[renovate : renovate]              "content-length": "82",
+[renovate : renovate]              "connection": "keep-alive",
+[renovate : renovate]              "server": "nginx/1.22.1",
+[renovate : renovate]              "vary": "Cookie"
+[renovate : renovate]            },
+[renovate : renovate]            "httpVersion": "1.1",
+[renovate : renovate]            "retryCount": 0
+[renovate : renovate]          }
+[renovate : renovate]        },
+[renovate : renovate]        "registryHost": "https://quay.io",
+[renovate : renovate]        "dockerRepository": "modh/must-gather",
+[renovate : renovate]        "tag": "sha256:c07d831808338a83e8e5aca3680f0d1730cdbd21da9a7f592e4ecd60973f45b4"
+[renovate : renovate] DEBUG: getManifestResponse(https://quay.io, modh/must-gather, konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29, head) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Got docker digest sha256:6cf419a59afbdbda7aab103923b6c72dba94937d04e1c0d7529c456754dda0cd (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: PackageFiles.add() - Package file saved for base branch (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Package releases lookups complete (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: branchifyUpgrades (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: detectSemanticCommits() (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: getCommitMessages (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: semanticCommits: detected "angular" (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: semanticCommits: enabled (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: 1 flattened updates found: quay.io/modh/must-gather (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: Returning 1 branch(es) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: config.repoIsOnboarded=true (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate] DEBUG: packageFiles with updates (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc)
+[renovate : renovate]        "config": {
+[renovate : renovate]          "regex": [
+[renovate : renovate]            {
+[renovate : renovate]              "deps": [
+[renovate : renovate]                {
+[renovate : renovate]                  "depName": "quay.io/modh/must-gather",
+[renovate : renovate]                  "currentValue": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29",
+[renovate : renovate]                  "currentDigest": "sha256:c07d831808338a83e8e5aca3680f0d1730cdbd21da9a7f592e4ecd60973f45b4",
+[renovate : renovate]                  "datasource": "docker",
+[renovate : renovate]                  "replaceString": "quay.io/modh/must-gather@sha256:c07d831808338a83e8e5aca3680f0d1730cdbd21da9a7f592e4ecd60973f45b4",
+[renovate : renovate]                  "updates": [
+[renovate : renovate]                    {
+[renovate : renovate]                      "updateType": "digest",
+[renovate : renovate]                      "newValue": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29",
+[renovate : renovate]                      "newDigest": "sha256:6cf419a59afbdbda7aab103923b6c72dba94937d04e1c0d7529c456754dda0cd",
+[renovate : renovate]                      "branchName": "rhtap/component-updates/must-gather-poc"
+[renovate : renovate]                    }
+[renovate : renovate]                  ],
+[renovate : renovate]                  "packageName": "quay.io/modh/must-gather",
+[renovate : renovate]                  "versioning": "docker",
+[renovate : renovate]                  "warnings": []
+[renovate : renovate]                }
+[renovate : renovate]              ],
+[renovate : renovate]              "matchStrings": [
+[renovate : renovate]                "quay.io/modh/must-gather(:.*)?@(?<currentDigest>sha256:[a-f0-9]+)"
+[renovate : renovate]              ],
+[renovate : renovate]              "depNameTemplate": "quay.io/modh/must-gather",
+[renovate : renovate]              "currentValueTemplate": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29",
+[renovate : renovate]              "datasourceTemplate": "docker",
+[renovate : renovate]              "packageFile": "hack/metadata.env"
+[renovate : renovate]            }
+[renovate : renovate]          ]
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: detectSemanticCommits() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: semanticCommits: returning "enabled" from cache (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: processRepo() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Processing 1 branch: rhtap/component-updates/must-gather-poc (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculating hourly PRs remaining (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: http cache: saving https://api.github.com/repos/red-hat-data-services/must-gather/pulls?per_page=100&state=all&sort=updated&direction=desc&page=1 (etag=W/"4fb982194e6a0a8f6a8512b4d9d44a54a1e51cf8933e39f8255a15686e014e7d", lastModified=undefined) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: getPrList success (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "pullsTotal": 4,
+[renovate : renovate]        "requestsTotal": 1,
+[renovate : renovate]        "apiQuotaAffected": true
+[renovate : renovate] DEBUG: currentHourStart=2024-04-29T13:00:00.000+00:00 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PR hourly limit remaining: 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculating prConcurrentLimit (10) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: getBranchPr(rhtap/component-updates/must-gather-poc) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: findPr(rhtap/component-updates/must-gather-poc, undefined, open) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: findPr(rhtap/component-updates/must-gather-poc, undefined, closed) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: 0 PRs are currently open (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PR concurrent limit remaining: 10 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculated maximum PRs remaining this run: 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PullRequests limit = 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculating hourly PRs remaining (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: currentHourStart=2024-04-29T13:00:00.000+00:00 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PR hourly limit remaining: 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculating branchConcurrentLimit (10) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: 0 already existing branches found:  (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Branch concurrent limit remaining: 10 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Calculated maximum branches remaining this run: 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Branches limit = 2 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: syncBranchState() (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: syncBranchState(): Branch cache not found, creating minimal branchState (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: getBranchPr(rhtap/component-updates/must-gather-poc) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: findPr(rhtap/component-updates/must-gather-poc, undefined, open) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: findPr(rhtap/component-updates/must-gather-poc, undefined, closed) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: branchExists=false (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: dependencyDashboardCheck=undefined (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: recreateClosed is true. No need to check for closed PR. (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Checking schedule(at any time, null) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: No schedule defined (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Branch needs creating (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Using reuseExistingBranch: false (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Setting current branch to konflux-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: latest commit (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "branchName": "konflux-poc",
+[renovate : renovate]        "latestCommitDate": "2024-04-29T18:25:19+05:30"
+[renovate : renovate] DEBUG: manager.getUpdatedPackageFiles() reuseExistingBranch=false (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Starting search at index 12 (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, packageFile=hack/metadata.env, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "depName": "quay.io/modh/must-gather"
+[renovate : renovate] DEBUG: Found match at index 12 (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, packageFile=hack/metadata.env, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "depName": "quay.io/modh/must-gather"
+[renovate : renovate] DEBUG: Contents updated (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, packageFile=hack/metadata.env, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "depName": "quay.io/modh/must-gather"
+[renovate : renovate] DEBUG: Updated 1 package files (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: No updated lock files in branch (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: 1 file(s) to commit (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Preparing files for committing to branch rhtap/component-updates/must-gather-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Setting git author name: red-hat-konflux (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Setting git author email: 123456+red-hat-konflux[bot]@users.noreply.github.com (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: git commit (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "deletedFiles": [],
+[renovate : renovate]        "ignoredFiles": [],
+[renovate : renovate]        "result": {
+[renovate : renovate]          "author": null,
+[renovate : renovate]          "branch": "rhtap/component-updates/must-gather-poc",
+[renovate : renovate]          "commit": "76cb94b6f859e4bd1971a4cacebe083ae1990f7a",
+[renovate : renovate]          "root": false,
+[renovate : renovate]          "summary": {"changes": 1, "insertions": 1, "deletions": 1}
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: Pushing refSpec rhtap/component-updates/must-gather-poc:rhtap/component-updates/must-gather-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: git push (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "result": {
+[renovate : renovate]          "pushed": [
+[renovate : renovate]            {
+[renovate : renovate]              "deleted": false,
+[renovate : renovate]              "tag": false,
+[renovate : renovate]              "branch": true,
+[renovate : renovate]              "new": true,
+[renovate : renovate]              "alreadyUpdated": false,
+[renovate : renovate]              "local": "refs/heads/rhtap/component-updates/must-gather-poc",
+[renovate : renovate]              "remote": "refs/heads/rhtap/component-updates/must-gather-poc"
+[renovate : renovate]            }
+[renovate : renovate]          ],
+[renovate : renovate]          "ref": {
+[renovate : renovate]            "local": "refs/remotes/origin/rhtap/component-updates/must-gather-poc"
+[renovate : renovate]          },
+[renovate : renovate]          "remoteMessages": {
+[renovate : renovate]            "all": [
+[renovate : renovate]              "Create a pull request for 'rhtap/component-updates/must-gather-poc' on GitHub by visiting:",
+[renovate : renovate]              "https://github.com/red-hat-data-services/must-gather/pull/new/rhtap/component-updates/must-gather-poc"
+[renovate : renovate]            ],
+[renovate : renovate]            "pullRequestUrl": "https://github.com/red-hat-data-services/must-gather/pull/new/rhtap/component-updates/must-gather-poc"
+[renovate : renovate]          }
+[renovate : renovate]        }
+[renovate : renovate] DEBUG: Setting current branch to konflux-poc (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: latest commit (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "branchName": "konflux-poc",
+[renovate : renovate]        "latestCommitDate": "2024-04-29T18:25:19+05:30"
+[renovate : renovate]  INFO: Branch created (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "commitSha": "76cb94b6f859e4bd1971a4cacebe083ae1990f7a"
+[renovate : renovate] DEBUG: Ensuring PR (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: There are 0 errors and 0 warnings (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: getBranchPr(rhtap/component-updates/must-gather-poc) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: findPr(rhtap/component-updates/must-gather-poc, undefined, open) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: findPr(rhtap/component-updates/must-gather-poc, undefined, closed) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: getPrCache() (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Creating PR (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "prTitle": "chore(deps): update must-gather-poc to 6cf419a"
+[renovate : renovate] DEBUG: Creating PR (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "title": "chore(deps): update must-gather-poc to 6cf419a",
+[renovate : renovate]        "head": "red-hat-data-services:rhtap/component-updates/must-gather-poc",
+[renovate : renovate]        "base": "konflux-poc",
+[renovate : renovate]        "draft": false
+[renovate : renovate] DEBUG: PR created (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "pr": 14,
+[renovate : renovate]        "draft": false
+[renovate : renovate] DEBUG: Adding labels '' to #14 (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]  INFO: PR created (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate]        "pr": 14,
+[renovate : renovate]        "prTitle": "chore(deps): update must-gather-poc to 6cf419a"
+[renovate : renovate] DEBUG: addParticipants(pr=14) (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: setPrCache() (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: Created Pull Request #14 (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: PR is not configured for automerge (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: setBranchCommit() (repository=red-hat-data-services/must-gather, baseBranch=konflux-poc, branch=rhtap/component-updates/must-gather-poc)
+[renovate : renovate] DEBUG: getBranchPr(rhtap/component-updates/must-gather-poc) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: findPr(rhtap/component-updates/must-gather-poc, undefined, open) (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Found PR #14 (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: getPrCache() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: ensureDependencyDashboard() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Closing Dependency Dashboard (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Retrieving issueList (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Retrieved 0 issues (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: validateReconfigureBranch() (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: No reconfigure branch found (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Removing any stale branches (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: config.repoIsOnboarded=true (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: No renovate branches found (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: PackageFiles.clear() - Package files deleted (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Repo is activated (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Branch summary (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "cacheModified": undefined,
+[renovate : renovate]        "baseBranches": [
+[renovate : renovate]          {
+[renovate : renovate]            "branchName": "konflux-poc",
+[renovate : renovate]            "sha": "8011221f7a0935b02364762b814efd2de3a47e29"
+[renovate : renovate]          }
+[renovate : renovate]        ],
+[renovate : renovate]        "branches": [
+[renovate : renovate]          {
+[renovate : renovate]            "automerge": false,
+[renovate : renovate]            "baseBranch": "konflux-poc",
+[renovate : renovate]            "baseBranchSha": "8011221f7a0935b02364762b814efd2de3a47e29",
+[renovate : renovate]            "branchName": "rhtap/component-updates/must-gather-poc",
+[renovate : renovate]            "branchSha": "76cb94b6f859e4bd1971a4cacebe083ae1990f7a",
+[renovate : renovate]            "isModified": false,
+[renovate : renovate]            "isPristine": true
+[renovate : renovate]          }
+[renovate : renovate]        ],
+[renovate : renovate]        "defaultBranch": "main",
+[renovate : renovate]        "inactiveBranches": []
+[renovate : renovate] DEBUG: branches info extended (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "branchesInformation": [
+[renovate : renovate]          {
+[renovate : renovate]            "branchName": "rhtap/component-updates/must-gather-poc",
+[renovate : renovate]            "prNo": 14,
+[renovate : renovate]            "prTitle": "chore(deps): update must-gather-poc to 6cf419a",
+[renovate : renovate]            "result": "pr-created",
+[renovate : renovate]            "upgrades": [
+[renovate : renovate]              {
+[renovate : renovate]                "datasource": "docker",
+[renovate : renovate]                "depName": "quay.io/modh/must-gather",
+[renovate : renovate]                "displayPending": "",
+[renovate : renovate]                "currentValue": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29",
+[renovate : renovate]                "newValue": "konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29",
+[renovate : renovate]                "packageFile": "hack/metadata.env",
+[renovate : renovate]                "updateType": "digest",
+[renovate : renovate]                "packageName": "quay.io/modh/must-gather"
+[renovate : renovate]              }
+[renovate : renovate]            ]
+[renovate : renovate]          }
+[renovate : renovate]        ]
+[renovate : renovate] DEBUG: Renovate repository PR statistics (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "stats": {"total": 5, "open": 1, "closed": 2, "merged": 2}
+[renovate : renovate] DEBUG: Repository result: done, status: activated, enabled: true, onboarded: true (repository=red-hat-data-services/must-gather)
+[renovate : renovate] DEBUG: Repository timing splits (milliseconds) (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "splits": {"init": 358, "extract": 420, "lookup": 693, "onboarding": 0, "update": 2203},
+[renovate : renovate]        "total": 3803
+[renovate : renovate] DEBUG: Package cache statistics (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "get": {"count": 2, "totalMs": 1, "avgMs": 1, "medianMs": 0, "maxMs": 1},
+[renovate : renovate]        "set": {"count": 2, "totalMs": 10, "avgMs": 5, "medianMs": 3, "maxMs": 7}
+[renovate : renovate] DEBUG: http statistics (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "urls": {
+[renovate : renovate]          "https://api.github.com/graphql (POST,200)": 1,
+[renovate : renovate]          "https://api.github.com/repos/red-hat-data-services/must-gather/pulls (GET,200)": 1,
+[renovate : renovate]          "https://api.github.com/repos/red-hat-data-services/must-gather/pulls (POST,201)": 1,
+[renovate : renovate]          "https://quay.io/v2/ (GET,401)": 1,
+[renovate : renovate]          "https://quay.io/v2/auth (GET,200)": 1,
+[renovate : renovate]          "https://quay.io/v2/modh/must-gather/manifests/konflux-poc-8011221f7a0935b02364762b814efd2de3a47e29 (HEAD,200)": 1,
+[renovate : renovate]          "https://quay.io/v2/modh/must-gather/manifests/sha256:c07d831808338a83e8e5aca3680f0d1730cdbd21da9a7f592e4ecd60973f45b4 (HEAD,404)": 1
+[renovate : renovate]        },
+[renovate : renovate]        "hostStats": {
+[renovate : renovate]          "api.github.com": {"requestCount": 3, "requestAvgMs": 394, "queueAvgMs": 3},
+[renovate : renovate]          "quay.io": {"requestCount": 4, "requestAvgMs": 42, "queueAvgMs": 112}
+[renovate : renovate]        },
+[renovate : renovate]        "totalRequests": 7
+[renovate : renovate] DEBUG: Package lookup durations (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "docker": {"count": 1, "averageMs": 648, "totalMs": 648, "maximumMs": 648}
+[renovate : renovate] DEBUG: dns cache (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "hosts": []
+[renovate : renovate]  INFO: Repository finished (repository=red-hat-data-services/must-gather)
+[renovate : renovate]        "cloned": true,
+[renovate : renovate]        "durationMs": 3803
+[renovate : renovate] DEBUG: Checking file package cache for expired items
+[renovate : renovate] DEBUG: Deleted 0 of 2 file cached entries in 5ms
+
