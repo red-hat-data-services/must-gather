@@ -16,7 +16,7 @@ metadata:
     pipelines.appstudio.openshift.io/type: build
   name: must-gather-poc-on-push
   namespace: rhoai-tenant
-# test
+
 spec:
   params:
   - name: dockerfile
