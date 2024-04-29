@@ -27,7 +27,7 @@ jobs:
           echo ${{ github.event.pull_request.title }}
           
       - name: instant-merge
-        if: ${{ github.event.sender.login == 'red-hat-konflux[bot]' && startsWith(github.event.pull_request.title, 'chore(deps): update must-gather') }}
+        if: ${{ github.event.sender.login == 'red-hat-konflux[bot]' && startsWith(github.event.pull_request.title, 'chore(deps):/ update must-gather') }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
