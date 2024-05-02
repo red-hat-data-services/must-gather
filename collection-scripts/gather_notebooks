@@ -2,6 +2,6 @@
 # shellcheck disable=SC1091
 source common.sh
 resources=("notebooks")
-
 nslist=$(get_all_namespace "${resources[@]}")
+
 run_mustgather "${nslist[@]}"

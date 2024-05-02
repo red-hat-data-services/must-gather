@@ -16,11 +16,11 @@ and datasciencecluster and dscinitialization instances from cluster
 
 This script also collects data from all the namespaces that has
 
-- `datasciencepipelinesapplications` `scheduledworkflow` `spplications` `clusterworkflowtemplates` `cronworkflows` `viewers` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` for Data Science Pipeline component
+- `datasciencepipelinesapplications` `scheduledworkflow` `applications` `clusterworkflowtemplates` `cronworkflows` `viewers` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` for Data Science Pipeline component
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
 - `mpijobs` `mxjobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob`  for Kubeflow Training Operator
-- `inferenceservice` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` `clusterservingruntimes` for Kserve and ModelMesh component
+- `inferenceservice` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve and ModelMesh component
 - `notebooks` for Workbench component
 
 ## Usage
@@ -50,15 +50,21 @@ export COMPONENT=kserve
 oc adm must-gather --image=quay.io/modh/must-gather:stable
 ```
 
-To collect for specific date(RFC3339):
+To collect logs after a specific date (RFC3339).
+Defaults to all logs.
+If this value is in the future, no logs will be returned.
+If this value precedes the time a pod was started, only logs since the pod start will be returned.
+Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
-```
-export MUST_GATHER_SINCE_TIME=2024-03-28_16:01:23Z
+```cmd
+MUST_GATHER_SINCE_TIME=2024-05-02T14:01:23Z
 ```
 
-To collect newer than a relative duration like 5s, 2m, or 3h
+To collect logs newer than a relative duration like 5s, 2m, or 3h.
+Defaults to all logs.
+Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
-```
+```cmd
 export MUST_GATHER_SINCE=3h
 ```
 

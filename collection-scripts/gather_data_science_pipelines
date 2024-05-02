@@ -2,7 +2,7 @@
 # shellcheck disable=SC1091
 source common.sh
 # for both DSPv1 and DSPv2
-resources=("datasciencepipelinesapplications" "scheduledworkflow" "spplications" "clusterworkflowtemplates" "cronworkflows" "viewers" "workfloweventbindings" "workflows" "workflowtaskresults" "workflowtemplates" "workflowtasksets")
+resources=("datasciencepipelinesapplications" "scheduledworkflow" "applications" "clusterworkflowtemplates" "cronworkflows" "viewers" "workfloweventbindings" "workflows" "workflowtaskresults" "workflowtemplates" "workflowtasksets")
 
 nslist=$(get_all_namespace "${resources[@]}")
 

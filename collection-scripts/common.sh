@@ -1,12 +1,13 @@
 #!/bin/bash
-# shellcheck disable=SC2034,SC2086,SC2001
+# shellcheck disable=SC2034,SC2086,SC2001,SC2068
+# be careful of 2068, oc is very sensitive with "" on variables with error error: there is no need to specify a resource type as a separate argument when passing arguments in resource/name form (e.g. 'oc get resource/<resource_name>' instead of 'oc get resource resource/<resource_name>'
 
 export DST_DIR="must-gather"
 
 # run must-gather in the namespaces one by one
 function run_mustgather() {
-    for ns in "$@"; do
-        oc adm inspect "${log_collection_args}" "namespace/$ns" --all-namespaces --dest-dir "$DST_DIR" || echo "Error inspecting namespace/$ns"
+    for ns in $@; do
+        oc adm inspect $log_collection_args namespace/$ns --dest-dir $DST_DIR || echo "Error inspecting namespace/$ns"
     done
 }
 
@@ -14,7 +15,7 @@ function run_mustgather() {
 function get_all_namespace() {
     local nslist
     for kind in "$@"; do
-        nslist+=$(oc get "$kind" --all-namespaces -o=jsonpath='{range .items[*]}{.metadata.namespace}{"\n"}{end}')
+        nslist+=$(oc get "$kind" --all-namespaces -o jsonpath='{range .items[*]}{.metadata.namespace}{" "}{end}')
     done
     uniq_list "$nslist"
 }
@@ -25,18 +26,18 @@ function uniq_list() {
 }
 
 # get the version of RHOAI operator
-function version() {
+function rhoai_version() {
   version=''
 
   # get version from RHOAI csv
-  csv_name=$(oc get csv | awk '/rhods/{print $1}')
+  csv_name=$(oc get clusterserviceversions| awk '/rhods/{print $1}')
   if [ -z "${version}" ] && [ -n "${csv_name}" ]; then
-	version=$(oc get csv "${csv_name}" -o json | jq .spec.version | xargs)
+	version=$(oc get csv/"${csv_name}" -o json | jq .spec.version | xargs)
   fi
 
-  # read env variable which set version from operator deployment
+  # read label from operator deployment
   if [ -z "${version}" ]; then
-    version=$(oc get deployment rhods-operator -n redhat-ods-operator --output=json | jq '.spec.template.spec.containers[0].env[] | select(.name == "OPERATOR_VERSION").value')
+    version=$(oc get deployment/rhods-operator -n redhat-ods-operator --output=json | jq '.metadata.labels."olm.owner"')
   fi
  
   # if version still not found, use Unknown
@@ -49,7 +50,7 @@ function version() {
 
 function get_operator_resource() {
     CR=$(oc get "$1" --no-headers | awk '{print $1}')
-    oc adm inspect "${log_collection_args}" "$1"/"$CR" --dest-dir "$DST_DIR" || echo "Error collecting info from ${CR}"
+    oc adm inspect $log_collection_args "$1"/"$CR" --dest-dir "$DST_DIR" || echo "Error collecting info from ${CR}"
 }
 
 

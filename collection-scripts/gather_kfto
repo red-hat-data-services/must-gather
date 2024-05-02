@@ -4,4 +4,6 @@ source common.sh
 resources=("mpijobs" "mpijobs" "mxjobs" "paddlejobs" "pytorchjob" "tfjob" "xgboostjob")
 
 nslist=$(get_all_namespace "${resources[@]}")
+
 run_mustgather "${nslist[@]}"
+
