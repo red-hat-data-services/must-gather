@@ -22,7 +22,7 @@ spec:
   - name: git-url
     value: '{{source_url}}'
   - name: output-image
-    value: quay.io/modh/must-gather:{{revision}}
+    value: quay.io/modh/must-gather:{{target_branch}}
   - name: path-context
     value: .
   - name: revision
@@ -404,6 +404,9 @@ spec:
       params:
       - name: IMAGE
         value: $(tasks.build-container.results.IMAGE_URL)
+      - name: ADDITIONAL_TAGS
+        value:
+          - {{target_branch}}-{{revision}}
       runAfter:
       - build-container
       taskRef:
