@@ -31,6 +31,8 @@ To collect all
 oc adm must-gather --image=quay.io/modh/must-gather:stable
 ```
 
+Dashboard has been included in this default behavior.
+
 To collect for only one component use env variable COMPONENT.
 Full list of supported components see table below:
 | COMPONENT value    | Comments |

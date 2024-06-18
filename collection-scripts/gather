@@ -7,8 +7,8 @@ get_log_collection_args
 
 
 # generate /must-gather/version file with RHOAI version
-echo "red-hat-data-services/must-gather" > /must-gather/version
-rhoai_version >> /must-gather/version
+echo "red-hat-data-services/must-gather" > "$DST_DIR/version"
+rhoai_version >> "$DST_DIR/version"
 
 # define default namespaces
 OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}

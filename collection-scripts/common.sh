@@ -7,7 +7,7 @@ export DST_DIR="must-gather"
 # run must-gather in the namespaces one by one
 function run_mustgather() {
     for ns in $@; do
-        oc adm inspect $log_collection_args namespace/$ns --dest-dir $DST_DIR || echo "Error inspecting namespace/$ns"
+        oc adm inspect $log_collection_args namespace/$ns --dest-dir "$DST_DIR" || echo "Error inspecting namespace/$ns"
     done
 }
 
