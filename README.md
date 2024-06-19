@@ -20,6 +20,7 @@ This script also collects data from all the namespaces that has
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
 - `mpijobs` `mxjobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob`  for Kubeflow Training Operator
+- `appwrappers` for CodeFlare Operator
 - `inferenceservice` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve and ModelMesh component
 - `notebooks` for Workbench component
 
@@ -41,6 +42,7 @@ Full list of supported components see table below:
 | kuberay |  KubeRay     |
 | kueue    | Kueue    |
 | kfto | Kubeflow Training Operator |
+| cfo | CodeFlare Operator |
 | kserve    | Kserve    |
 | modelmesh  | Model Mesh   |
 | workbench | Workbench    |

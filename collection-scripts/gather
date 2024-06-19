@@ -52,6 +52,9 @@ case "$component" in
     "kfto")
         /usr/bin/gather_kfto
         ;;
+    "cfo")
+        /usr/bin/gather_cfo
+        ;;
     *) # for all 
         /usr/bin/gather_data_science_pipelines
         /usr/bin/gather_serving
@@ -59,6 +62,7 @@ case "$component" in
         /usr/bin/gather_kuberay
         /usr/bin/gather_kueue
         /usr/bin/gather_kfto
+        /usr/bin/gather_cfo
         ;;
 esac
 
