@@ -1,7 +1,7 @@
 # must-gather for Red Hat OpenShift AI
 
 The must-gather script allows a cluster admin to collect information about various key resources and namespaces
-for Red Hat OpenShift Data Science.
+for Red Hat OpenShift AI.
 
 ## Data Collected
 
