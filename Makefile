@@ -1,8 +1,9 @@
 GATHER_IMG ?= must-gather
-IMAGE_BUILDER ?= docker
+GATHER_IMG_VERSION ?= stable
+IMAGE_BUILDER ?= podman
 
 build-must-gather:
-	${IMAGE_BUILDER} build . -t ${GATHER_IMG}
+	${IMAGE_BUILDER} build . -t ${GATHER_IMG}:${GATHER_IMG_VERSION}
 
 push-must-gather:
 	${IMAGE_BUILDER} push ${GATHER_IMG}

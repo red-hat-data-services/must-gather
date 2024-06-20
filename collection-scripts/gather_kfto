@@ -1,7 +1,9 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 source common.sh
-resources=("notebooks")
+resources=("mpijobs" "mpijobs" "mxjobs" "paddlejobs" "pytorchjob" "tfjob" "xgboostjob")
+
 nslist=$(get_all_namespace "${resources[@]}")
 
 run_mustgather "${nslist[@]}"
+

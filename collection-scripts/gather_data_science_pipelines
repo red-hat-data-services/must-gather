@@ -1,13 +1,9 @@
 #!/bin/bash
+# shellcheck disable=SC1091
+source common.sh
+# for both DSPv1 and DSPv2
+resources=("datasciencepipelinesapplications" "scheduledworkflow" "applications" "clusterworkflowtemplates" "cronworkflows" "viewers" "workfloweventbindings" "workflows" "workflowtaskresults" "workflowtemplates" "workflowtasksets")
 
-datasciencepipelines=$(oc get DataSciencePipelinesApplication --all-namespaces -o=jsonpath='{range .items[*]}{.metadata.namespace}{"\n"}{end}')
+nslist=$(get_all_namespace "${resources[@]}")
 
-# Get logs from all Data Science Pipelines Application namespaces
-for i in $datasciencepipelines;
-do
-# Get pod logs for all the pods in Data Science Pipelines Application namespaces
-oc adm inspect namespace/"$i" --dest-dir=must-gather || echo "Error getting logs from $i"
-
-done
-
-sync
+run_mustgather "${nslist[@]}"
