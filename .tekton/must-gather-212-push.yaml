@@ -6,8 +6,10 @@ metadata:
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
-      == "rhoai-2.12"
+    pipelinesascode.tekton.dev/on-cel-expression:  |
+      event == "push" 
+      && target_branch == "rhoai-2.12"
+      && ( !".tekton/**".pathChanged() || ".tekton/must-gather-212-push.yaml".pathChanged() )
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: must-gather
@@ -22,7 +24,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/rhoai-tenant/must-gather/must-gather-212:{{revision}}
+    value: quay.io/modh/must-gather:{{target_branch}}
   - name: dockerfile
     value: Dockerfile
   pipelineSpec:
@@ -413,6 +415,9 @@ spec:
       params:
       - name: IMAGE
         value: $(tasks.build-container.results.IMAGE_URL)
+      - name: ADDITIONAL_TAGS
+        value: 
+          - '{{target_branch}}-{{revision}}'
       runAfter:
       - build-container
       taskRef:
