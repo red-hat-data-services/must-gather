@@ -21,15 +21,15 @@ This script also collects data from all the namespaces that has
 - `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
 - `mpijobs` `mxjobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob`  for Kubeflow Training Operator
 - `appwrappers` for CodeFlare Operator
-- `inferenceservice` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve and ModelMesh component
+- `inferenceservices` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve and ModelMesh component
 - `notebooks` for Workbench component
 
 ## Usage
 
-To collect all
+To collect all for RHOAI release 2.11.0
 
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:stable
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11
 ```
 
 Dashboard has been included in this default behavior.
@@ -51,33 +51,35 @@ for example to 'kserve':
 
 ```
 export COMPONENT=kserve
-oc adm must-gather --image=quay.io/modh/must-gather:stable
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 -- "export COMPONET=kserve; /usr/bin/gather"
 ```
 
-To collect logs after a specific date (RFC3339).
+To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
 Defaults to all logs.
 If this value is in the future, no logs will be returned.
 If this value precedes the time a pod was started, only logs since the pod start will be returned.
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-MUST_GATHER_SINCE_TIME=2024-05-02T14:01:23Z
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 --since-time=2024-05-02T14:01:23Z
 ```
 
-To collect logs newer than a relative duration like 5s, 2m, or 3h.
+To collect logs newer than a relative duration like 5s, 2m, or 3h. This feature only support oc 4.16+
 Defaults to all logs.
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-export MUST_GATHER_SINCE=3h
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 --since=3h
 ```
 
 ## Developer Guide
 
-To build custom image :
+To build custom image quay.io/myname/must-gather:123, can set GATHER_IMG and/or GATHER_IMG_VERSION
+by default GATHER_IMG is set to 'quay.io/$USER_NAME/must-gather' and GATHER_IMG_VERSION is 'dev'
 
 ```
-export GATHER_IMG= <image-name>
+export GATHER_IMG=quay.io/myname/must-gather
+export GATHER_IMG_VERSION=1.2.3
 make build-and-push-must-gather
 
 ```
