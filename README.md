@@ -51,7 +51,7 @@ for example to 'kserve':
 
 ```
 export COMPONENT=kserve
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 -- "export COMPONET=kserve; /usr/bin/gather"
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 -- "export COMPONENT=kserve; /usr/bin/gather"
 ```
 
 To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
