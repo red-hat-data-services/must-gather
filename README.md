@@ -50,7 +50,6 @@ Full list of supported components see table below:
 for example to 'kserve':
 
 ```
-export COMPONENT=kserve
 oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 -- "export COMPONENT=kserve; /usr/bin/gather"
 ```
 
