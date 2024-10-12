@@ -15,11 +15,13 @@ OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
 NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
 MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
 APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
+MODELREG_NS=${MODELS_REGISTRY_NAMESPACE:-rhoai-model-registries}
 
 oc adm inspect $log_collection_args "namespace/$OPERATOR_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
-oc adm inspect $log_collection_args "namespace/$NOTEBOOKS_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
 oc adm inspect $log_collection_args "namespace/$MONITORING_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
 oc adm inspect $log_collection_args "namespace/$APPLICATIONS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
+oc adm inspect $log_collection_args "namespace/$NOTEBOOKS_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
+oc adm inspect $log_collection_args "namespace/$MODELREG_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MODELREG_NS}"
 
 # add DSCI and DSC
 get_operator_resource dscinitialization
@@ -55,6 +57,9 @@ case "$component" in
     "cfo")
         /usr/bin/gather_cfo
         ;;
+    "modelregistry")
+        /usr/bin/gather_mr
+        ;;
     *) # for all 
         /usr/bin/gather_data_science_pipelines
         /usr/bin/gather_serving
@@ -63,6 +68,7 @@ case "$component" in
         /usr/bin/gather_kueue
         /usr/bin/gather_kfto
         /usr/bin/gather_cfo
+        /usr/bin/gather_mr
         ;;
 esac
 
