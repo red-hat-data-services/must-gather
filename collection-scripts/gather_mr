@@ -2,6 +2,10 @@
 # shellcheck disable=SC1091
 source common.sh
 resources=("modelregistries")
+# depedent resources ossm
+resources+=("smcp" "smm" "smmr" "authorizationpolicies")
+# depedent resources authorino
+resources+=("authconfigs" "authorinos")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
