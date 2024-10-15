@@ -94,6 +94,6 @@ export OPERATOR_NS=<name-for-operator-namespace>
 export NOTEBOOKS_NS=>name-for-notebooks-namespace>
 export MONITORING_NS=>name-for-monitoring-namespace>
 export APPLICATIONS_NS=<name-for-applications-namespace>
-export MODEL_REGISTRY_NAMESPACE=<name-for-model-registries-namespace>
+export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
 
 ```
