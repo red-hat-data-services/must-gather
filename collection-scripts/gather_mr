@@ -3,7 +3,7 @@
 source common.sh
 resources=("modelregistries")
 # depedent resources ossm
-resources+=("smcp" "smm" "smmr" "authorizationpolicies")
+resources+=("smcp" "smm" "smmr" "authorizationpolicies" "destinationrules" "gateways" "virtualservices")
 # depedent resources authorino
 resources+=("authconfigs" "authorinos")
 
