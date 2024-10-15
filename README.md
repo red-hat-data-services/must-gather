@@ -11,6 +11,7 @@ The must-gather script currently collects data from following default namespaces
 - rhods-notebooks
 - redhat-ods-applications
 - redhat-ods-monitoring
+- rhoai-model-registries
 
 and datasciencecluster and dscinitialization instances from cluster
 
@@ -23,6 +24,7 @@ This script also collects data from all the namespaces that has
 - `appwrappers` for CodeFlare Operator
 - `inferenceservices` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve and ModelMesh component
 - `notebooks` for Workbench component
+- `modelregistries` for model registry component
 
 ## Usage
 
@@ -46,6 +48,7 @@ Full list of supported components see table below:
 | kserve    | Kserve    |
 | modelmesh  | Model Mesh   |
 | workbench | Workbench    |
+| modelregistry | Model Registry |
 
 for example to 'kserve':
 
@@ -87,9 +90,10 @@ make build-and-push-must-gather
 To collect data for custom repositories for Open Data Hub set the following variables:
 
 ```
-export OPERATOR_NS= <name-for-operator-namespace>
-export NOTEBOOKS_NS= <name-for-notebooks-namespace>
-export MONITORING_NS= <name-for-monitoring-namespace>
-export APPLICATIONS_NS= <name-for-applications-namespace>
+export OPERATOR_NS=<name-for-operator-namespace>
+export NOTEBOOKS_NS=>name-for-notebooks-namespace>
+export MONITORING_NS=>name-for-monitoring-namespace>
+export APPLICATIONS_NS=<name-for-applications-namespace>
+export MODELS_REGISTRY_NAMESPACE=<name-for-model-registry-namespace>
 
 ```
