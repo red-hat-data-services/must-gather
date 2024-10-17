@@ -3,7 +3,7 @@
 source common.sh
 resources=("inferenceservices" "inferencegraphs" "trainedmodels" "servingruntimes" "clusterstoragecontainers" "predictors")
 # Dependent resources ossm
-resources+=("smcp" "smm" "smmr" "gateways" "authorizationpolicies" "envoyfilters")
+resources+=("smcp" "smm" "smmr" "gateways" "virtualservices" "authorizationpolicies" "envoyfilters")
 # Dependent resources knative
 resources+=("knativeservings")
 # Dependent resources authorino
