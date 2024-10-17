@@ -4,9 +4,7 @@ source common.sh
 # for DSP
 resources=("datasciencepipelinesapplications")
 # depedent resources from kubeflow
-resources+=("scheduledworkflows" "viewers")
-# depedent resources from k8s
-resources+=("applications")
+resources+=("scheduledworkflows")
 # depedent resources from argo
 resources+=("clusterworkflowtemplates" "cronworkflows" "workfloweventbindings" "workflows" "workflowtaskresults" "workflowtemplates" "workflowtasksets" "workflowartifactgctasks")
 
