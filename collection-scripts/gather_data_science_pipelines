@@ -3,9 +3,9 @@
 source common.sh
 # for DSP
 resources=("datasciencepipelinesapplications")
-# depedent resources from kubeflow
+# Dependent resources from kubeflow
 resources+=("scheduledworkflows")
-# depedent resources from argo
+# Dependent resources from argo
 resources+=("clusterworkflowtemplates" "cronworkflows" "workfloweventbindings" "workflows" "workflowtaskresults" "workflowtemplates" "workflowtasksets" "workflowartifactgctasks")
 
 nslist=$(get_all_namespace "${resources[@]}")
