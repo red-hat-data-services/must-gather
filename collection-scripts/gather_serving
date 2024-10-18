@@ -5,7 +5,7 @@ resources=("inferenceservices" "inferencegraphs" "trainedmodels" "servingruntime
 # Dependent resources ossm
 resources+=("smcp" "smm" "smmr" "gateways" "virtualservices" "authorizationpolicies" "envoyfilters")
 # Dependent resources knative
-resources+=("knativeservings")
+resources+=("knativeservings" "configurations" "routes.serving.knative.dev" "services.serving.knative.dev" "revisions")
 # Dependent resources authorino
 resources+=("authconfigs" "authorinos")
 
