@@ -2,6 +2,12 @@
 # shellcheck disable=SC1091
 source common.sh
 resources=("inferenceservices" "inferencegraphs" "trainedmodels" "servingruntimes" "clusterstoragecontainers" "predictors")
+# Dependent resources ossm
+resources+=("smcp" "smm" "smmr" "gateways" "virtualservices" "authorizationpolicies" "envoyfilters")
+# Dependent resources knative
+resources+=("knativeservings" "configurations" "routes.serving.knative.dev" "services.serving.knative.dev" "revisions")
+# Dependent resources authorino
+resources+=("authconfigs" "authorinos")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
