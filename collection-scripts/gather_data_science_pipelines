@@ -1,8 +1,12 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 source common.sh
-# for both DSPv1 and DSPv2
-resources=("datasciencepipelinesapplications" "scheduledworkflow" "applications" "clusterworkflowtemplates" "cronworkflows" "viewers" "workfloweventbindings" "workflows" "workflowtaskresults" "workflowtemplates" "workflowtasksets")
+# for DSP
+resources=("datasciencepipelinesapplications")
+# Dependent resources from kubeflow
+resources+=("scheduledworkflows")
+# Dependent resources from argo
+resources+=("clusterworkflowtemplates" "cronworkflows" "workfloweventbindings" "workflows" "workflowtaskresults" "workflowtemplates" "workflowtasksets" "workflowartifactgctasks")
 
 nslist=$(get_all_namespace "${resources[@]}")
 

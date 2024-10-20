@@ -15,7 +15,7 @@ OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
 NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
 MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
 APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
-MODELREG_NS=${MODELS_REGISTRY_NAMESPACE:-rhoai-model-registries}
+MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
 
 oc adm inspect $log_collection_args "namespace/$OPERATOR_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
 oc adm inspect $log_collection_args "namespace/$MONITORING_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
