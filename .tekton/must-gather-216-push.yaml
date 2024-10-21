@@ -22,7 +22,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/rhoai-tenant/must-gather-216:{{revision}}
+    value: quay.io/modh/must-gather:{{target_branch}}
   - name: dockerfile
     value: Dockerfile
   pipelineSpec:
@@ -402,6 +402,9 @@ spec:
       params:
       - name: IMAGE
         value: $(tasks.build-image-index.results.IMAGE_URL)
+      - name: ADDITIONAL_TAGS
+        value: 
+          - '{{target_branch}}-{{revision}}'
       runAfter:
       - build-image-index
       taskRef:
