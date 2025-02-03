@@ -24,14 +24,14 @@ This script also collects data from all the namespaces that has
 - `appwrappers` for CodeFlare Operator
 - `inferenceservices` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve and ModelMesh component
 - `notebooks` for Workbench component
-- `modelregistries` for model registry component
+- `modelregistries` for Model Registry component
 
 ## Usage
 
-To collect all for RHOAI release 2.11.0
+To collect all for RHOAI release 2.17.0
 
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17
 ```
 
 Dashboard has been included in this default behavior.
@@ -49,12 +49,13 @@ Full list of supported components see table below:
 | modelmesh  | Model Mesh   |
 | workbench | Workbench    |
 | modelregistry | Model Registry |
+| trustyai | TrustyAI |
 
 for example to 'kserve':
 
 ```
 export COMPONENT=kserve
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 -- "export COMPONENT=kserve; /usr/bin/gather"
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 -- "export COMPONENT=kserve; /usr/bin/gather"
 ```
 
 To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
@@ -64,7 +65,7 @@ If this value precedes the time a pod was started, only logs since the pod start
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 --since-time=2024-05-02T14:01:23Z
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 --since-time=2024-05-02T14:01:23Z
 ```
 
 To collect logs newer than a relative duration like 5s, 2m, or 3h. This feature only support oc 4.16+
@@ -72,8 +73,12 @@ Defaults to all logs.
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.11 --since=3h
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 --since=3h
 ```
+
+If you have enabled customized namespaces for installtion, below env. variable need to be configed before running "oc adm must-gather":
+export OPERATOR_NS=<your-operator-namespace>
+export APPLICATIONS_NS=<your-applications-namespace>
 
 ## Developer Guide
 
