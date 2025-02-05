@@ -49,10 +49,11 @@ function rhoai_version() {
 }
 
 function get_operator_resource() {
-    CR=$(oc get "$1" --no-headers | awk '{print $1}')
-    oc adm inspect $log_collection_args "$1"/"$CR" --dest-dir "$DST_DIR" || echo "Error collecting info from ${CR}"
+	for k in $@; do
+		o=$(oc get $k --no-headers | awk '{print $1}')
+		oc adm inspect $log_collection_args "$k"/"$o" --dest-dir "$DST_DIR" || echo "Error collecting info from ${o}"
+	done
 }
-
 
 # cherrypick from https://github.com/openshift/must-gather/blob/4b03e40e374c2e8096d6043bcfd1c23dd4cd9d0b/collection-scripts/common.sh#L19
 # even we do not run "oc adm node-logs" in RHOAI

@@ -1,9 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 source common.sh
-resources=("mpijobs" "mxjobs" "paddlejobs" "pytorchjob" "tfjob" "xgboostjob")
+resources=("lmevaljobs" "trustyaiservices")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
 run_mustgather "${nslist[@]}"
-

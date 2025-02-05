@@ -23,9 +23,10 @@ oc adm inspect $log_collection_args "namespace/$APPLICATIONS_NS" --dest-dir="$DS
 oc adm inspect $log_collection_args "namespace/$NOTEBOOKS_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
 oc adm inspect $log_collection_args "namespace/$MODELREG_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MODELREG_NS}"
 
-# add DSCI and DSC
-get_operator_resource dscinitialization
-get_operator_resource datasciencecluster
+# add DSCI, DSC, Auth and new component CRs
+resources=("dscinitialization" "datasciencecluster" "auths" "monitorings" "codeflares" "dashboards" "datasciencepipelines" "kserves" "kueues" "modelcontrollers" "modelmeshservings" "modelregistries" "rays" "trainingoperators" "trustyais" "workbenches")
+get_operator_resource "${resources[@]}"
+
 
 # set component or default to all
 component=${COMPONENT:-all}
@@ -60,6 +61,9 @@ case "$component" in
     "modelregistry")
         /usr/bin/gather_mr
         ;;
+    "trustyai")
+        /usr/bin/gather_trustyai
+        ;;
     *) # for all 
         /usr/bin/gather_data_science_pipelines
         /usr/bin/gather_serving
@@ -69,6 +73,7 @@ case "$component" in
         /usr/bin/gather_kfto
         /usr/bin/gather_cfo
         /usr/bin/gather_mr
+        /usr/bin/gather_trustyai
         ;;
 esac
 
