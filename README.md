@@ -54,7 +54,6 @@ Full list of supported components see table below:
 for example to 'kserve':
 
 ```
-export COMPONENT=kserve
 oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 -- "export COMPONENT=kserve; /usr/bin/gather"
 ```
 
@@ -76,9 +75,10 @@ Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 --since=3h
 ```
 
-If you have enabled customized namespaces for installtion, below env. variable need to be configed before running "oc adm must-gather":
-export OPERATOR_NS=<your-operator-namespace>
-export APPLICATIONS_NS=<your-applications-namespace>
+If you have enabled customized namespaces for installtion, below env. variable need to be configed when running "oc adm must-gather", example:
+```
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
+```
 
 ## Developer Guide
 
@@ -92,13 +92,13 @@ make build-and-push-must-gather
 
 ```
 
-To collect data for custom repositories for Open Data Hub set the following variables:
+To collect data for custom repositories for Open Data Hub set the following variables inside must-gather:
 
 ```
-export OPERATOR_NS=<name-for-operator-namespace>
-export NOTEBOOKS_NS=>name-for-notebooks-namespace>
-export MONITORING_NS=>name-for-monitoring-namespace>
-export APPLICATIONS_NS=<name-for-applications-namespace>
+export OPERATOR_NAMESPACE=<name-for-operator-namespace>
+export NOTEBOOKS_NAMESPACE=<name-for-notebooks-namespace>
+export MONITORING_NAMESPACE=<name-for-monitoring-namespace>
+export APPLICATIONS_NAMESPACE=<name-for-applications-namespace>
 export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
 
 ```
