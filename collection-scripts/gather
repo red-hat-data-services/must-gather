@@ -5,17 +5,16 @@ source common.sh
 # for new flag to get since and since-time
 get_log_collection_args
 
-
-# generate /must-gather/version file with RHOAI version
-echo "red-hat-data-services/must-gather" > "$DST_DIR/version"
-rhoai_version >> "$DST_DIR/version"
-
 # define default namespaces
 OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
 NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
 MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
 APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
 MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
+
+# generate /must-gather/version file with RHOAI version
+echo "red-hat-data-services/must-gather" > "$DST_DIR/version"
+rhoai_version >> "$DST_DIR/version"
 
 oc adm inspect $log_collection_args "namespace/$OPERATOR_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
 oc adm inspect $log_collection_args "namespace/$MONITORING_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
