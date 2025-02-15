@@ -37,7 +37,7 @@ function rhoai_version() {
 
   # read label from operator deployment
   if [ -z "${version}" ]; then
-    version=$(oc get deployment/rhods-operator -n redhat-ods-operator --output=json | jq '.metadata.labels."olm.owner"')
+	version=$(oc get deployment/rhods-operator -n $OPERATOR_NS --output=json | jq '.metadata.labels."olm.owner"')
   fi
  
   # if version still not found, use Unknown
