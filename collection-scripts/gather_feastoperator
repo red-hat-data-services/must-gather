@@ -1,0 +1,6 @@
+#!/bin/bash
+# shellcheck disable=SC1091
+source common.sh
+resources=("feastoperator")
+
+get_operator_resource "${resources[@]}"

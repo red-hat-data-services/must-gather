@@ -38,18 +38,20 @@ Dashboard has been included in this default behavior.
 
 To collect for only one component use env variable COMPONENT.
 Full list of supported components see table below:
-| COMPONENT value    | Comments |
-| -------- | ------- |
-| dsp  | Data Science Pipeline    |
-| kuberay |  KubeRay     |
-| kueue    | Kueue    |
-| kfto | Kubeflow Training Operator |
-| cfo | CodeFlare Operator |
-| kserve    | Kserve    |
-| modelmesh  | Model Mesh   |
-| workbench | Workbench    |
-| modelregistry | Model Registry |
-| trustyai | TrustyAI |
+
+| COMPONENT value | Comments                   |
+|-----------------|----------------------------|
+| dsp             | Data Science Pipeline      |
+| kuberay         | KubeRay                    |
+| kueue           | Kueue                      |
+| kfto            | Kubeflow Training Operator |
+| cfo             | CodeFlare Operator         |
+| kserve          | Kserve                     |
+| modelmesh       | Model Mesh                 |
+| workbench       | Workbench                  |
+| modelregistry   | Model Registry             |
+| trustyai        | TrustyAI                   |
+| feastoperator   | Feast Operator             |
 
 for example to 'kserve':
 
@@ -75,7 +77,7 @@ Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 --since=3h
 ```
 
-If you have enabled customized namespaces for installtion, below env. variable need to be configed when running "oc adm must-gather", example:
+If you have enabled customized namespaces for installation, below env. variable need to be configured when running "oc adm must-gather", example:
 ```
 oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
 ```
