@@ -11,6 +11,11 @@ NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
 MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
 APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
 MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
+# dependent operator namespace
+OSSM_NS=${OSSM_NS:-istio-system}
+KNATIVE_NS=${KNATIVE_NS:-knative-serving}
+AUTH_NS=${AUTH_NS:-redhat-ods-applications-auth-provider}
+
 
 # generate /must-gather/version file with RHOAI version
 echo "red-hat-data-services/must-gather" > "$DST_DIR/version"
@@ -21,6 +26,10 @@ oc adm inspect $log_collection_args "namespace/$MONITORING_NS" --dest-dir="$DST_
 oc adm inspect $log_collection_args "namespace/$APPLICATIONS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
 oc adm inspect $log_collection_args "namespace/$NOTEBOOKS_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
 oc adm inspect $log_collection_args "namespace/$MODELREG_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MODELREG_NS}"
+oc adm inspect $log_collection_args "namespace/$OSSM_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${OSSM_NS}"
+oc adm inspect $log_collection_args "namespace/$KNATIVE_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KNATIVE_NS}"
+oc adm inspect $log_collection_args "namespace/$AUTH_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${AUTH_NS}"
+
 
 # add DSCI, DSC, Auth and new component CRs
 resources=("dscinitialization" "datasciencecluster" "auths" "monitorings" "codeflares" "dashboards" "datasciencepipelines" "feastoperator" "kserves" "kueues" "modelcontrollers" "modelmeshservings" "modelregistries" "rays" "trainingoperators" "trustyais" "workbenches")

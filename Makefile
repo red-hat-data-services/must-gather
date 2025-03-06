@@ -3,7 +3,7 @@ GATHER_IMG_VERSION ?=dev
 IMAGE_BUILDER ?= podman
 
 build-must-gather:
-	${IMAGE_BUILDER} build . -f Dockerfile -t ${GATHER_IMG}:${GATHER_IMG_VERSION}
+	${IMAGE_BUILDER} build . -f Containerfile -t ${GATHER_IMG}:${GATHER_IMG_VERSION}
 
 push-must-gather:
 	${IMAGE_BUILDER} push ${GATHER_IMG}:${GATHER_IMG_VERSION}
