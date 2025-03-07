@@ -25,6 +25,7 @@ This script also collects data from all the namespaces that has
 - `inferenceservices` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve and ModelMesh component
 - `notebooks` for Workbench component
 - `modelregistries` for Model Registry component
+- `featurestores` for Feast Operator
 
 ## Usage
 
