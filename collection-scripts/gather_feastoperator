@@ -1,6 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 source common.sh
-resources=("feastoperator")
+resources=("featurestores")
 
-get_operator_resource "${resources[@]}"
+nslist=$(get_all_namespace "${resources[@]}")
+
+run_mustgather "${nslist[@]}"
