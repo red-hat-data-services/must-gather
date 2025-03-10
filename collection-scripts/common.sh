@@ -20,7 +20,7 @@ function get_all_namespace() {
     uniq_list "$nslist"
 }
 
-# remove dupplicated namespaces
+# remove duplicated namespaces
 function uniq_list() {
     echo "$@" | sort -u
 }
