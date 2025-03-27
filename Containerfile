@@ -9,3 +9,4 @@ COPY collection-scripts/* /usr/bin/
 
 ENTRYPOINT ["/usr/bin/gather"]
 
+#test
