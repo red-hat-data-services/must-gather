@@ -5,11 +5,11 @@ metadata:
     build.appstudio.openshift.io/repo: https://github.com/red-hat-data-services/must-gather?rev={{revision}}
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
-    pipelinesascode.tekton.dev/max-keep-runs: "3"
+    pipelinesascode.tekton.dev/max-keep-runs: '3'
     pipelinesascode.tekton.dev/on-cel-expression: |
       event == "push"
        && target_branch == "rhoai-2.19"
-  creationTimestamp: null
+  creationTimestamp:
   labels:
     appstudio.openshift.io/application: external-rhoai-v2-19
     appstudio.openshift.io/component: must-gather-v2-19
