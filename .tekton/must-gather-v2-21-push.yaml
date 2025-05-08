@@ -56,7 +56,8 @@ spec:
       value: '{{ target_branch }}'
     - name: pathInRepo
       value: pipelines/multi-arch-container-build.yaml
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-must-gather-v2-21
   workspaces:
   - name: git-auth
     secret:
