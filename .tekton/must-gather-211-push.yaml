@@ -6,10 +6,9 @@ metadata:
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression:  |
-      event == "push" 
-      && target_branch == "rhoai-2.11"
-      && ( !".tekton/**".pathChanged() || ".tekton/must-gather-211-push.yaml".pathChanged() )
+    pipelinesascode.tekton.dev/on-cel-expression: "event == \"push\" \n&& target_branch
+      == \"rhoai-2.11\"\n&& ( !\".tekton/**\".pathChanged() || \".tekton/must-gather-211-push.yaml\".pathChanged()
+      )\n"
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: must-gather
@@ -411,8 +410,8 @@ spec:
       - name: IMAGE
         value: $(tasks.build-container.results.IMAGE_URL)
       - name: ADDITIONAL_TAGS
-        value: 
-          - '{{target_branch}}-{{revision}}'
+        value:
+        - '{{target_branch}}-{{revision}}'
       runAfter:
       - build-container
       taskRef:
@@ -428,7 +427,8 @@ spec:
     - name: workspace
     - name: git-auth
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-must-gather-211
   workspaces:
   - name: workspace
     volumeClaimTemplate:
