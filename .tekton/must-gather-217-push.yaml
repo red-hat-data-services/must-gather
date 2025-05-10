@@ -509,8 +509,8 @@ spec:
       - name: IMAGE
         value: $(tasks.build-image-index.results.IMAGE_URL)
       - name: ADDITIONAL_TAGS
-        value: 
-          - '{{target_branch}}-{{revision}}'
+        value:
+        - '{{target_branch}}-{{revision}}'
       runAfter:
       - build-image-index
       taskRef:
@@ -572,7 +572,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-must-gather-217
   workspaces:
   - name: git-auth
     secret:
