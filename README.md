@@ -29,19 +29,18 @@ This script also collects data from all the namespaces that has
 
 ## Usage
 
-To collect all for RHOAI release 2.17.0
+To collect all for RHOAI release 2.21.0
 
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.21
 ```
-
-Dashboard has been included in this default behavior.
 
 To collect for only one component use env variable COMPONENT.
 Full list of supported components see table below:
 
 | COMPONENT value | Comments                   |
 |-----------------|----------------------------|
+| dashboard       | Dashboard                  |
 | dsp             | Data Science Pipeline      |
 | kuberay         | KubeRay                    |
 | kueue           | Kueue                      |
