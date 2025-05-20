@@ -49,7 +49,7 @@ case "$component" in
         /usr/bin/gather_serving
         ;;
     "dashboard")
-        echo "It has been included in the default namespace."
+        /usr/bin/gather_dashboard
         ;;
     "workbench")
         /usr/bin/gather_notebooks
