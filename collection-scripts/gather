@@ -31,8 +31,28 @@ oc adm inspect $log_collection_args "namespace/$KNATIVE_NS" --dest-dir="$DST_DIR
 oc adm inspect $log_collection_args "namespace/$AUTH_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${AUTH_NS}"
 
 
-# add DSCI, DSC, Auth and new component CRs
-resources=("dscinitialization" "datasciencecluster" "auths" "monitorings" "codeflares" "dashboards" "datasciencepipelines" "feastoperator" "kserves" "kueues" "modelcontrollers" "modelmeshservings" "modelregistries" "rays" "trainingoperators" "trustyais" "workbenches")
+# add DSCI, DSC, Auth and service/component/infra CRs
+resources=(
+  "dscinitialization"
+  "datasciencecluster"
+  "auths.services.platform.opendatahub.io"
+  "monitorings.services.platform.opendatahub.io"
+  "featuretrackers.features.opendatahub.io"
+  "codeflares.components.platform.opendatahub.io"
+  "dashboards.components.platform.opendatahub.io"
+  "datasciencepipelines.components.platform.opendatahub.io"
+  "feastoperators.components.platform.opendatahub.io"
+  "kserves.components.platform.opendatahub.io"
+  "kueues.components.platform.opendatahub.io"
+  "modelcontrollers.components.platform.opendatahub.io"
+  "modelmeshservings.components.platform.opendatahub.io"
+  "modelregistries.components.platform.opendatahub.io"
+  "rays.components.platform.opendatahub.io"
+  "trainingoperators.components.platform.opendatahub.io"
+  "trustyais.components.platform.opendatahub.io"
+  "workbenches.components.platform.opendatahub.io"
+  "hardwareprofiles.infrastructure.opendatahub.io"
+)
 get_operator_resource "${resources[@]}"
 
 

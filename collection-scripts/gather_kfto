@@ -1,7 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 source common.sh
-resources=("mpijobs" "mxjobs" "paddlejobs" "pytorchjob" "tfjob" "xgboostjob")
+resources=("mpijobs" "paddlejobs" "pytorchjob" "tfjob" "xgboostjob" "jaxjobs")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
