@@ -1,13 +1,15 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 source common.sh
-resources=("inferenceservices" "inferencegraphs" "trainedmodels" "servingruntimes" "clusterstoragecontainers" "predictors")
+resources=("inferenceservices" "inferencegraphs" "trainedmodels" "servingruntimes" "clusterstoragecontainers" "predictors" "localmodelnodegroups")
 # Dependent resources ossm
 resources+=("smcp" "smm" "smmr" "gateways" "virtualservices" "authorizationpolicies" "envoyfilters")
 # Dependent resources knative
 resources+=("knativeservings" "configurations" "routes.serving.knative.dev" "services.serving.knative.dev" "revisions")
 # Dependent resources authorino
 resources+=("authconfigs" "authorinos")
+# Dependent resources NIM
+resources+=("accounts.nim.opendatahub.io")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
