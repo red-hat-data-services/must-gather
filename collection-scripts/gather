@@ -52,6 +52,7 @@ resources=(
   "trustyais.components.platform.opendatahub.io"
   "workbenches.components.platform.opendatahub.io"
   "hardwareprofiles.infrastructure.opendatahub.io"
+  "llamastackoperators.components.platform.opendatahub.io"
 )
 get_operator_resource "${resources[@]}"
 
@@ -95,6 +96,9 @@ case "$component" in
     "feastoperator")
         /usr/bin/gather_feastoperator
         ;;
+    "llamastack")
+        /usr/bin/gather_lls
+        ;;
     *) # for all 
         /usr/bin/gather_data_science_pipelines
         /usr/bin/gather_serving
@@ -106,6 +110,7 @@ case "$component" in
         /usr/bin/gather_mr
         /usr/bin/gather_trustyai
         /usr/bin/gather_feastoperator
+        /usr/bin/gather_lls
         ;;
 esac
 
