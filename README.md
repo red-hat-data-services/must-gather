@@ -26,6 +26,7 @@ This script also collects data from all the namespaces that has
 - `notebooks` `imagestreams` for Workbench component
 - `modelregistries` for Model Registry component
 - `featurestores` for Feast Operator
+- `llamastackdistributions` for Llama-stack Operator
 
 ## Usage
 
@@ -52,6 +53,7 @@ Full list of supported components see table below:
 | modelregistry   | Model Registry             |
 | trustyai        | TrustyAI                   |
 | feastoperator   | Feast Operator             |
+| llamastack      | Llama-stack Operator       |
 
 for example to 'kserve':
 
