@@ -7,3 +7,10 @@ RUN mv /usr/bin/gather /usr/bin/gather_original
 COPY collection-scripts/* /usr/bin/
 
 ENTRYPOINT ["/usr/bin/gather"]
+
+LABEL com.redhat.component="odh-must-gather" \
+      name="odh-must-gather" \
+      description="odh-must-gather" \
+      summary="odh-must-gather" \
+      io.k8s.display-name="odh-must-gather" \
+      io.k8s.description="odh-must-gather"
