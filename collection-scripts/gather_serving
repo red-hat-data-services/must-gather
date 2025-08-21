@@ -3,13 +3,15 @@
 source common.sh
 resources=("inferenceservices" "inferencegraphs" "trainedmodels" "servingruntimes" "clusterstoragecontainers" "predictors" "localmodelnodegroups")
 # Dependent resources ossm
-resources+=("smcp" "smm" "smmr" "gateways" "virtualservices" "authorizationpolicies" "envoyfilters")
+resources+=("smcp" "smm" "smmr" "gateways.networking.istio.io" "virtualservices" "authorizationpolicies" "envoyfilters" "destinationrules")
 # Dependent resources knative
 resources+=("knativeservings" "configurations" "routes.serving.knative.dev" "services.serving.knative.dev" "revisions")
 # Dependent resources authorino
-resources+=("authconfigs" "authorinos")
+resources+=("authconfigs" "authorinos" "authpolicies.kuadrant.io")
 # Dependent resources NIM
 resources+=("accounts.nim.opendatahub.io")
+# Dependent resources llm-d
+resources+=("llminferenceserviceconfigs" "llminferenceservices" "leaderworkersets" "gatewayclasses" "gateways.gateway.networking.k8s.io" "httproutes" "inferencepools")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
