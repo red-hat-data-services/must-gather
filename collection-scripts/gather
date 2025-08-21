@@ -53,6 +53,8 @@ resources=(
   "workbenches.components.platform.opendatahub.io"
   "hardwareprofiles.infrastructure.opendatahub.io"
   "llamastackoperators.components.platform.opendatahub.io"
+  "mutatingwebhookconfigurations.admissionregistration.k8s.io"
+  "validationwebhookconfigurations.admissionregistration.k8s.io"
 )
 get_operator_resource "${resources[@]}"
 
