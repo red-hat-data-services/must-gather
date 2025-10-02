@@ -7,7 +7,7 @@ resources+=("authconfigs" "authorinos" "authpolicies.kuadrant.io")
 # Dependent resources NIM
 resources+=("accounts.nim.opendatahub.io")
 # Dependent resources llm-d
-resources+=("llminferenceserviceconfigs" "llminferenceservices" "leaderworkersetoperators" "gatewayclasses" "gateways.gateway.networking.k8s.io" "httproutes" "inferencepools" "envoyfilters")
+resources+=("llminferenceserviceconfigs" "llminferenceservices" "leaderworkersetoperators" "leaderworkersets" "gateways.gateway.networking.k8s.io" "inferencepools")
 
 nslist=$(get_all_namespace "${resources[@]}")
 

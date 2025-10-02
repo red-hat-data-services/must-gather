@@ -17,7 +17,7 @@ and datasciencecluster and dscinitialization instances from cluster
 
 This script also collects data from all the namespaces that has
 
-- `datasciencepipelinesapplications` `scheduledworkflow` `applications` `clusterworkflowtemplates` `cronworkflows` `viewers` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` for AI Pipeline component
+- `datasciencepipelinesapplications` `scheduledworkflow` `applications` `clusterworkflowtemplates` `cronworkflows` `viewers` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` for AI Pipeline (Previously called Data Science Pipeline) component
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
 - `mpijobs` `mxjobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob`  for Kubeflow Training Operator
@@ -41,7 +41,7 @@ Full list of supported components see table below:
 | COMPONENT value | Comments                   |
 |-----------------|----------------------------|
 | dashboard       | Dashboard                  |
-| dsp             | AI Pipeline      |
+| dsp             | AI Pipeline (previously: Data Science Pipeline)|
 | kuberay         | KubeRay                    |
 | kueue           | Kueue                      |
 | kfto            | Kubeflow Training Operator |
