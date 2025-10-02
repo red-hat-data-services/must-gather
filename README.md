@@ -17,12 +17,11 @@ and datasciencecluster and dscinitialization instances from cluster
 
 This script also collects data from all the namespaces that has
 
-- `datasciencepipelinesapplications` `scheduledworkflow` `applications` `clusterworkflowtemplates` `cronworkflows` `viewers` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` for Data Science Pipeline component
+- `datasciencepipelinesapplications` `scheduledworkflow` `applications` `clusterworkflowtemplates` `cronworkflows` `viewers` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` for AI Pipeline component
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
 - `mpijobs` `mxjobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob`  for Kubeflow Training Operator
-- `appwrappers` for CodeFlare Operator
-- `inferenceservices` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve and ModelMesh component
+- `inferenceservices` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve component
 - `notebooks` `imagestreams` for Workbench component
 - `modelregistries` for Model Registry component
 - `featurestores` for Feast Operator
@@ -30,10 +29,10 @@ This script also collects data from all the namespaces that has
 
 ## Usage
 
-To collect all for RHOAI release 2.21.0
+To collect all for RHOAI release 3.0
 
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.21
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-3.0
 ```
 
 To collect for only one component use env variable COMPONENT.
@@ -42,13 +41,11 @@ Full list of supported components see table below:
 | COMPONENT value | Comments                   |
 |-----------------|----------------------------|
 | dashboard       | Dashboard                  |
-| dsp             | Data Science Pipeline      |
+| dsp             | AI Pipeline      |
 | kuberay         | KubeRay                    |
 | kueue           | Kueue                      |
 | kfto            | Kubeflow Training Operator |
-| cfo             | CodeFlare Operator         |
 | kserve          | Kserve                     |
-| modelmesh       | Model Mesh                 |
 | workbench       | Workbench                  |
 | modelregistry   | Model Registry             |
 | trustyai        | TrustyAI                   |
@@ -68,7 +65,7 @@ If this value precedes the time a pod was started, only logs since the pod start
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 --since-time=2024-05-02T14:01:23Z
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-3.0 --since-time=2024-05-02T14:01:23Z
 ```
 
 To collect logs newer than a relative duration like 5s, 2m, or 3h. This feature only support oc 4.16+
@@ -76,17 +73,17 @@ Defaults to all logs.
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 --since=3h
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-3.0 --since=3h
 ```
 
 If you have enabled customized namespaces for installation, below env. variable need to be configured when running "oc adm must-gather", example:
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
+oc adm must-gather --image=quay.io/modh/must-gather:rhoai-3.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
 ```
 
 ## Developer Guide
 
-To build custom image quay.io/myname/must-gather:123, can set GATHER_IMG and/or GATHER_IMG_VERSION
+To build custom image quay.io/myname/must-gather:1.2.3, can set GATHER_IMG and/or GATHER_IMG_VERSION
 by default GATHER_IMG is set to 'quay.io/$USER_NAME/must-gather' and GATHER_IMG_VERSION is 'dev'
 
 ```
