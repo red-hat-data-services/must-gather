@@ -55,6 +55,7 @@ resources=(
   "httproutes"
   "envoyfilters"
   "destinationrules"
+  "trainers.components.platform.opendatahub.io"
 )
 get_operator_resource "${resources[@]}"
 
