@@ -1,4 +1,4 @@
-FROM registry.redhat.io/openshift4/ose-must-gather-rhel9:v4.18.0@sha256:eaee2b7baf013c351a5e4b5b9324a230478d28a1f9bb3fb8e6f05323e120b754
+FROM registry.redhat.io/openshift4/ose-must-gather-rhel9:v4.18.0@sha256:8024244ff2e827ef77b9b64d988985a4d424ac2806e3f1f60d4003d134bee0a6
 
 # copy original gather from base image to gather_original
 RUN mv /usr/bin/gather /usr/bin/gather_original
