@@ -13,7 +13,7 @@ APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
 MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
 # MaaS namespace
 KUADRANT_NS="kuadrant-system"
-MAAS_NS="maas-api"
+MAAS_NS=${MASS_NAMESPACE:-maas-api}
 # dependent operator namespace
 GW_NS=${GW_NS:-openshift-ingress}
 
