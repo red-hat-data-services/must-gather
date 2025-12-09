@@ -101,6 +101,6 @@ export NOTEBOOKS_NAMESPACE=<name-for-notebooks-namespace>
 export MONITORING_NAMESPACE=<name-for-monitoring-namespace>
 export APPLICATIONS_NAMESPACE=<name-for-applications-namespace>
 export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
-export MASS_NAMESPACE=<name-for-maas-namespace>
+export MAAS_NAMESPACE=<name-for-maas-namespace>
 
 ```
