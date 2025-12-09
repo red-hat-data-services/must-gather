@@ -11,8 +11,12 @@ NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
 MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
 APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
 MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
+# MaaS namespace
+KUADRANT_NS="kuadrant-system"
+MAAS_NS=${MAAS_NAMESPACE:-maas-api}
 # dependent operator namespace
 GW_NS=${GW_NS:-openshift-ingress}
+
 
 # generate /must-gather/version file with RHOAI version
 echo "red-hat-data-services/must-gather" > "$DST_DIR/version"
@@ -24,7 +28,8 @@ oc adm inspect $log_collection_args "namespace/$APPLICATIONS_NS" --dest-dir="$DS
 oc adm inspect $log_collection_args "namespace/$NOTEBOOKS_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
 oc adm inspect $log_collection_args "namespace/$MODELREG_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MODELREG_NS}"
 oc adm inspect $log_collection_args "namespace/$GW_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${GW_NS}"
-
+oc adm inspect $log_collection_args "namespace/$KUADRANT_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KUADRANT_NS}"
+oc adm inspect $log_collection_args "namespace/$MAAS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MAAS_NS}"
 
 # add DSCI, DSC, Auth and service/component/infra CRs
 resources=(
