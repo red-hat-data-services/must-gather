@@ -29,10 +29,12 @@ This script also collects data from all the namespaces that has
 
 ## Usage
 
+Refer to KCS: https://access.redhat.com/solutions/7061604 
+
 To collect all for RHOAI release 3.0
 
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-3.0
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0
 ```
 
 To collect for only one component use env variable COMPONENT.
@@ -65,7 +67,7 @@ If this value precedes the time a pod was started, only logs since the pod start
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-3.0 --since-time=2024-05-02T14:01:23Z
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 --since-time=2024-05-02T14:01:23Z
 ```
 
 To collect logs newer than a relative duration like 5s, 2m, or 3h. This feature only support oc 4.16+
@@ -73,12 +75,12 @@ Defaults to all logs.
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-3.0 --since=3h
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 --since=3h
 ```
 
 If you have enabled customized namespaces for installation, below env. variable need to be configured when running "oc adm must-gather", example:
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-3.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
 ```
 
 ## Developer Guide
