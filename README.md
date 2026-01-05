@@ -57,7 +57,7 @@ Full list of supported components see table below:
 for example to 'kserve':
 
 ```
-oc adm must-gather --image=quay.io/modh/must-gather:rhoai-2.17 -- "export COMPONENT=kserve; /usr/bin/gather"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 -- "export COMPONENT=kserve; /usr/bin/gather"
 ```
 
 To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
