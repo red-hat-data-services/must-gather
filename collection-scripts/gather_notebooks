@@ -4,4 +4,4 @@ source common.sh
 resources=("notebooks" "imagestreams")
 nslist=$(get_all_namespace "${resources[@]}")
 
-run_mustgather "${nslist[@]}"
+run_mustgather "$nslist" "${resources[@]}"
