@@ -5,4 +5,4 @@ resources=("lmevaljobs" "trustyaiservices.trustyai.opendatahub.io" "guardrailsor
 
 nslist=$(get_all_namespace "${resources[@]}")
 
-run_mustgather "${nslist[@]}"
+run_mustgather "$nslist" "${resources[@]}"

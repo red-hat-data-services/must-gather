@@ -7,10 +7,10 @@ resources+=("authconfigs" "authorinos" "authpolicies.kuadrant.io")
 # Dependent resources NIM
 resources+=("accounts.nim.opendatahub.io")
 # Dependent resources llm-d
-resources+=("llminferenceserviceconfigs" "llminferenceservices" "leaderworkersetoperators" "leaderworkersets" "gateways.gateway.networking.k8s.io" "inferencepools")
+resources+=("llminferenceserviceconfigs" "llminferenceservices" "leaderworkersetoperators" "leaderworkersets" "inferencepools")
 # Dependent resources MaaS
 resources+=("ratelimitpolicies.kuadrant.io" "kuadrants.kuadrant.io" "tokenratelimitpolicies.kuadrant.io")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
-run_mustgather "${nslist[@]}"
+run_mustgather "$nslist" "${resources[@]}"

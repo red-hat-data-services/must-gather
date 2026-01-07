@@ -4,9 +4,9 @@ source common.sh
 # resource for v1
 resources=("mpijobs" "paddlejobs" "pytorchjob" "tfjob" "xgboostjob" "jaxjobs")
 # resource for v2
-resource+=("jobsetoperators" "trainjobs.trainer.kubeflow.org" "trainingruntimes.trainer.kubeflow.org" "clustertrainingruntimes.trainer.kubeflow.org")
+resources+=("jobsetoperators" "trainjobs.trainer.kubeflow.org" "trainingruntimes.trainer.kubeflow.org" "clustertrainingruntimes.trainer.kubeflow.org")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
-run_mustgather "${nslist[@]}"
+run_mustgather "$nslist" "${resources[@]}"
 
