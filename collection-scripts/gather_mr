@@ -5,4 +5,4 @@ resources=("modelregistries.modelregistry.opendatahub.io")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
-run_mustgather "${nslist[@]}"
+run_mustgather "$nslist" "${resources[@]}"

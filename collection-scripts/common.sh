@@ -4,10 +4,28 @@
 
 export DST_DIR="must-gather"
 
-# run must-gather in the namespaces one by one
+# Default resources to collect for every namespace (Gateway API, Istio, etc.)
+DEFAULT_RESOURCES=(
+    "gateways.gateway.networking.k8s.io"
+    "httproutes.gateway.networking.k8s.io"
+    "grpcroutes.gateway.networking.k8s.io"
+    "referencegrants.gateway.networking.k8s.io"
+    "envoyfilters"
+    "destinationrules"
+)
+
+# run must-gather in the namespaces one by one, also collecting custom resources
 function run_mustgather() {
-    for ns in $@; do
+    local namespaces="$1"
+    shift
+    local resources=("${DEFAULT_RESOURCES[@]}" "$@")
+
+    for ns in $namespaces; do
         oc adm inspect $log_collection_args namespace/$ns --dest-dir "$DST_DIR" || echo "Error inspecting namespace/$ns"
+        # Inspect custom resources in this namespace
+        for resource in "${resources[@]}"; do
+            oc adm inspect $log_collection_args "$resource" -n "$ns" --dest-dir "$DST_DIR" 2>/dev/null
+        done
     done
 }
 
@@ -50,8 +68,7 @@ function rhoai_version() {
 
 function get_operator_resource() {
 	for k in $@; do
-		o=$(oc get $k --no-headers | awk '{print $1}')
-		oc adm inspect $log_collection_args "$k"/"$o" --dest-dir "$DST_DIR" || echo "Error collecting info from ${o}"
+		oc adm inspect $log_collection_args "$k" --dest-dir "$DST_DIR" || echo "Error collecting $k"
 	done
 }
 
