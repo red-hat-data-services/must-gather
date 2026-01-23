@@ -26,7 +26,15 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     echo "=========================================="
 
     # define default namespaces
-    OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+    # Get operator namespace: use env var if set, otherwise auto-detect from subscription
+    if [ -n "${OPERATOR_NAMESPACE}" ]; then
+        OPERATOR_NS="${OPERATOR_NAMESPACE}"
+    else
+        # auto-detect based on operator name
+        get_operator_ns "rhods-operator"
+        OPERATOR_NS="${operator_ns}"
+    fi
+
     NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
     MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
     APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
@@ -139,22 +147,60 @@ case "$component" in
         fi
         ;;
     *) # for all except llm-d
-        /usr/bin/gather_data_science_pipelines
-        /usr/bin/gather_serving
-        /usr/bin/gather_notebooks
-        /usr/bin/gather_kuberay
-        /usr/bin/gather_kueue
-        /usr/bin/gather_kfto
-        /usr/bin/gather_mr
-        /usr/bin/gather_trustyai
-        /usr/bin/gather_feastoperator
-        /usr/bin/gather_lls
-        /usr/bin/gather_mlflow
+        # Track PIDs and job names for error reporting
+        declare -A job_pids
+        declare -a failed_jobs
+
+        echo "Starting parallel data collection..."
+
+        # Start all gather operations in background and track PIDs
+        /usr/bin/gather_data_science_pipelines & job_pids[$!]="dsp"
+        /usr/bin/gather_serving & job_pids[$!]="kserve"
+        /usr/bin/gather_notebooks & job_pids[$!]="workbench"
+        /usr/bin/gather_kuberay & job_pids[$!]="kuberay"
+        /usr/bin/gather_kueue & job_pids[$!]="kueue"
+        /usr/bin/gather_kfto & job_pids[$!]="kfto"
+        /usr/bin/gather_mr & job_pids[$!]="modelregistry"
+        /usr/bin/gather_trustyai & job_pids[$!]="trustyai"
+        /usr/bin/gather_feastoperator & job_pids[$!]="feastoperator"
+        /usr/bin/gather_lls & job_pids[$!]="llamastack"
+        /usr/bin/gather_mlflow & job_pids[$!]="mlflow"
+
+        echo "Waiting for ${#job_pids[@]} jobs to complete..."
+
+        # Wait for all jobs and mark failed one to later report
+        for pid in "${!job_pids[@]}"; do
+            if ! wait "$pid"; then
+                failed_jobs+=("${job_pids[$pid]}")
+            fi
+        done
         ;;
 esac
 
+# wait for all background jobs to complete
+wait
+
 # force disk flush to ensure that all data gathered is accessible in the copy container
 sync
+
+# Generate collection summary report
+echo "=========================================="
+echo "Must-Gather Collection Summary"
+echo "=========================================="
+echo "Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+echo "Kubernetes Distribution: ${K8S_DISTRO}"
+echo "Component: ${component}"
+echo "Destination: ${DST_DIR}"
+
+if [ -n "${failed_jobs[*]}" ]; then
+    echo ""
+    echo "Status: (${#failed_jobs[@]} failures)"
+    echo "Failed components:"
+    printf '  - %s\n' "${failed_jobs[@]}"
+else
+    echo ""
+    echo "Status: SUCCESS"
+fi
 
 echo "=========================================="
 echo "DEBUG: Must-gather collection completed"

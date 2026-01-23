@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2034,SC2086,SC2001,SC2068
+# shellcheck disable=SC2034,SC2086,SC2001,SC2068,SC2153
 # be careful of 2068, oc is very sensitive with "" on variables with error error: there is no need to specify a resource type as a separate argument when passing arguments in resource/name form (e.g. 'oc get resource/<resource_name>' instead of 'oc get resource resource/<resource_name>'
 
 export DST_DIR="must-gather"
@@ -70,6 +70,25 @@ function get_operator_resource() {
 	for k in $@; do
 		oc adm inspect $log_collection_args "$k" --dest-dir "$DST_DIR" || echo "Error collecting $k"
 	done
+}
+
+# cherrypick from https://github.com/openshift/must-gather/blob/main/collection-scripts/common.sh
+# other upstream require this to operator namespace from subscription
+function get_operator_ns() {
+    local operator_name
+    operator_name="$1"
+    cmd="oc get subs -A -o template --template '{{range .items}}{{if eq .spec.name \"${operator_name}\"}}{{.metadata.namespace}}{{\"\n\"}}{{end}}{{end}}'"
+    operator_ns="$(eval "$cmd")"
+
+    if [ -z "${operator_ns}" ]; then
+        echo "INFO: ${operator_name} not detected. Skipping."
+        exit 0
+    fi
+
+    if [[ "$(echo "${operator_ns}" | wc -l)" -gt 1 ]]; then
+        echo "ERROR: found more than one ${operator_name} subscription. Exiting."
+        exit 1
+    fi
 }
 
 # cherrypick from https://github.com/openshift/must-gather/blob/4b03e40e374c2e8096d6043bcfd1c23dd4cd9d0b/collection-scripts/common.sh#L19
