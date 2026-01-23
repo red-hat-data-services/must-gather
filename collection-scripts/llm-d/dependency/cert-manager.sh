@@ -9,15 +9,15 @@ source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 # https://cert-manager.io/
 # All are collected but only certain are in use
 resources=(
-    "certmanagers.operator.openshift.io"
-    "issuers.cert-manager.io"
-    "clusterissuers.cert-manager.io"
-    "certificates.cert-manager.io"
-    "certificaterequests.cert-manager.io"
-    "orders.acme.cert-manager.io"
-    "challenges.acme.cert-manager.io"
-    "istiocsrs.operator.openshift.io"
-    "infrastructures.config.openshift.io"
+    "certmanagers.operator.openshift.io" # this is the only one we use
+    # "issuers.cert-manager.io"
+    # "clusterissuers.cert-manager.io"
+    # "certificates.cert-manager.io"
+    # "certificaterequests.cert-manager.io"
+    # "orders.acme.cert-manager.io"
+    # "challenges.acme.cert-manager.io"
+    # "istiocsrs.operator.openshift.io"
+    # "infrastructures.config.openshift.io"
 )
 
 # Get all namespaces where these resources exist
