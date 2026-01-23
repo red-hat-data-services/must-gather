@@ -1,11 +1,17 @@
-# current latest is point to 4.20.0
-FROM quay.io/openshift/origin-must-gather:4.19.0
+FROM docker.io/alpine/git AS upstream
+# Current main SHA (2025-01-23): cea9e829eb920c0d45b322a9c60e9cd67970c9e3
+ARG MUST_GATHER_BRANCH=main
+RUN git clone --depth 1 --branch ${MUST_GATHER_BRANCH} https://github.com/openshift/must-gather.git /upstream
 
-# copy original gather from base image to gather_original
-RUN mv /usr/bin/gather /usr/bin/gather_original
 
-# copy all collection scripts to /usr/bin, including gather
+FROM quay.io/openshift/origin-cli:4.20
+# copy all local collection scripts to /usr/bin
 COPY collection-scripts/* /usr/bin/
-
+# copy upstream infrastructure gather scripts
+COPY --from=upstream \
+    /upstream/collection-scripts/gather_istio \
+    /upstream/collection-scripts/gather_metallb \
+    /upstream/collection-scripts/gather_sriov \
+    /usr/bin/
+RUN chmod +x /usr/bin/gather_*
 ENTRYPOINT ["/usr/bin/gather"]
-
