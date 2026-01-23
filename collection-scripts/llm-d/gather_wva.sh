@@ -15,14 +15,14 @@ echo "Collecting observability resources..."
 bash "${SCRIPT_DIR}/llm-d/gather_o11y.sh" || echo "WARNING: Failed to collect observability resources"
 
 # KEDA (Kubernetes Event Driven Autoscaling)
-resources+=(
+resources=(
     "scaledobjects.keda.sh"
     "scaledjobs.keda.sh"
     "triggerauthentications.keda.sh"
     "clustertriggerauthentications.keda.sh"
 )
 
-# llm-d
+# llm-d specific resources
 resources+=(
     "variantautoscalings.llmd.ai"
 )
