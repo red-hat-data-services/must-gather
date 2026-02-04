@@ -51,6 +51,7 @@ resources=(
   "trustyais.components.platform.opendatahub.io"
   "workbenches.components.platform.opendatahub.io"
   "llamastackoperators.components.platform.opendatahub.io"
+  "mlflowoperators.components.platform.opendatahub.io"
   "mutatingwebhookconfigurations.admissionregistration.k8s.io"
   "validationwebhookconfigurations.admissionregistration.k8s.io"
   "validatingadmissionpolicy"
@@ -97,6 +98,9 @@ case "$component" in
     "llamastack")
         /usr/bin/gather_lls
         ;;
+    "mlflow")
+        /usr/bin/gather_mlflow
+        ;;
     *) # for all 
         /usr/bin/gather_data_science_pipelines
         /usr/bin/gather_serving
@@ -108,6 +112,7 @@ case "$component" in
         /usr/bin/gather_trustyai
         /usr/bin/gather_feastoperator
         /usr/bin/gather_lls
+        /usr/bin/gather_mlflow
         ;;
 esac
 
