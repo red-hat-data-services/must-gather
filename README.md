@@ -26,6 +26,7 @@ This script also collects data from all the namespaces that has
 - `modelregistries` for Model Registry component
 - `featurestores` for Feast Operator
 - `llamastackdistributions` for Llama-stack Operator
+- `mlflows` for MLflow Operator
 
 ## Usage
 
@@ -53,6 +54,7 @@ Full list of supported components see table below:
 | trustyai        | TrustyAI                   |
 | feastoperator   | Feast Operator             |
 | llamastack      | Llama-stack Operator       |
+| mlflow          | MLflow Operator            |
 
 for example to 'kserve':
 
