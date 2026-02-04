@@ -1,0 +1,8 @@
+#!/bin/bash
+# shellcheck disable=SC1091
+source common.sh
+resources=("mlflows.mlflow.opendatahub.io")
+
+nslist=$(get_all_namespace "${resources[@]}")
+
+run_mustgather "$nslist" "${resources[@]}"
