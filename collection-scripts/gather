@@ -51,6 +51,7 @@ resources=(
   "trustyais.components.platform.opendatahub.io"
   "workbenches.components.platform.opendatahub.io"
   "llamastackoperators.components.platform.opendatahub.io"
+  "mlflowoperators.components.platform.opendatahub.io"
   "mutatingwebhookconfigurations.admissionregistration.k8s.io"
   "validationwebhookconfigurations.admissionregistration.k8s.io"
   "validatingadmissionpolicy"
@@ -97,17 +98,21 @@ case "$component" in
     "llamastack")
         /usr/bin/gather_lls
         ;;
-    *) # for all - run in parallel for faster collection
-        /usr/bin/gather_data_science_pipelines &
-        /usr/bin/gather_serving &
-        /usr/bin/gather_notebooks &
-        /usr/bin/gather_kuberay &
-        /usr/bin/gather_kueue &
-        /usr/bin/gather_kfto &
-        /usr/bin/gather_mr &
-        /usr/bin/gather_trustyai &
-        /usr/bin/gather_feastoperator &
-        /usr/bin/gather_lls &
+    "mlflow")
+        /usr/bin/gather_mlflow
+        ;;
+    *) # for all 
+        /usr/bin/gather_data_science_pipelines
+        /usr/bin/gather_serving
+        /usr/bin/gather_notebooks
+        /usr/bin/gather_kuberay
+        /usr/bin/gather_kueue
+        /usr/bin/gather_kfto
+        /usr/bin/gather_mr
+        /usr/bin/gather_trustyai
+        /usr/bin/gather_feastoperator
+        /usr/bin/gather_lls
+        /usr/bin/gather_mlflow
         ;;
 esac
 
