@@ -116,5 +116,13 @@ case "$component" in
         ;;
 esac
 
+# cherrypick from upstream openshift/must-gather for infrastructure components
+/usr/bin/gather_istio &
+/usr/bin/gather_metallb &
+/usr/bin/gather_sriov &
+
+# wait for all background jobs to complete
+wait
+
 # force disk flush to ensure that all data gathered is accessible in the copy container
 sync
