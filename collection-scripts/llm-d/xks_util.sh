@@ -57,8 +57,8 @@ function kubectl_inspect() {
     if [[ "$resource" == "namespace" ]] && [[ -n "$namespace" ]]; then
         # Check if namespace exists first
         if ! $KUBECTL get namespace "$namespace" &>/dev/null; then
-            echo "DEBUG: Namespace $namespace does not exist, skipping"
-            return 0
+            echo "WARNING: Namespace $namespace does not exist, skipping"
+            return 1
         fi
         echo "DEBUG: kubectl_inspect: resource type as ${resource} in namesapce ${namespace}"
         local ns_dir="${dest_dir}/namespaces/${namespace}"
@@ -107,7 +107,7 @@ function collect_cluster_scoped_resources() {
 function run_k8sgather() {
     local namespaces="$1"
     shift
-    local resources=("${DEFAULT_RESOURCES[@]}" "$@")
+    local resources=("$@")
 
     for ns in $namespaces; do
         # Only collect specific resource types, not entire namespace
