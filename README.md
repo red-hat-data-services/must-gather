@@ -55,6 +55,7 @@ Full list of supported components see table below:
 | feastoperator   | Feast Operator             |
 | llamastack      | Llama-stack Operator       |
 | mlflow          | MLflow Operator            |
+| llm-d           | LLM-D (auto-enabled for xKS)|
 
 for example to 'kserve':
 
@@ -83,6 +84,16 @@ oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 -
 If you have enabled customized namespaces for installation, below env. variable need to be configured when running "oc adm must-gather", example:
 ```
 oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
+```
+
+To enable workload-variant-autoscaler for llm-d on xKS (optional):
+```
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -- "export ENABLE_WVA=true; /usr/bin/gather"
+```
+
+For llm-d running on AKS with Azure Managed Prometheus:
+```
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -- "export AKS_MONITORING_TYPE=managed; /usr/bin/gather"
 ```
 
 ## Developer Guide

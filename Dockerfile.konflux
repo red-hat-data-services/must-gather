@@ -1,10 +1,22 @@
-FROM registry.redhat.io/openshift4/ose-must-gather-rhel9:v4.18.0@sha256:eaee2b7baf013c351a5e4b5b9324a230478d28a1f9bb3fb8e6f05323e120b754
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest As builder
+RUN cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
+EOF
+RUN microdnf install -y kubectl && \
+    microdnf clean all
 
+FROM registry.redhat.io/openshift4/ose-must-gather-rhel9:v4.20.@sha256:2c7248879f975086b0bfb59bb176c9f381e77caf3dfad40227ebe6404932f3ee
 # copy original gather from base image to gather_original
 RUN mv /usr/bin/gather /usr/bin/gather_original
-
-# copy all collection scripts to /usr/bin, including gather
-COPY collection-scripts/* /usr/bin/
+# Copy kubectl from builder stage
+COPY --from=builder /usr/bin/kubectl /usr/bin/kubectl
+# copy all collection scripts to /usr/bin, including gather and subdirectories
+COPY collection-scripts /usr/bin
 
 ENTRYPOINT ["/usr/bin/gather"]
 
