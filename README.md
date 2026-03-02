@@ -96,6 +96,115 @@ For llm-d running on AKS with Azure Managed Prometheus:
 oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -- "export AKS_MONITORING_TYPE=managed; /usr/bin/gather"
 ```
 
+## Usage on Non-OpenShift Kubernetes (xKS)
+
+For managed Kubernetes platforms like **CoreWeave (CKS)** and **Azure Kubernetes Service (AKS)**, must-gather can collect LLM-D inference-related resources.
+
+The script automatically detects:
+- **CKS** (CoreWeave Kubernetes) - via kernel version
+- **AKS** (Azure Kubernetes Service) - via provider ID
+- **OCP** (OpenShift) - via CoreOS image or OpenShift APIs
+
+### Quick Start
+
+**Step 1: Create RBAC (requires cluster admin)**
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: must-gather
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: must-gather-sa
+  namespace: k8s-gather
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: must-gather-reader
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: must-gather-reader-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: must-gather-reader
+subjects:
+  - kind: ServiceAccount
+    name: must-gather-sa
+    namespace: must-gather
+EOF
+```
+
+**Step 2: Run must-gather as a Job**
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: must-gather-job
+  namespace: must-gather
+spec:
+  template:
+    spec:
+      serviceAccountName: must-gather-sa
+      containers:
+      - name: gather
+        image: quay.io/wenzhou/must-gather:latest
+        command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
+      restartPolicy: Never
+EOF
+```
+
+**Step 3: Retrieve collected data**
+
+```bash
+# Get pod name
+POD_NAME=$(kubectl get pods -n must-gather -l job-name=must-gather-job -o jsonpath='{.items[0].metadata.name}')
+
+# Wait for collection to complete by checking for completion message in logs
+echo "Waiting for must-gather to complete..."
+until kubectl logs $POD_NAME -n must-gather 2>/dev/null | grep -q "DEBUG: LLM-D resource collection completed"; do
+  sleep 10
+done
+echo "Collection completed!"
+
+# Copy collected data to local machine
+kubectl cp must-gather/$POD_NAME:/tmp/must-gather ./must-gather.local.$(date +%s)
+```
+
+### Optional Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ENABLE_WVA` | `false` | Enable workload-variant-autoscaler collection |
+| `AKS_MONITORING_TYPE` | `self-hosted` | `managed` for Azure Managed Prometheus, `self-hosted` for kube-prometheus-stack |
+
+**Example with WVA enabled:**
+```bash
+env:
+- name: ENABLE_WVA
+  value: "true"
+```
+
+**Example for AKS with Azure Managed Prometheus:**
+```bash
+env:
+- name: AKS_MONITORING_TYPE
+  value: "managed"
+```
+
 ## Developer Guide
 
 To build custom image quay.io/myname/must-gather:1.2.3, can set GATHER_IMG and/or GATHER_IMG_VERSION
