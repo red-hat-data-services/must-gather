@@ -4,9 +4,9 @@
 source "$(dirname "$0")/../../common.sh"
 source "$(dirname "$0")/../xks_util.sh"
 
-# Sail Operator resources (Istio lifecycle management)
-# https://github.com/istio-ecosystem/sail-operator
+# Sail Operator resources
 # All are collected but only certain are in use
+# https://github.com/istio-ecosystem/sail-operator
 resources=(
     "istios.sailoperator.io"
     "istiorevisions.sailoperator.io"
@@ -15,11 +15,34 @@ resources=(
     "ztunnels.sailoperator.io"
 )
 
-# Istio networking resources (brought by Sail Operator)
+# Istio networking resources
 resources+=(
     "virtualservices.networking.istio.io"
     "destinationrules.networking.istio.io"
     "envoyfilters.networking.istio.io"
+    "gateways.networking.istio.io"
+    "proxyconfigs.networking.istio.io"
+    "serviceentries.networking.istio.io"
+    "sidecars.networking.istio.io"
+    "workloadentries.networking.istio.io"
+    "workloadgroups.networking.istio.io"
+)
+
+# Istio security resources
+resources+=(
+    "authorizationpolicies.security.istio.io"
+    "peerauthentications.security.istio.io"
+    "requestauthentications.security.istio.io"
+)
+
+# Istio telemetry resources
+resources+=(
+    "telemetries.telemetry.istio.io"
+)
+
+# Istio extensions
+resources+=(
+    "wasmplugins.extensions.istio.io"
 )
 
 # Get all namespaces where these resources exist

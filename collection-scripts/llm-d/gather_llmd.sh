@@ -60,3 +60,7 @@ nslist=$(get_all_namespace "${resources[@]}")
 
 # Run collection across all identified namespaces
 run_k8sgather "$nslist" "${resources[@]}"
+
+echo "=========================================="
+echo "DEBUG: LLM-D resource collection completed"
+echo "=========================================="
