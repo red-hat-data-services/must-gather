@@ -101,26 +101,28 @@ oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -
 For managed Kubernetes platforms like **CoreWeave (CKS)** and **Azure Kubernetes Service (AKS)**, must-gather can collect LLM-D inference-related resources.
 
 The script automatically detects:
-- **CKS** (CoreWeave Kubernetes) - via kernel version
-- **AKS** (Azure Kubernetes Service) - via provider ID
-- **OCP** (OpenShift) - via CoreOS image or OpenShift APIs
+- **CKS** (CoreWeave Kubernetes)
+- **AKS** (Azure Kubernetes Service)
 
 ### Quick Start
 
-**Step 1: Create RBAC (requires cluster admin)**
+**Step 1: Create RBAC**
 
 ```bash
+# Set namespace
+NAMESPACE=must-gather
+
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: must-gather
+  name: ${NAMESPACE}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: must-gather-sa
-  namespace: k8s-gather
+  namespace: ${NAMESPACE}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -142,7 +144,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: must-gather-sa
-    namespace: must-gather
+    namespace: ${NAMESPACE}
 EOF
 ```
 
@@ -154,7 +156,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: must-gather-job
-  namespace: must-gather
+  namespace: ${NAMESPACE}
 spec:
   template:
     spec:
@@ -170,18 +172,36 @@ EOF
 **Step 3: Retrieve collected data**
 
 ```bash
+
 # Get pod name
-POD_NAME=$(kubectl get pods -n must-gather -l job-name=must-gather-job -o jsonpath='{.items[0].metadata.name}')
+POD_NAME=$(kubectl get pods -n $NAMESPACE -l job-name=must-gather-job -o jsonpath='{.items[0].metadata.name}')
+
+# Optional: to follow pod logs
+kubectl logs -f $POD_NAME -n $NAMESPACE
 
 # Wait for collection to complete by checking for completion message in logs
 echo "Waiting for must-gather to complete..."
-until kubectl logs $POD_NAME -n must-gather 2>/dev/null | grep -q "DEBUG: LLM-D resource collection completed"; do
+until kubectl logs $POD_NAME -n $NAMESPACE 2>/dev/null | grep -q "DEBUG: Must-gather collection completed"; do
   sleep 10
 done
 echo "Collection completed!"
 
 # Copy collected data to local machine
-kubectl cp must-gather/$POD_NAME:/tmp/must-gather ./must-gather.local.$(date +%s)
+# IMPORTANT: Do this within 10 minutes! The pod sleeps for 10 minutes after collection,
+# then exits. If you need more time, increase the sleep value in the Job spec.
+kubectl cp $NAMESPACE/$POD_NAME:/tmp/must-gather ./must-gather.local.$(date +%s)
+```
+
+**Step 4: Clean up resources**
+
+```bash
+# Delete the Job (reuse NAMESPACE variable from Step 3)
+kubectl delete job must-gather-job -n $NAMESPACE
+
+# Optional: Delete namespace and RBAC (if no longer needed)
+kubectl delete namespace $NAMESPACE
+kubectl delete clusterrolebinding must-gather-reader-binding
+kubectl delete clusterrole must-gather-reader
 ```
 
 ### Optional Environment Variables
@@ -191,18 +211,54 @@ kubectl cp must-gather/$POD_NAME:/tmp/must-gather ./must-gather.local.$(date +%s
 | `ENABLE_WVA` | `false` | Enable workload-variant-autoscaler collection |
 | `AKS_MONITORING_TYPE` | `self-hosted` | `managed` for Azure Managed Prometheus, `self-hosted` for kube-prometheus-stack |
 
-**Example with WVA enabled:**
+**Example: Enable WVA collection (opt-in)**
+
+If workload-variant-autoscaler is enabled in your cluster and you want to collect it:
 ```bash
-env:
-- name: ENABLE_WVA
-  value: "true"
+kubectl apply -f - <<EOF
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: must-gather-job
+  namespace: ${NAMESPACE}
+spec:
+  template:
+    spec:
+      serviceAccountName: must-gather-sa
+      containers:
+      - name: gather
+        image: quay.io/wenzhou/must-gather:latest
+        command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
+        env:
+        - name: ENABLE_WVA
+          value: "true"
+      restartPolicy: Never
+EOF
 ```
 
-**Example for AKS with Azure Managed Prometheus:**
+**Example: AKS with Azure Managed Prometheus**
+
+If using Azure Managed Prometheus instead of self-hosted kube-prometheus-stack:
 ```bash
-env:
-- name: AKS_MONITORING_TYPE
-  value: "managed"
+kubectl apply -f - <<EOF
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: must-gather-job
+  namespace: ${NAMESPACE}
+spec:
+  template:
+    spec:
+      serviceAccountName: must-gather-sa
+      containers:
+      - name: gather
+        image: quay.io/wenzhou/must-gather:latest
+        command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
+        env:
+        - name: AKS_MONITORING_TYPE
+          value: "managed"
+      restartPolicy: Never
+EOF
 ```
 
 ## Developer Guide
