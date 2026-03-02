@@ -1,69 +1,99 @@
 #!/bin/bash
-# shellcheck disable=SC2154,SC1091,SC2086
-source common.sh
+# shellcheck disable=SC2154,SC1091,SC2086,SC2155
+source "$(dirname "$0")/common.sh"
 
-# for new flag to get since and since-time
+# Detect Kubernetes distribution
+source "$(dirname "$0")/llm-d/xks_util.sh"
+export K8S_DISTRO=$(detect_k8s_distro)
+
+echo "Detected Kubernetes distribution: ${K8S_DISTRO}"
+
+# Set KUBECTL based on distribution
+if [[ "${K8S_DISTRO}" == "ocp" ]]; then
+    export KUBECTL="oc"
+else
+    export KUBECTL="kubectl"
+fi
+
+# Get log collection arguments (--since, --since-time) for both oc adm inspect and kubectl logs
 get_log_collection_args
 
-# define default namespaces
-OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
-NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
-MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
-APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
-MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
-# MaaS namespace
-KUADRANT_NS="kuadrant-system"
-MAAS_NS=${MAAS_NAMESPACE:-maas-api}
-# dependent operator namespace
-GW_NS=${GW_NS:-openshift-ingress}
+# OpenShift-specific logic - for RHOAI
+if [[ "${K8S_DISTRO}" == "ocp" ]]; then
+    echo "=========================================="
+    echo "DEBUG: OpenShift detected. Running RHOAI-specific collection..."
+    echo "DEBUG: Using KUBECTL=${KUBECTL}"
+    echo "=========================================="
+
+    # define default namespaces
+    OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+    NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
+    MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
+    APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
+    MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
+    # MaaS namespace
+    KUADRANT_NS="kuadrant-system"
+    MAAS_NS=${MAAS_NAMESPACE:-maas-api}
+    # dependent operator namespace
+    GW_NS=${GW_NS:-openshift-ingress}
+
+    # generate /must-gather/version file with RHOAI version
+    echo "red-hat-data-services/must-gather" > "$DST_DIR/version"
+    rhoai_version >> "$DST_DIR/version"
+
+    oc adm inspect $log_collection_args "namespace/$OPERATOR_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
+    oc adm inspect $log_collection_args "namespace/$MONITORING_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
+    oc adm inspect $log_collection_args "namespace/$APPLICATIONS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
+    oc adm inspect $log_collection_args "namespace/$NOTEBOOKS_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
+    oc adm inspect $log_collection_args "namespace/$MODELREG_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MODELREG_NS}"
+    oc adm inspect $log_collection_args "namespace/$GW_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${GW_NS}"
+    oc adm inspect $log_collection_args "namespace/$KUADRANT_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KUADRANT_NS}"
+    oc adm inspect $log_collection_args "namespace/$MAAS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MAAS_NS}"
+
+    # add DSCI, DSC, Auth and service/component/infra CRs
+    resources=(
+      "dscinitialization"
+      "datasciencecluster"
+      "auths.services.platform.opendatahub.io"
+      "monitorings.services.platform.opendatahub.io"
+      "gatewayconfigs.services.platform.opendatahub.io"
+      "hardwareprofiles.infrastructure.opendatahub.io"
+      "dashboards.components.platform.opendatahub.io"
+      "datasciencepipelines.components.platform.opendatahub.io"
+      "feastoperators.components.platform.opendatahub.io"
+      "kserves.components.platform.opendatahub.io"
+      "kueues.components.platform.opendatahub.io"
+      "modelcontrollers.components.platform.opendatahub.io"
+      "modelregistries.components.platform.opendatahub.io"
+      "rays.components.platform.opendatahub.io"
+      "trainingoperators.components.platform.opendatahub.io"
+      "trustyais.components.platform.opendatahub.io"
+      "workbenches.components.platform.opendatahub.io"
+      "llamastackoperators.components.platform.opendatahub.io"
+      "mlflowoperators.components.platform.opendatahub.io"
+      "mutatingwebhookconfigurations.admissionregistration.k8s.io"
+      "validationwebhookconfigurations.admissionregistration.k8s.io"
+      "validatingadmissionpolicy"
+      "validatingadmissionpolicybinding"
+      "gatewayclasses"
+      "trainers.components.platform.opendatahub.io"
+    )
+    get_operator_resource "${resources[@]}"
+fi
 
 
-# generate /must-gather/version file with RHOAI version
-echo "red-hat-data-services/must-gather" > "$DST_DIR/version"
-rhoai_version >> "$DST_DIR/version"
+# set component or default based on distribution
+# For non-OpenShift, we only run with llm-d; for OpenShift, default to all
+if [[ "${K8S_DISTRO}" == "ocp" ]]; then
+    component=${COMPONENT:-all}
+else
+    component="llm-d"
+fi
 
-oc adm inspect $log_collection_args "namespace/$OPERATOR_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${OPERATOR_NS}"
-oc adm inspect $log_collection_args "namespace/$MONITORING_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MONITORING_NS}"
-oc adm inspect $log_collection_args "namespace/$APPLICATIONS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${APPLICATIONS_NS}"
-oc adm inspect $log_collection_args "namespace/$NOTEBOOKS_NS" --dest-dir="$DST_DIR" || echo "Error getting logs from ${NOTEBOOKS_NS}"
-oc adm inspect $log_collection_args "namespace/$MODELREG_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MODELREG_NS}"
-oc adm inspect $log_collection_args "namespace/$GW_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${GW_NS}"
-oc adm inspect $log_collection_args "namespace/$KUADRANT_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KUADRANT_NS}"
-oc adm inspect $log_collection_args "namespace/$MAAS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MAAS_NS}"
+echo "=========================================="
+echo "DEBUG: Component=${component}"
+echo "=========================================="
 
-# add DSCI, DSC, Auth and service/component/infra CRs
-resources=(
-  "dscinitialization"
-  "datasciencecluster"
-  "auths.services.platform.opendatahub.io"
-  "monitorings.services.platform.opendatahub.io"
-  "gatewayconfigs.services.platform.opendatahub.io"
-  "hardwareprofiles.infrastructure.opendatahub.io"
-  "dashboards.components.platform.opendatahub.io"
-  "datasciencepipelines.components.platform.opendatahub.io"
-  "feastoperators.components.platform.opendatahub.io"
-  "kserves.components.platform.opendatahub.io"
-  "kueues.components.platform.opendatahub.io"
-  "modelcontrollers.components.platform.opendatahub.io"
-  "modelregistries.components.platform.opendatahub.io"
-  "rays.components.platform.opendatahub.io"
-  "trainingoperators.components.platform.opendatahub.io"
-  "trustyais.components.platform.opendatahub.io"
-  "workbenches.components.platform.opendatahub.io"
-  "llamastackoperators.components.platform.opendatahub.io"
-  "mlflowoperators.components.platform.opendatahub.io"
-  "mutatingwebhookconfigurations.admissionregistration.k8s.io"
-  "validationwebhookconfigurations.admissionregistration.k8s.io"
-  "validatingadmissionpolicy"
-  "validatingadmissionpolicybinding"
-  "gatewayclasses"
-  "trainers.components.platform.opendatahub.io"
-)
-get_operator_resource "${resources[@]}"
-
-
-# set component or default to all
-component=${COMPONENT:-all}
 case "$component" in
     "dsp")
         /usr/bin/gather_data_science_pipelines
@@ -101,7 +131,14 @@ case "$component" in
     "mlflow")
         /usr/bin/gather_mlflow
         ;;
-    *) # for all 
+    "llm-d")
+        "$(dirname "$0")/llm-d/gather_llmd.sh"
+        # WVA is optional, controlled by ENABLE_WVA env var (default: false)
+        if [[ "${ENABLE_WVA:-false}" == "true" ]]; then
+            /usr/bin/llm-d/gather_wva.sh
+        fi
+        ;;
+    *) # for all except llm-d
         /usr/bin/gather_data_science_pipelines
         /usr/bin/gather_serving
         /usr/bin/gather_notebooks

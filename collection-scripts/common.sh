@@ -33,7 +33,7 @@ function run_mustgather() {
 function get_all_namespace() {
     local nslist
     for kind in "$@"; do
-        nslist+=$(oc get "$kind" --all-namespaces -o jsonpath='{range .items[*]}{.metadata.namespace}{" "}{end}')
+        nslist+=$($KUBECTL get "$kind" --all-namespaces -o jsonpath='{range .items[*]}{.metadata.namespace}{" "}{end}')
     done
     uniq_list "$nslist"
 }
@@ -102,4 +102,8 @@ get_log_collection_args() {
 		iso_time=$(echo "${MUST_GATHER_SINCE_TIME}" | sed 's/T/ /; s/Z//')
 		node_log_collection_args=--since="${iso_time}"
 	fi
+
+	# Export so subprocess scripts can access these variables
+	export log_collection_args
+	export node_log_collection_args
 }
