@@ -163,7 +163,7 @@ spec:
       serviceAccountName: must-gather-sa
       containers:
       - name: gather
-        image: quay.io/wenzhou/must-gather:latest
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
       restartPolicy: Never
 EOF
@@ -227,7 +227,7 @@ spec:
       serviceAccountName: must-gather-sa
       containers:
       - name: gather
-        image: quay.io/wenzhou/must-gather:latest
+        iamge: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
         - name: ENABLE_WVA
@@ -252,7 +252,7 @@ spec:
       serviceAccountName: must-gather-sa
       containers:
       - name: gather
-        image: quay.io/wenzhou/must-gather:latest
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
         - name: AKS_MONITORING_TYPE
