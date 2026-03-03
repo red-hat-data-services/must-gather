@@ -155,3 +155,7 @@ esac
 
 # force disk flush to ensure that all data gathered is accessible in the copy container
 sync
+
+echo "=========================================="
+echo "DEBUG: Must-gather collection completed"
+echo "=========================================="

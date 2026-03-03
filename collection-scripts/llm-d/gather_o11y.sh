@@ -58,6 +58,11 @@ else
     # Get all namespaces where these resources exist
     nslist=$(get_all_namespace "${resources[@]}")
 
+    echo "=========================================="
+    echo "DEBUG: Self-hosted monitoring - Namespaces found: ${nslist:-<none>}"
+    echo "DEBUG: Resources to collect: ${#resources[@]}"
+    echo "=========================================="
+
     # Run collection across all identified namespaces (for ServiceMonitor/PodMonitor CRDs)
     run_k8sgather "$nslist" "${resources[@]}"
 
@@ -66,3 +71,7 @@ else
     MONITORING_NS=${MONITORING_NAMESPACE:-${DEFAULT_MONITORING_NS:-monitoring}}
     kubectl_inspect "namespace/$MONITORING_NS" || echo "ERROR: Namespace ${MONITORING_NS} not found"
 fi
+
+echo "=========================================="
+echo "DEBUG: O11y collection completed"
+echo "=========================================="
