@@ -57,8 +57,8 @@ function kubectl_inspect() {
     if [[ "$resource" == "namespace" ]] && [[ -n "$namespace" ]]; then
         # Check if namespace exists first
         if ! $KUBECTL get namespace "$namespace" &>/dev/null; then
-            echo "DEBUG: Namespace $namespace does not exist, skipping"
-            return 0
+            echo "WARNING: Namespace $namespace does not exist, skipping"
+            return 1
         fi
         echo "DEBUG: kubectl_inspect: resource type as ${resource} in namesapce ${namespace}"
         local ns_dir="${dest_dir}/namespaces/${namespace}"
@@ -107,7 +107,7 @@ function collect_cluster_scoped_resources() {
 function run_k8sgather() {
     local namespaces="$1"
     shift
-    local resources=("${DEFAULT_RESOURCES[@]}" "$@")
+    local resources=("$@")
 
     for ns in $namespaces; do
         # Only collect specific resource types, not entire namespace
@@ -132,23 +132,30 @@ function detect_k8s_distro() {
         exit 1
     fi
 
-    local kernel_version os_image provider_id
-    kernel_version=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.kernelVersion}' 2>/dev/null) # for CKS
-    os_image=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.osImage}' 2>/dev/null)  # for OCP
-    provider_id=$(${cmd} get nodes -o jsonpath='{.items[0].spec.providerID}' 2>/dev/null) # for AKS
+    # Check if infrastructure.config.openshift.io/cluster resource exists
+    if ${cmd} get infrastructure cluster &>/dev/null; then
+        local kernel_version provider_id
+        kernel_version=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.kernelVersion}' 2>/dev/null)
+        provider_id=$(${cmd} get nodes -o jsonpath='{.items[0].spec.providerID}' 2>/dev/null)
 
-    # Check for OpenShift first (catches ROSA and ARO)
-    if echo "$os_image" | grep -q "Red Hat Enterprise Linux CoreOS"; then
-        distro="ocp"
-    # Check API resources for OpenShift (fallback)
-    elif ${cmd} api-resources 2>/dev/null | grep -q "route.openshift.io"; then
-        distro="ocp"
-    # Check kernel version for CoreWeave
-    elif echo "$kernel_version" | grep -qi "coreweave"; then
-        distro="cks"
-    # Check for Azure Kubernetes Service (after OCP to avoid ARO confusion)
-    elif echo "$provider_id" | grep -q "^azure://"; then
-        distro="aks"
+        # Check kernel version for CKS
+        if echo "$kernel_version" | grep -qi "coreweave"; then
+            distro="cks"
+        # Check provider for AKS
+        elif echo "$provider_id" | grep -q "^azure://"; then
+            distro="aks"
+        fi
+    else
+        local os_image
+        os_image=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.osImage}' 2>/dev/null)
+
+        # Check for OpenShift - CoreOS image (catches ROSA and ARO)
+        if echo "$os_image" | grep -q "Red Hat Enterprise Linux CoreOS"; then
+            distro="ocp"
+        # Check API resources for OpenShift (fallback)
+        elif ${cmd} api-resources 2>/dev/null | grep -q "route.openshift.io"; then
+            distro="ocp"
+        fi
     fi
 
     echo "$distro"
