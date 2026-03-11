@@ -19,7 +19,6 @@ resources+=(
     "scaledjobs.keda.sh"
     "triggerauthentications.keda.sh"
     "clustertriggerauthentications.keda.sh"
-    "variantautoscalings.llmd.ai"
 )
 
 # llm-d
