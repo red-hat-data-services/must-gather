@@ -1,7 +1,8 @@
 #!/bin/bash
 # collects Prometheus Operator monitoring resources
 # shellcheck disable=SC1091
-source "$(dirname "$0")/../common.sh"
+: "${SCRIPT_DIR:=$(dirname "$0")/..}"
+source "${SCRIPT_DIR}/common.sh"
 
 echo "=========================================="
 echo "DEBUG: gather_o11y.sh is being executed"

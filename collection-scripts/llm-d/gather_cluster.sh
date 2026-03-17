@@ -2,9 +2,9 @@
 # shellcheck disable=SC1091
 # Note: Core cluster resources (PVs, storage classes, etc.) are collected by gather script
 # This script collects cluster info, API resources, and detailed node information
-
-source "$(dirname "$0")/../common.sh"
-source "$(dirname "$0")/xks_util.sh"
+: "${SCRIPT_DIR:=$(dirname "$0")/..}"
+source "${SCRIPT_DIR}/common.sh"
+source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 
 dest_dir="${DST_DIR}/cluster-scoped-resources"
 mkdir -p "${dest_dir}"
