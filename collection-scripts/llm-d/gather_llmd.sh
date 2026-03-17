@@ -56,10 +56,10 @@ resources+=(
     "inferencemodels.inference.networking.x-k8s.io"  # to be deleted
 )
 
-# Get all namespaces where these resources exist
-nslist=$(get_all_namespace "${resources[@]}")
+# Get all namespaces where these resources exist, excluding application namespace which has been full inspected
+nslist=$(get_all_namespace "${resources[@]}" | grep -v "^${APPLICATIONS_NS}$" | tr '\n' ' ')
 
-# Run collection across all identified namespaces
+# Run collection across all identified namespaces (except APPLICATIONS_NS which was already fully inspected)
 run_k8sgather "$nslist" "${resources[@]}"
 
 echo "=========================================="

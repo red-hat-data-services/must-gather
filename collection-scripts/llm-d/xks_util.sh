@@ -132,9 +132,11 @@ function detect_k8s_distro() {
         exit 1
     fi
 
-    # Check if infrastructure.config.openshift.io/cluster resource exists
-    if ${cmd} get infrastructure cluster &>/dev/null; then
-        local kernel_version provider_id
+    # Check if infrastructures.config.openshift.io exists - definitive OCP indicator
+    if ${cmd} get infrastructures.config.openshift.io cluster &>/dev/null; then
+        distro="ocp"
+    else
+        local kernel_version provider_id os_image
         kernel_version=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.kernelVersion}' 2>/dev/null)
         provider_id=$(${cmd} get nodes -o jsonpath='{.items[0].spec.providerID}' 2>/dev/null)
 
@@ -144,17 +146,12 @@ function detect_k8s_distro() {
         # Check provider for AKS
         elif echo "$provider_id" | grep -q "^azure://"; then
             distro="aks"
-        fi
-    else
-        local os_image
-        os_image=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.osImage}' 2>/dev/null)
-
-        # Check for OpenShift - CoreOS image (catches ROSA and ARO)
-        if echo "$os_image" | grep -q "Red Hat Enterprise Linux CoreOS"; then
-            distro="ocp"
-        # Check API resources for OpenShift (fallback)
-        elif ${cmd} api-resources 2>/dev/null | grep -q "route.openshift.io"; then
-            distro="ocp"
+        else
+            # Fallback: check os_image for OpenShift
+            os_image=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.osImage}' 2>/dev/null)
+            if echo "$os_image" | grep -q "Red Hat Enterprise Linux CoreOS"; then
+                distro="ocp"
+            fi
         fi
     fi
 
