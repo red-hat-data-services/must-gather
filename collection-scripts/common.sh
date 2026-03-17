@@ -3,6 +3,7 @@
 # be careful of 2068, oc is very sensitive with "" on variables with error error: there is no need to specify a resource type as a separate argument when passing arguments in resource/name form (e.g. 'oc get resource/<resource_name>' instead of 'oc get resource resource/<resource_name>'
 
 export DST_DIR="must-gather"
+mkdir -p "$DST_DIR"
 
 # Default resources to collect for every namespace (Gateway API, Istio, etc.)
 DEFAULT_RESOURCES=(

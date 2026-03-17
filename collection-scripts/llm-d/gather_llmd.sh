@@ -21,13 +21,19 @@ APPLICATIONS_NS="opendatahub" # hardcode to opendatahub for now where kserve con
 # Mainly get kserve controller pods
 kubectl_inspect "namespace/$APPLICATIONS_NS" || echo "Error inspecting namespace/${APPLICATIONS_NS}"
 
-# Run dependency collection scripts (cert-manager, sail, lws)
-echo "Collecting llm-d dependencies(operators)..."
+# Run dependency collection scripts in parallel (cert-manager, sail, lws)
+echo "Collecting llm-d dependencies(operators) in parallel..."
+declare -A pid_to_script
 for script in "${SCRIPT_DIR}/llm-d/dependency"/*.sh; do
     if [[ -f "$script" ]]; then
-        echo "Running $(basename "$script")..."
-        bash "$script" || echo "ERROR: Failed to run $script"
+        echo "Starting $(basename "$script")..."
+        bash "$script" &
+        pid_to_script[$!]="$script"
     fi
+done
+# Wait for all dependency scripts to complete
+for pid in "${!pid_to_script[@]}"; do
+    wait "$pid" || echo "ERROR: Failed to run ${pid_to_script[$pid]}"
 done
 
 # Core KServe resources
