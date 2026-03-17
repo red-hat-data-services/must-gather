@@ -1,8 +1,9 @@
 #!/bin/bash
 # cert-manager dependency gathering script - collects certificate management resources
 # shellcheck disable=SC1091
-source "$(dirname "$0")/../../common.sh"
-source "$(dirname "$0")/../xks_util.sh"
+: "${SCRIPT_DIR:=$(dirname "$0")/../..}"
+source "${SCRIPT_DIR}/common.sh"
+source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 
 # cert-manager core resources
 # https://cert-manager.io/

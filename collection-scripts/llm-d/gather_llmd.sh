@@ -2,8 +2,9 @@
 # LLM-D component gathering script - collects Kserve + llm-d related resources
 # No need call gather_serving but running standalone
 # shellcheck disable=SC1091
-source "$(dirname "$0")/../common.sh"
-source "$(dirname "$0")/xks_util.sh"
+: "${SCRIPT_DIR:=$(dirname "$0")/..}"
+source "${SCRIPT_DIR}/common.sh"
+source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 
 echo "=========================================="
 echo "DEBUG: gather_llmd.sh is being executed"
@@ -14,7 +15,7 @@ echo "=========================================="
 
 # Collect cluster-level information
 echo "Collecting cluster information..."
-bash "$(dirname "$0")/gather_cluster.sh" || echo "WARNING: Failed to collect cluster information"
+bash "${SCRIPT_DIR}/llm-d/gather_cluster.sh" || echo "WARNING: Failed to collect cluster information"
 
 APPLICATIONS_NS="opendatahub" # hardcode to opendatahub for now where kserve controller is deployed
 # Mainly get kserve controller pods
@@ -22,7 +23,7 @@ kubectl_inspect "namespace/$APPLICATIONS_NS" || echo "Error inspecting namespace
 
 # Run dependency collection scripts (cert-manager, sail, lws)
 echo "Collecting llm-d dependencies(operators)..."
-for script in "$(dirname "$0")/dependency"/*.sh; do
+for script in "${SCRIPT_DIR}/llm-d/dependency"/*.sh; do
     if [[ -f "$script" ]]; then
         echo "Running $(basename "$script")..."
         bash "$script" || echo "ERROR: Failed to run $script"
