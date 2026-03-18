@@ -70,20 +70,28 @@ function kubectl_inspect() {
         # Auto-discover all namespaced resources
         auto_discover_resources "true" "${ns_dir}" "${namespace}"
 
-        # Get container logs from pod
+        # Get container logs from pods in parallel
+        local log_pids=()
         for pod in $($KUBECTL get pods -n "$namespace" -o jsonpath='{.items[*].metadata.name}' 2>/dev/null); do
-            local pod_dir="${ns_dir}/pods/${pod}"
-            mkdir -p "${pod_dir}"
-            $KUBECTL get pod "$pod" -n "$namespace" -o yaml > "${pod_dir}/${pod}.yaml" 2>/dev/null
+            (
+                local pod_dir="${ns_dir}/pods/${pod}"
+                mkdir -p "${pod_dir}"
+                $KUBECTL get pod "$pod" -n "$namespace" -o yaml > "${pod_dir}/${pod}.yaml" 2>/dev/null
 
-            # Get logs for each container
-            for container in $($KUBECTL get pod "$pod" -n "$namespace" -o jsonpath='{.spec.containers[*].name}' 2>/dev/null); do
-                mkdir -p "${pod_dir}/${container}/logs"
-                # shellcheck disable=SC2086,SC2154
-                $KUBECTL logs "$pod" -n "$namespace" -c "$container" $log_collection_args > "${pod_dir}/${container}/logs/current.log" 2>/dev/null || true
-                # shellcheck disable=SC2086
-                $KUBECTL logs "$pod" -n "$namespace" -c "$container" --previous $log_collection_args > "${pod_dir}/${container}/logs/previous.log" 2>/dev/null || true
-            done
+                # Get logs for each container
+                for container in $($KUBECTL get pod "$pod" -n "$namespace" -o jsonpath='{.spec.containers[*].name}' 2>/dev/null); do
+                    mkdir -p "${pod_dir}/${container}/logs"
+                    # shellcheck disable=SC2086,SC2154
+                    $KUBECTL logs "$pod" -n "$namespace" -c "$container" $log_collection_args > "${pod_dir}/${container}/logs/current.log" 2>/dev/null || true
+                    # shellcheck disable=SC2086
+                    $KUBECTL logs "$pod" -n "$namespace" -c "$container" --previous $log_collection_args > "${pod_dir}/${container}/logs/previous.log" 2>/dev/null || true
+                done
+            ) &
+            log_pids+=($!)
+        done
+        # Wait for all pod log collections
+        for pid in "${log_pids[@]}"; do
+            wait "$pid" 2>/dev/null
         done
         return 0
     elif [[ -n "$namespace" ]]; then
@@ -103,17 +111,26 @@ function collect_cluster_scoped_resources() {
     auto_discover_resources "false" "${dest_dir}"
 }
 
-# run gather in the namespaces one by one, also collecting custom resources
+# run gather in the namespaces in parallel, also collecting custom resources
 function run_k8sgather() {
     local namespaces="$1"
     shift
     local resources=("$@")
+    local pids=()
 
     for ns in $namespaces; do
-        # Only collect specific resource types, not entire namespace
-        for resource in "${resources[@]}"; do
-            kubectl_inspect "$resource" "$ns" 2>/dev/null
-        done
+        (
+            # Only collect specific resource types, not entire namespace
+            for resource in "${resources[@]}"; do
+                kubectl_inspect "$resource" "$ns" 2>/dev/null
+            done
+        ) &
+        pids+=($!)
+    done
+
+    # Wait for all namespace collections to complete
+    for pid in "${pids[@]}"; do
+        wait "$pid" 2>/dev/null
     done
 }
 
@@ -132,9 +149,11 @@ function detect_k8s_distro() {
         exit 1
     fi
 
-    # Check if infrastructure.config.openshift.io/cluster resource exists
-    if ${cmd} get infrastructure cluster &>/dev/null; then
-        local kernel_version provider_id
+    # Check if infrastructures.config.openshift.io exists - definitive OCP indicator
+    if ${cmd} get infrastructures.config.openshift.io cluster &>/dev/null; then
+        distro="ocp"
+    else
+        local kernel_version provider_id os_image
         kernel_version=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.kernelVersion}' 2>/dev/null)
         provider_id=$(${cmd} get nodes -o jsonpath='{.items[0].spec.providerID}' 2>/dev/null)
 
@@ -144,17 +163,12 @@ function detect_k8s_distro() {
         # Check provider for AKS
         elif echo "$provider_id" | grep -q "^azure://"; then
             distro="aks"
-        fi
-    else
-        local os_image
-        os_image=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.osImage}' 2>/dev/null)
-
-        # Check for OpenShift - CoreOS image (catches ROSA and ARO)
-        if echo "$os_image" | grep -q "Red Hat Enterprise Linux CoreOS"; then
-            distro="ocp"
-        # Check API resources for OpenShift (fallback)
-        elif ${cmd} api-resources 2>/dev/null | grep -q "route.openshift.io"; then
-            distro="ocp"
+        else
+            # Fallback: check os_image for OpenShift
+            os_image=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.osImage}' 2>/dev/null)
+            if echo "$os_image" | grep -q "Red Hat Enterprise Linux CoreOS"; then
+                distro="ocp"
+            fi
         fi
     fi
 
