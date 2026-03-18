@@ -46,8 +46,8 @@ else
     # Prometheus Operator resources (monitoring.coreos.com)
     # https://github.com/prometheus-operator/prometheus-operator
     resources=(
-        "servicemonitors.monitoring.coreos.com" # dupe: already in gather_llmd.sh
-        "podmonitors.monitoring.coreos.com"     # dupe: already in gather_llmd.sh
+        # "servicemonitors.monitoring.coreos.com" # dupe: already in gather_llmd.sh
+        # "podmonitors.monitoring.coreos.com"     # dupe: already in gather_llmd.sh
         "prometheusrules.monitoring.coreos.com"
         "prometheuses.monitoring.coreos.com"
         "alertmanagers.monitoring.coreos.com"
