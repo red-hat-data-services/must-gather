@@ -79,6 +79,7 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
       "validatingadmissionpolicybinding"
       "gatewayclasses"
       "trainers.components.platform.opendatahub.io"
+      "sparkoperators.components.platform.opendatahub.io"
     )
     get_operator_resource "${resources[@]}"
 fi
@@ -133,6 +134,9 @@ case "$component" in
     "mlflow")
         "${SCRIPT_DIR}/gather_mlflow"
         ;;
+    "sparkoperator")
+        "${SCRIPT_DIR}/gather_sparkoperator"
+        ;;
     "llm-d")
         "${SCRIPT_DIR}/llm-d/gather_llmd.sh"
         # WVA is optional, controlled by ENABLE_WVA env var (default: false)
@@ -152,6 +156,7 @@ case "$component" in
         "${SCRIPT_DIR}/gather_feastoperator"
         "${SCRIPT_DIR}/gather_lls"
         "${SCRIPT_DIR}/gather_mlflow"
+        "${SCRIPT_DIR}/gather_sparkoperator"
         ;;
 esac
 
