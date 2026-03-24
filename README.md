@@ -98,11 +98,18 @@ oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -
 
 ## Usage on Non-OpenShift Kubernetes (xKS)
 
-For managed Kubernetes platforms like **CoreWeave (CKS)** and **Azure Kubernetes Service (AKS)**, must-gather can collect LLM-D inference-related resources.
+For Kubernetes platforms running LLM-D inference workloads, must-gather can collect LLM-D-specific resources.
 
-The script automatically detects:
+Supported platforms:
 - **CKS** (CoreWeave Kubernetes)
 - **AKS** (Azure Kubernetes Service)
+- **OpenShift** (when running LLM-D workloads via RHAII)
+
+> **Important:** The examples below include `COMPONENT=llm-d` environment variable. This is required for:
+> - All xKS platforms to collect LLM-D resources
+> - OpenShift clusters running LLM-D workloads to avoid the default RHOAI-specific collection
+>
+> **Custom Namespaces:** If you used custom namespaces, add the appropriate environment variables to the Job spec. See the [Developer Guide](#developer-guide) section for the complete list of namespace variables.
 
 ### Quick Start
 
@@ -148,7 +155,25 @@ subjects:
 EOF
 ```
 
-**Step 2: Run must-gather as a Job**
+**Step 2: Authenticate to registry and create image pull secret**
+
+```bash
+# Authenticate to the registry
+podman login registry.redhat.io
+
+# Verify you can pull the must-gather image
+podman pull registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
+
+# Create Kubernetes secret from podman auth
+# This uses ~/.config/containers/auth.json for podman (persistent across sessions)
+# For docker users, use ~/.docker/config.json instead
+kubectl create secret generic redhat-pull-secret \
+  --from-file=.dockerconfigjson=${HOME}/.config/containers/auth.json \
+  --type=kubernetes.io/dockerconfigjson \
+  -n ${NAMESPACE}
+```
+
+**Step 3: Run must-gather as a Job**
 
 ```bash
 kubectl apply -f - <<EOF
@@ -161,15 +186,20 @@ spec:
   template:
     spec:
       serviceAccountName: must-gather-sa
+      imagePullSecrets:
+      - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
+        env:
+        - name: COMPONENT
+          value: "llm-d"
       restartPolicy: Never
 EOF
 ```
 
-**Step 3: Retrieve collected data**
+**Step 4: Retrieve collected data**
 
 ```bash
 
@@ -225,11 +255,15 @@ spec:
   template:
     spec:
       serviceAccountName: must-gather-sa
+      imagePullSecrets:
+      - name: redhat-pull-secret
       containers:
       - name: gather
-        iamge: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
+        - name: COMPONENT
+          value: "llm-d"
         - name: ENABLE_WVA
           value: "true"
       restartPolicy: Never
@@ -250,11 +284,15 @@ spec:
   template:
     spec:
       serviceAccountName: must-gather-sa
+      imagePullSecrets:
+      - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
+        - name: COMPONENT
+          value: "llm-d"
         - name: AKS_MONITORING_TYPE
           value: "managed"
       restartPolicy: Never
@@ -273,7 +311,7 @@ make build-and-push-must-gather
 
 ```
 
-To collect data for custom repositories for Open Data Hub set the following variables inside must-gather:
+To collect data for custom repositories, set the following variables inside must-gather:
 
 ```
 export OPERATOR_NAMESPACE=<name-for-operator-namespace>
