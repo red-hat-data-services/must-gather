@@ -2,8 +2,9 @@
 # LLM-D component gathering script - collects Kserve + llm-d related resources
 # No need call gather_serving but running standalone
 # shellcheck disable=SC1091
-source "$(dirname "$0")/../common.sh"
-source "$(dirname "$0")/xks_util.sh"
+: "${SCRIPT_DIR:=$(dirname "$0")/..}"
+source "${SCRIPT_DIR}/common.sh"
+source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 
 echo "=========================================="
 echo "DEBUG: gather_llmd.sh is being executed"
@@ -14,20 +15,39 @@ echo "=========================================="
 
 # Collect cluster-level information
 echo "Collecting cluster information..."
-bash "$(dirname "$0")/gather_cluster.sh" || echo "WARNING: Failed to collect cluster information"
+bash "${SCRIPT_DIR}/llm-d/gather_cluster.sh" || echo "WARNING: Failed to collect cluster information"
 
-APPLICATIONS_NS="opendatahub" # hardcode to opendatahub for now where kserve controller is deployed
-# Mainly get kserve controller pods
-kubectl_inspect "namespace/$APPLICATIONS_NS" || echo "Error inspecting namespace/${APPLICATIONS_NS}"
+# OPERATOR_NS and APPLICATIONS_NS are already defined in the main gather script
+# For non-OpenShift platforms, collect operator and applications namespaces
+if [[ "${K8S_DISTRO}" != "ocp" ]]; then
+    kubectl_inspect "namespace/$OPERATOR_NS" || echo "Error inspecting namespace/${OPERATOR_NS}"
+    kubectl_inspect "namespace/$APPLICATIONS_NS" || echo "Error inspecting namespace/${APPLICATIONS_NS}"
+fi
 
-# Run dependency collection scripts (cert-manager, sail, lws)
-echo "Collecting llm-d dependencies(operators)..."
-for script in "$(dirname "$0")/dependency"/*.sh; do
+# Run dependency collection scripts in parallel (cert-manager, sail, lws)
+echo "Collecting llm-d dependencies(operators) in parallel..."
+declare -A pid_to_script
+for script in "${SCRIPT_DIR}/llm-d/dependency"/*.sh; do
     if [[ -f "$script" ]]; then
-        echo "Running $(basename "$script")..."
-        bash "$script" || echo "ERROR: Failed to run $script"
+        echo "Starting $(basename "$script")..."
+        bash "$script" &
+        pid_to_script[$!]="$script"
     fi
 done
+# Wait for all dependency scripts to complete
+for pid in "${!pid_to_script[@]}"; do
+    wait "$pid" || echo "ERROR: Failed to run ${pid_to_script[$pid]}"
+done
+
+resources+=(
+    "dscinitialization"
+    "datasciencecluster"
+    "gatewayconfigs.services.platform.opendatahub.io"
+    "kserves.components.platform.opendatahub.io"
+    "mutatingwebhookconfigurations.admissionregistration.k8s.io"
+    "validatingwebhookconfigurations.admissionregistration.k8s.io"
+    "gatewayclasses"
+)
 
 # Core KServe resources
 resources+=(
@@ -55,10 +75,10 @@ resources+=(
     "inferencemodels.inference.networking.x-k8s.io"  # to be deleted
 )
 
-# Get all namespaces where these resources exist
-nslist=$(get_all_namespace "${resources[@]}")
+# Get all namespaces where these resources exist, excluding namespaces which have been fully inspected
+nslist=$(get_all_namespace "${resources[@]}" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${OPERATOR_NS}$" | tr '\n' ' ')
 
-# Run collection across all identified namespaces
+# Run collection across all identified namespaces (except already fully inspected namespaces)
 run_k8sgather "$nslist" "${resources[@]}"
 
 echo "=========================================="

@@ -17,18 +17,18 @@ and datasciencecluster and dscinitialization instances from cluster
 
 This script also collects data from all the namespaces that has
 
-- `datasciencepipelinesapplications` `scheduledworkflow` `applications` `clusterworkflowtemplates` `cronworkflows` `viewers` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` for AI Pipeline (Previously called Data Science Pipeline) component
+- `datasciencepipelinesapplications` `scheduledworkflows` `clusterworkflowtemplates` `cronworkflows` `workfloweventbindings` `workflows` `workflowtaskresults` `workflowtemplates` `workflowtasksets` `workflowartifactgctasks` for AI Pipeline (Previously called Data Science Pipeline) component
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
-- `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
-- `mpijobs` `mxjobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob`  for Kubeflow Training Operator
-- `inferenceservices` `inferencegraphs` `"trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` for Kserve component
+- `admissionchecks` `cohorts` `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
+- `mpijobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob` `jaxjobs` `jobsetoperators` `trainjobs.trainer.kubeflow.org` `trainingruntimes.trainer.kubeflow.org` `clustertrainingruntimes.trainer.kubeflow.org` for Kubeflow Training Operator
+- `inferenceservices` `inferencegraphs` `trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` `localmodelnodegroups` `authconfigs` `authorinos` `authpolicies.kuadrant.io` `accounts.nim.opendatahub.io` `llminferenceserviceconfigs` `llminferenceservices` `leaderworkersetoperators` `leaderworkersets` `inferencepools` `variantautoscalings.llmd.ai` `ratelimitpolicies.kuadrant.io` `kuadrants.kuadrant.io` `tokenratelimitpolicies.kuadrant.io` for Kserve component
 - `notebooks` `imagestreams` for Workbench component
-- `modelregistries` for Model Registry component
+- `modelregistries.modelregistry.opendatahub.io` for Model Registry component
 - `featurestores` for Feast Operator
 - `llamastackdistributions` for Llama-stack Operator
-- `mlflows` for MLflow Operator
+- `mlflows.mlflow.opendatahub.io` for MLflow Operator
 
-## Usage
+## Usage on OpenShift
 
 Refer to KCS: https://access.redhat.com/solutions/7061604 
 
@@ -55,7 +55,7 @@ Full list of supported components see table below:
 | feastoperator   | Feast Operator             |
 | llamastack      | Llama-stack Operator       |
 | mlflow          | MLflow Operator            |
-| llm-d           | LLM-D (auto-enabled for xKS)|
+| llm-d           | LLM-D / RHAII (auto-enabled for xKS)|
 
 for example to 'kserve':
 
@@ -98,11 +98,20 @@ oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -
 
 ## Usage on Non-OpenShift Kubernetes (xKS)
 
-For managed Kubernetes platforms like **CoreWeave (CKS)** and **Azure Kubernetes Service (AKS)**, must-gather can collect LLM-D inference-related resources.
+For Kubernetes platforms running LLM-D inference workloads, must-gather can collect LLM-D-specific resources.
 
-The script automatically detects:
+Supported platforms:
 - **CKS** (CoreWeave Kubernetes)
 - **AKS** (Azure Kubernetes Service)
+- **OpenShift** with RHAII - see [Usage on OpenShift](#usage-on-openshift) above
+
+> **Note for OpenShift RHAII Users:** If you are running on OpenShift with RHAII (Red Hat AI Inference) for inference-only workloads, we recommend using the standard OpenShift approach instead:
+> ```bash
+> oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -- "export COMPONENT=llm-d; /usr/bin/gather"
+> ```
+> The Kubernetes Job approach below is primarily intended for non-OpenShift platforms (CKS, AKS).
+
+> **Custom Namespaces:** If you used custom namespaces, add the appropriate environment variables to the Job spec. See the [Developer Guide](#developer-guide) section for the complete list of namespace variables.
 
 ### Quick Start
 
@@ -148,7 +157,25 @@ subjects:
 EOF
 ```
 
-**Step 2: Run must-gather as a Job**
+**Step 2: Authenticate to registry and create image pull secret**
+
+```bash
+# Authenticate to the registry
+podman login registry.redhat.io
+
+# Verify you can pull the must-gather image
+podman pull registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
+
+# Create Kubernetes secret from podman auth
+# This uses ~/.config/containers/auth.json for podman (persistent across sessions)
+# For docker users, use ~/.docker/config.json instead
+kubectl create secret generic redhat-pull-secret \
+  --from-file=.dockerconfigjson=${HOME}/.config/containers/auth.json \
+  --type=kubernetes.io/dockerconfigjson \
+  -n ${NAMESPACE}
+```
+
+**Step 3: Run must-gather as a Job**
 
 ```bash
 kubectl apply -f - <<EOF
@@ -161,15 +188,20 @@ spec:
   template:
     spec:
       serviceAccountName: must-gather-sa
+      imagePullSecrets:
+      - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
+        env:
+        - name: COMPONENT
+          value: "llm-d"
       restartPolicy: Never
 EOF
 ```
 
-**Step 3: Retrieve collected data**
+**Step 4: Retrieve collected data**
 
 ```bash
 
@@ -181,9 +213,7 @@ kubectl logs -f $POD_NAME -n $NAMESPACE
 
 # Wait for collection to complete by checking for completion message in logs
 echo "Waiting for must-gather to complete..."
-until kubectl logs $POD_NAME -n $NAMESPACE 2>/dev/null | grep -q "DEBUG: Must-gather collection completed"; do
-  sleep 10
-done
+until kubectl logs -l job-name=must-gather-job -n $NAMESPACE 2>&1 | tail -5 | grep -q "Musts-gather collection completed"; do sleep 10; done
 echo "Collection completed!"
 
 # Copy collected data to local machine
@@ -225,11 +255,15 @@ spec:
   template:
     spec:
       serviceAccountName: must-gather-sa
+      imagePullSecrets:
+      - name: redhat-pull-secret
       containers:
       - name: gather
-        iamge: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
+        - name: COMPONENT
+          value: "llm-d"
         - name: ENABLE_WVA
           value: "true"
       restartPolicy: Never
@@ -250,11 +284,15 @@ spec:
   template:
     spec:
       serviceAccountName: must-gather-sa
+      imagePullSecrets:
+      - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4-ea2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
+        - name: COMPONENT
+          value: "llm-d"
         - name: AKS_MONITORING_TYPE
           value: "managed"
       restartPolicy: Never
@@ -273,7 +311,7 @@ make build-and-push-must-gather
 
 ```
 
-To collect data for custom repositories for Open Data Hub set the following variables inside must-gather:
+To collect data for custom repositories, set the following variables inside must-gather:
 
 ```
 export OPERATOR_NAMESPACE=<name-for-operator-namespace>

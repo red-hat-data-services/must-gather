@@ -1,9 +1,11 @@
 #!/bin/bash
 # shellcheck disable=SC2154,SC1091,SC2086,SC2155
-source "$(dirname "$0")/common.sh"
+export SCRIPT_DIR="$(dirname "$0")"
+
+source "${SCRIPT_DIR}/common.sh"
 
 # Detect Kubernetes distribution
-source "$(dirname "$0")/llm-d/xks_util.sh"
+source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 export K8S_DISTRO=$(detect_k8s_distro)
 
 echo "Detected Kubernetes distribution: ${K8S_DISTRO}"
@@ -18,6 +20,10 @@ fi
 # Get log collection arguments (--since, --since-time) for both oc adm inspect and kubectl logs
 get_log_collection_args
 
+# Define common namespaces (used by both OpenShift and xKS)
+OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
+
 # OpenShift-specific logic - for RHOAI
 if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     echo "=========================================="
@@ -25,11 +31,9 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     echo "DEBUG: Using KUBECTL=${KUBECTL}"
     echo "=========================================="
 
-    # define default namespaces
-    OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+    # define OCP namespaces
     NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
     MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
-    APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
     MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
     # MaaS namespace
     KUADRANT_NS="kuadrant-system"
@@ -96,60 +100,60 @@ echo "=========================================="
 
 case "$component" in
     "dsp")
-        /usr/bin/gather_data_science_pipelines
+        "${SCRIPT_DIR}/gather_data_science_pipelines"
         ;;
     "kserve")
-        /usr/bin/gather_serving
+        "${SCRIPT_DIR}/gather_serving"
         ;;
     "dashboard")
-        /usr/bin/gather_dashboard
+        "${SCRIPT_DIR}/gather_dashboard"
         ;;
     "workbench")
-        /usr/bin/gather_notebooks
+        "${SCRIPT_DIR}/gather_notebooks"
         ;;
     "kuberay")
-        /usr/bin/gather_kuberay
+        "${SCRIPT_DIR}/gather_kuberay"
         ;;
     "kueue")
-        /usr/bin/gather_kueue
+        "${SCRIPT_DIR}/gather_kueue"
         ;;
     "kfto")
-        /usr/bin/gather_kfto
+        "${SCRIPT_DIR}/gather_kfto"
         ;;
     "modelregistry")
-        /usr/bin/gather_mr
+        "${SCRIPT_DIR}/gather_mr"
         ;;
     "trustyai")
-        /usr/bin/gather_trustyai
+        "${SCRIPT_DIR}/gather_trustyai"
         ;;
     "feastoperator")
-        /usr/bin/gather_feastoperator
+        "${SCRIPT_DIR}/gather_feastoperator"
         ;;
     "llamastack")
-        /usr/bin/gather_lls
+        "${SCRIPT_DIR}/gather_lls"
         ;;
     "mlflow")
-        /usr/bin/gather_mlflow
+        "${SCRIPT_DIR}/gather_mlflow"
         ;;
     "llm-d")
-        "$(dirname "$0")/llm-d/gather_llmd.sh"
+        "${SCRIPT_DIR}/llm-d/gather_llmd.sh"
         # WVA is optional, controlled by ENABLE_WVA env var (default: false)
         if [[ "${ENABLE_WVA:-false}" == "true" ]]; then
-            /usr/bin/llm-d/gather_wva.sh
+            "${SCRIPT_DIR}/llm-d/gather_wva.sh"
         fi
         ;;
     *) # for all except llm-d
-        /usr/bin/gather_data_science_pipelines
-        /usr/bin/gather_serving
-        /usr/bin/gather_notebooks
-        /usr/bin/gather_kuberay
-        /usr/bin/gather_kueue
-        /usr/bin/gather_kfto
-        /usr/bin/gather_mr
-        /usr/bin/gather_trustyai
-        /usr/bin/gather_feastoperator
-        /usr/bin/gather_lls
-        /usr/bin/gather_mlflow
+        "${SCRIPT_DIR}/gather_data_science_pipelines"
+        "${SCRIPT_DIR}/gather_serving"
+        "${SCRIPT_DIR}/gather_notebooks"
+        "${SCRIPT_DIR}/gather_kuberay"
+        "${SCRIPT_DIR}/gather_kueue"
+        "${SCRIPT_DIR}/gather_kfto"
+        "${SCRIPT_DIR}/gather_mr"
+        "${SCRIPT_DIR}/gather_trustyai"
+        "${SCRIPT_DIR}/gather_feastoperator"
+        "${SCRIPT_DIR}/gather_lls"
+        "${SCRIPT_DIR}/gather_mlflow"
         ;;
 esac
 

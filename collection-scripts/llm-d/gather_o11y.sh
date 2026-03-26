@@ -1,7 +1,8 @@
 #!/bin/bash
 # collects Prometheus Operator monitoring resources
 # shellcheck disable=SC1091
-source "$(dirname "$0")/../common.sh"
+: "${SCRIPT_DIR:=$(dirname "$0")/..}"
+source "${SCRIPT_DIR}/common.sh"
 
 echo "=========================================="
 echo "DEBUG: gather_o11y.sh is being executed"
@@ -45,8 +46,8 @@ else
     # Prometheus Operator resources (monitoring.coreos.com)
     # https://github.com/prometheus-operator/prometheus-operator
     resources=(
-        "servicemonitors.monitoring.coreos.com" # dupe: already in gather_llmd.sh
-        "podmonitors.monitoring.coreos.com"     # dupe: already in gather_llmd.sh
+        # "servicemonitors.monitoring.coreos.com" # dupe: already in gather_llmd.sh
+        # "podmonitors.monitoring.coreos.com"     # dupe: already in gather_llmd.sh
         "prometheusrules.monitoring.coreos.com"
         "prometheuses.monitoring.coreos.com"
         "alertmanagers.monitoring.coreos.com"

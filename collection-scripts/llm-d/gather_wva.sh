@@ -1,7 +1,8 @@
 #!/bin/bash
 # LLM-D component gathering script - collects workload-variant-autoscaler related resources
 # shellcheck disable=SC1091
-source "$(dirname "$0")/../common.sh"
+: "${SCRIPT_DIR:=$(dirname "$0")/..}"
+source "${SCRIPT_DIR}/common.sh"
 
 echo "=========================================="
 echo "DEBUG: gather_wva.sh is being executed"
@@ -11,7 +12,7 @@ echo "=========================================="
 
 # WVA depends on observability
 echo "Collecting observability resources..."
-bash "$(dirname "$0")/gather_o11y.sh" || echo "WARNING: Failed to collect observability resources"
+bash "${SCRIPT_DIR}/llm-d/gather_o11y.sh" || echo "WARNING: Failed to collect observability resources"
 
 # KEDA (Kubernetes Event Driven Autoscaling)
 resources+=(
