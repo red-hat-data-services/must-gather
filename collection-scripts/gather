@@ -20,6 +20,10 @@ fi
 # Get log collection arguments (--since, --since-time) for both oc adm inspect and kubectl logs
 get_log_collection_args
 
+# Define common namespaces (used by both OpenShift and xKS)
+OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
+
 # OpenShift-specific logic - for RHOAI
 if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     echo "=========================================="
@@ -27,11 +31,9 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     echo "DEBUG: Using KUBECTL=${KUBECTL}"
     echo "=========================================="
 
-    # define default namespaces
-    OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+    # define OCP namespaces
     NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
     MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
-    APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
     MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
     # MaaS namespace
     KUADRANT_NS="kuadrant-system"
