@@ -35,9 +35,7 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
     MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
     MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
-    # MaaS namespace
     KUADRANT_NS="kuadrant-system"
-    MAAS_NS=${MAAS_NAMESPACE:-maas-api}
     # dependent operator namespace
     GW_NS=${GW_NS:-openshift-ingress}
 
@@ -52,7 +50,6 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     oc adm inspect $log_collection_args "namespace/$MODELREG_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MODELREG_NS}"
     oc adm inspect $log_collection_args "namespace/$GW_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${GW_NS}"
     oc adm inspect $log_collection_args "namespace/$KUADRANT_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KUADRANT_NS}"
-    oc adm inspect $log_collection_args "namespace/$MAAS_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MAAS_NS}"
 
     # add DSCI, DSC, Auth and service/component/infra CRs
     resources=(
@@ -139,6 +136,9 @@ case "$component" in
     "sparkoperator")
         "${SCRIPT_DIR}/gather_sparkoperator"
         ;;
+    "maas")
+        "${SCRIPT_DIR}/gather_models_as_a_service"
+        ;;
     "llm-d")
         "${SCRIPT_DIR}/llm-d/gather_llmd.sh"
         # WVA is optional, controlled by ENABLE_WVA env var (default: false)
@@ -159,6 +159,7 @@ case "$component" in
         "${SCRIPT_DIR}/gather_lls"
         "${SCRIPT_DIR}/gather_mlflow"
         "${SCRIPT_DIR}/gather_sparkoperator"
+        "${SCRIPT_DIR}/gather_models_as_a_service"
         ;;
 esac
 
