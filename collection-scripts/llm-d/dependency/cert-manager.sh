@@ -10,14 +10,13 @@ source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 # All are collected but only certain are in use
 resources=(
     "certmanagers.operator.openshift.io"
-    "issuers.cert-manager.io"
+    "issuers.cert-manager.io"           # bootstrap resources or done by annotation for rhoai
     "clusterissuers.cert-manager.io"
     "certificates.cert-manager.io"
-    "certificaterequests.cert-manager.io"
-    "orders.acme.cert-manager.io"
-    "challenges.acme.cert-manager.io"
-    "istiocsrs.operator.openshift.io"
-    "infrastructures.config.openshift.io"
+    # "certificaterequests.cert-manager.io"
+    # "orders.acme.cert-manager.io"
+    # "challenges.acme.cert-manager.io"
+    # "istiocsrs.operator.openshift.io"
 )
 
 # Get all namespaces where these resources exist

@@ -17,11 +17,12 @@ echo "=========================================="
 echo "Collecting cluster information..."
 bash "${SCRIPT_DIR}/llm-d/gather_cluster.sh" || echo "WARNING: Failed to collect cluster information"
 
-# OPERATOR_NS and APPLICATIONS_NS are already defined in the main gather script
-# For non-OpenShift platforms, collect operator and applications namespaces
+# OPERATOR_NS, APPLICATIONS_NS and HELM_CHART_NS are already defined in the main gather script
+# For non-OpenShift platforms, collect operator, applications and helm chart namespaces
 if [[ "${K8S_DISTRO}" != "ocp" ]]; then
     kubectl_inspect "namespace/$OPERATOR_NS" || echo "Error inspecting namespace/${OPERATOR_NS}"
     kubectl_inspect "namespace/$APPLICATIONS_NS" || echo "Error inspecting namespace/${APPLICATIONS_NS}"
+    kubectl_inspect "namespace/$HELM_CHART_NS" || echo "Error inspecting namespace/${HELM_CHART_NS}"
 fi
 
 # Run dependency collection scripts in parallel (cert-manager, sail, lws)
@@ -40,13 +41,10 @@ for pid in "${!pid_to_script[@]}"; do
 done
 
 resources+=(
-    "dscinitialization"
-    "datasciencecluster"
     "gatewayconfigs.services.platform.opendatahub.io"
     "kserves.components.platform.opendatahub.io"
     "mutatingwebhookconfigurations.admissionregistration.k8s.io"
     "validatingwebhookconfigurations.admissionregistration.k8s.io"
-    "gatewayclasses"
 )
 
 # Core KServe resources
@@ -72,7 +70,6 @@ resources+=(
     "inferencepools.inference.networking.k8s.io"
     # "inferencemodelrewrites.inference.networking.x-k8s.io" enabled for LoRA
     "inferenceobjectives.inference.networking.x-k8s.io"
-    "inferencemodels.inference.networking.x-k8s.io"  # to be deleted
 )
 
 # Get all namespaces where these resources exist, excluding namespaces which have been fully inspected

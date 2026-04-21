@@ -21,12 +21,12 @@ resources+=(
     "virtualservices.networking.istio.io"
     "destinationrules.networking.istio.io"
     "envoyfilters.networking.istio.io"
-    "gateways.networking.istio.io"
-    "proxyconfigs.networking.istio.io"
-    "serviceentries.networking.istio.io"
-    "sidecars.networking.istio.io"
-    "workloadentries.networking.istio.io"
-    "workloadgroups.networking.istio.io"
+    # "gateways.networking.istio.io"
+    # "proxyconfigs.networking.istio.io"
+    # "serviceentries.networking.istio.io"
+    # "sidecars.networking.istio.io"
+    # "workloadentries.networking.istio.io"
+    # "workloadgroups.networking.istio.io"
 )
 
 # Istio security resources
@@ -42,9 +42,9 @@ resources+=(
 )
 
 # Istio extensions
-resources+=(
-    "wasmplugins.extensions.istio.io"
-)
+# resources+=(
+#     "wasmplugins.extensions.istio.io"
+# )
 
 # Get all namespaces where these resources exist
 nslist=$(get_all_namespace "${resources[@]}")
