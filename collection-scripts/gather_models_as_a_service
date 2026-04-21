@@ -4,7 +4,7 @@
 source "${SCRIPT_DIR}/common.sh"
 
 # MaaS core CRDs
-resources=("maasmodelrefs.maas.opendatahub.io" "maasauthpolicies.maas.opendatahub.io" "maassubscriptions.maas.opendatahub.io" "externalmodels.maas.opendatahub.io")
+resources=("maasmodelrefs.maas.opendatahub.io" "maasauthpolicies.maas.opendatahub.io" "maassubscriptions.maas.opendatahub.io" "externalmodels.maas.opendatahub.io" "tenants.maas.opendatahub.io")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
