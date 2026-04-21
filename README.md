@@ -244,6 +244,7 @@ kubectl delete clusterrole must-gather-reader
 |----------|---------|-------------|
 | `ENABLE_WVA` | `false` | Enable workload-variant-autoscaler collection |
 | `AKS_MONITORING_TYPE` | `self-hosted` | `managed` for Azure Managed Prometheus, `self-hosted` for kube-prometheus-stack |
+| `RHAI_HELM_CHART_NS` | `rhai-gitops` | Namespace where rhai-on-xks is installed |
 
 **Example: Enable WVA collection (opt-in)**
 
@@ -324,5 +325,6 @@ export MONITORING_NAMESPACE=<name-for-monitoring-namespace>
 export APPLICATIONS_NAMESPACE=<name-for-applications-namespace>
 export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
 export MAAS_NAMESPACE=<name-for-maas-namespace>
+export RHAI_HELM_CHART_NS=<name-for-rhai-helm-chart-namespace>
 
 ```
