@@ -28,7 +28,7 @@ This script also collects data from all the namespaces that has
 - `llamastackdistributions` for Llama-stack Operator
 - `mlflows.mlflow.opendatahub.io` for MLflow Operator
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
-- `maasmodelrefs` `maasauthpolicies` `maassubscriptions` for Models as a Service
+- `maasmodelrefs` `maasauthpolicies` `maassubscriptions` `externalmodels` `tenants` for Models as a Service
 
 ## Usage on OpenShift
 
