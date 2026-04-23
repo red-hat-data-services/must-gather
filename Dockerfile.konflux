@@ -1,5 +1,5 @@
 # To get kubectl CLI (1.33.3)
-FROM registry.redhat.io/openshift4/ose-cli-rhel9@sha256:08c3d93f2eaf1c070374c978fe5bb619a8c7af23d7bbbbdf8baa5ef793cc5e0c AS builder
+FROM registry.redhat.io/openshift4/ose-cli-rhel9@sha256:1c6f9f9f726be814274f19e66bd04d069236460a312faa274eebe757d33f889c AS builder
 
 FROM registry.redhat.io/openshift4/ose-must-gather-rhel9:v4.20.@sha256:2c7248879f975086b0bfb59bb176c9f381e77caf3dfad40227ebe6404932f3ee
 # copy original gather from base image to gather_original
