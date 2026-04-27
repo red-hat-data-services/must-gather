@@ -23,6 +23,7 @@ if [[ "${K8S_DISTRO}" != "ocp" ]]; then
     kubectl_inspect "namespace/$OPERATOR_NS" || echo "Error inspecting namespace/${OPERATOR_NS}"
     kubectl_inspect "namespace/$APPLICATIONS_NS" || echo "Error inspecting namespace/${APPLICATIONS_NS}"
     kubectl_inspect "namespace/$HELM_CHART_NS" || echo "Error inspecting namespace/${HELM_CHART_NS}"
+    kubectl_inspect "namespace/$CLOUDMANAGER_NS" || echo "Error inspecting namespace/${CLOUDMANAGER_NS}"
 fi
 
 # Run dependency collection scripts in parallel (cert-manager, sail, lws)
@@ -43,7 +44,7 @@ done
 # Full namespace inspection for namespaces where LLMInferenceService CRs are deployed
 # This ensures pods, pod logs, and all resources (including llmisvc CRs) are collected
 llmisvc_namespaces=$(get_all_namespace "llminferenceservices.serving.kserve.io" | \
-    grep -v "^${OPERATOR_NS}$" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${HELM_CHART_NS}$" | tr '\n' ' ')
+    grep -v "^${OPERATOR_NS}$" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${HELM_CHART_NS}$" | grep -v "^${CLOUDMANAGER_NS}$" | tr '\n' ' ')
 for ns in $llmisvc_namespaces; do
     kubectl_inspect "namespace/$ns" || echo "Error inspecting namespace/${ns}"
 done
@@ -81,7 +82,7 @@ resources+=(
 )
 
 # Get all namespaces where these resources exist, excluding namespaces which have been fully inspected
-nslist=$(get_all_namespace "${resources[@]}" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${OPERATOR_NS}$" | grep -v "^${HELM_CHART_NS}$")
+nslist=$(get_all_namespace "${resources[@]}" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${OPERATOR_NS}$" | grep -v "^${HELM_CHART_NS}$" | grep -v "^${CLOUDMANAGER_NS}$")
 # Exclude llmisvc namespaces already fully inspected above
 for ns in $llmisvc_namespaces; do
     nslist=$(echo "$nslist" | grep -v "^${ns}$")
