@@ -21,9 +21,10 @@ fi
 get_log_collection_args
 
 # Define common namespaces (used by both OpenShift and xKS)
-OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
-APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
-HELM_CHART_NS=${RHAI_HELM_CHART_NS:-rhai-gitops}
+export OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+export APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
+export HELM_CHART_NS=${RHAI_HELM_CHART_NS:-rhai-gitops}
+export CLOUDMANAGER_NS=${RHAI_CLOUDMANAGER_NS:-rhai-cloudmanager-system}
 
 # OpenShift-specific logic - for RHOAI
 if [[ "${K8S_DISTRO}" == "ocp" ]]; then
