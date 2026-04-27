@@ -73,6 +73,18 @@ function get_operator_resource() {
 	done
 }
 
+# Collect Helm release values for a given release in a namespace
+# Usage: collect_helm_releases <namespace> <release_name>
+function collect_helm_releases() {
+    local namespace="$1"
+    local release="$2"
+
+    local release_dir="${DST_DIR}/namespaces/${namespace}/helm/${release}"
+    mkdir -p "${release_dir}"
+    helm get values "$release" -n "$namespace" -o yaml > "${release_dir}/values.yaml" 2>/dev/null || true
+    helm get manifest "$release" -n "$namespace" > "${release_dir}/manifest.yaml" 2>/dev/null || true
+}
+
 # cherrypick from https://github.com/openshift/must-gather/blob/main/collection-scripts/common.sh
 # other upstream require this to operator namespace from subscription
 function get_operator_ns() {
