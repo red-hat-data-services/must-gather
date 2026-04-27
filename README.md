@@ -34,10 +34,10 @@ This script also collects data from all the namespaces that has
 
 Refer to KCS: https://access.redhat.com/solutions/7061604 
 
-To collect all for RHOAI release 3.0
+To collect all for RHOAI release 3.4
 
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
 ```
 
 To collect for only one component use env variable COMPONENT.
@@ -64,7 +64,7 @@ Full list of supported components see table below:
 for example to 'kserve':
 
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 -- "export COMPONENT=kserve; /usr/bin/gather"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=kserve; /usr/bin/gather"
 ```
 
 To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
@@ -74,7 +74,7 @@ If this value precedes the time a pod was started, only logs since the pod start
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 --since-time=2024-05-02T14:01:23Z
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 --since-time=2024-05-02T14:01:23Z
 ```
 
 To collect logs newer than a relative duration like 5s, 2m, or 3h. This feature only support oc 4.16+
@@ -82,22 +82,22 @@ Defaults to all logs.
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 --since=3h
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 --since=3h
 ```
 
 If you have enabled customized namespaces for installation, below env. variable need to be configured when running "oc adm must-gather", example:
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; /usr/bin/gather"
 ```
 
 To enable workload-variant-autoscaler for llm-d on xKS (optional):
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -- "export ENABLE_WVA=true; /usr/bin/gather"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export ENABLE_WVA=true; /usr/bin/gather"
 ```
 
 For llm-d running on AKS with Azure Managed Prometheus:
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -- "export AKS_MONITORING_TYPE=managed; /usr/bin/gather"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export AKS_MONITORING_TYPE=managed; /usr/bin/gather"
 ```
 
 ## Usage on Non-OpenShift Kubernetes (xKS)
@@ -109,9 +109,9 @@ Supported platforms:
 - **AKS** (Azure Kubernetes Service)
 - **OpenShift** with RHAII - see [Usage on OpenShift](#usage-on-openshift) above
 
-> **Note for OpenShift RHAII Users:** If you are running on OpenShift with RHAII (Red Hat AI Inference) for inference-only workloads, we recommend using the standard OpenShift approach instead:
+> **Note for OpenShift RHAII Users:** If you are running on OpenShift with RHAII (Red Hat AI Inference) for inference-only workloads, we recommend using the standard OpenShift approach:
 > ```bash
-> oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4 -- "export COMPONENT=llm-d; /usr/bin/gather"
+> oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=llm-d; /usr/bin/gather"
 > ```
 > The Kubernetes Job approach below is primarily intended for non-OpenShift platforms (CKS, AKS).
 
@@ -168,7 +168,7 @@ EOF
 podman login registry.redhat.io
 
 # Verify you can pull the must-gather image
-podman pull registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
+podman pull registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
 
 # Create Kubernetes secret from podman auth
 # This uses ~/.config/containers/auth.json for podman (persistent across sessions)
@@ -196,7 +196,7 @@ spec:
       - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
         - name: COMPONENT
@@ -244,6 +244,7 @@ kubectl delete clusterrole must-gather-reader
 |----------|---------|-------------|
 | `ENABLE_WVA` | `false` | Enable workload-variant-autoscaler collection |
 | `AKS_MONITORING_TYPE` | `self-hosted` | `managed` for Azure Managed Prometheus, `self-hosted` for kube-prometheus-stack |
+| `RHAI_HELM_CHART_NS` | `rhai-gitops` | Ensure this match the namespace where rhai-on-xks is installed |
 
 **Example: Enable WVA collection (opt-in)**
 
@@ -263,7 +264,7 @@ spec:
       - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
         - name: COMPONENT
@@ -292,7 +293,7 @@ spec:
       - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0-ea.2
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
         command: ["/bin/bash", "-c", "cd /tmp && /usr/bin/gather && sleep 600"]
         env:
         - name: COMPONENT
@@ -324,5 +325,6 @@ export MONITORING_NAMESPACE=<name-for-monitoring-namespace>
 export APPLICATIONS_NAMESPACE=<name-for-applications-namespace>
 export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
 export MAAS_NAMESPACE=<name-for-maas-namespace>
+export RHAI_HELM_CHART_NS=<name-for-rhai-helm-chart-namespace>
 
 ```

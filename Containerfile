@@ -1,4 +1,4 @@
-# current latest is point to 4.20.0
+# current latest is point to 4.21.0
 FROM quay.io/openshift/origin-must-gather:4.21.0
 
 # Install kubectl for xKS environments

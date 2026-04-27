@@ -21,8 +21,10 @@ fi
 get_log_collection_args
 
 # Define common namespaces (used by both OpenShift and xKS)
-OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
-APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
+export OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
+export APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
+export HELM_CHART_NS=${RHAI_HELM_CHART_NS:-rhai-gitops}
+export CLOUDMANAGER_NS=${RHAI_CLOUDMANAGER_NS:-rhai-cloudmanager-system}
 
 # OpenShift-specific logic - for RHOAI
 if [[ "${K8S_DISTRO}" == "ocp" ]]; then
@@ -31,7 +33,16 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     echo "DEBUG: Using KUBECTL=${KUBECTL}"
     echo "=========================================="
 
-    # define OCP namespaces
+    # define default namespaces
+    # Get operator namespace: use env var if set, otherwise auto-detect from subscription
+    if [ -n "${OPERATOR_NAMESPACE}" ]; then
+        OPERATOR_NS="${OPERATOR_NAMESPACE}"
+    else
+        # auto-detect based on operator name
+        get_operator_ns "rhods-operator"
+        OPERATOR_NS="${operator_ns}"
+    fi
+
     NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
     MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
     MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
@@ -50,6 +61,7 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     oc adm inspect $log_collection_args "namespace/$MODELREG_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${MODELREG_NS}"
     oc adm inspect $log_collection_args "namespace/$GW_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${GW_NS}"
     oc adm inspect $log_collection_args "namespace/$KUADRANT_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KUADRANT_NS}"
+    oc adm inspect $log_collection_args "namespace/$HELM_CHART_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${HELM_CHART_NS}"
 
     # add DSCI, DSC, Auth and service/component/infra CRs
     resources=(
@@ -81,14 +93,20 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
       "sparkoperators.components.platform.opendatahub.io"
     )
     get_operator_resource "${resources[@]}"
-fi
 
-
-# set component or default based on distribution
-# For non-OpenShift, we only run with llm-d; for OpenShift, default to all
-if [[ "${K8S_DISTRO}" == "ocp" ]]; then
+    # set component or default based on distribution
+    # For non-OpenShift, we only run with llm-d; for OpenShift, default to all
     component=${COMPONENT:-all}
 else
+    if [ -n "${OPERATOR_NAMESPACE}" ]; then
+        OPERATOR_NS="${OPERATOR_NAMESPACE}"
+    else
+        OPERATOR_NS="redhat-ods-operator"
+    fi
+    resources=(
+      "azurekubernetesengines.infrastructure.opendatahub.io"
+      "coreweavekubernetesengines.infrastructure.opendatahub.io"
+    )
     component="llm-d"
 fi
 
@@ -147,24 +165,63 @@ case "$component" in
         fi
         ;;
     *) # for all except llm-d
-        "${SCRIPT_DIR}/gather_data_science_pipelines"
-        "${SCRIPT_DIR}/gather_serving"
-        "${SCRIPT_DIR}/gather_notebooks"
-        "${SCRIPT_DIR}/gather_kuberay"
-        "${SCRIPT_DIR}/gather_kueue"
-        "${SCRIPT_DIR}/gather_kfto"
-        "${SCRIPT_DIR}/gather_mr"
-        "${SCRIPT_DIR}/gather_trustyai"
-        "${SCRIPT_DIR}/gather_feastoperator"
-        "${SCRIPT_DIR}/gather_lls"
-        "${SCRIPT_DIR}/gather_mlflow"
-        "${SCRIPT_DIR}/gather_sparkoperator"
-        "${SCRIPT_DIR}/gather_models_as_a_service"
+
+        # Track PIDs and job names for error reporting
+        declare -A job_pids
+        declare -a failed_jobs
+
+        echo "Starting parallel data collection..."
+
+        # Start all gather operations in background and track PIDs
+        "${SCRIPT_DIR}/gather_data_science_pipelines" & job_pids[$!]="dsp"
+        "${SCRIPT_DIR}/gather_serving" & job_pids[$!]="kserve"
+        "${SCRIPT_DIR}/gather_notebooks" & job_pids[$!]="workbench"
+        "${SCRIPT_DIR}/gather_kuberay" & job_pids[$!]="kuberay"
+        "${SCRIPT_DIR}/gather_kueue" & job_pids[$!]="kueue"
+        "${SCRIPT_DIR}/gather_kfto" & job_pids[$!]="kfto"
+        "${SCRIPT_DIR}/gather_mr" & job_pids[$!]="modelregistry"
+        "${SCRIPT_DIR}/gather_trustyai" & job_pids[$!]="trustyai"
+        "${SCRIPT_DIR}/gather_feastoperator" & job_pids[$!]="feastoperator"
+        "${SCRIPT_DIR}/gather_lls" & job_pids[$!]="llamastack"
+        "${SCRIPT_DIR}/gather_mlflow" & job_pids[$!]="mlflow"
+        "${SCRIPT_DIR}/gather_sparkoperator" & job_pids[$!]="spark"
+        "${SCRIPT_DIR}/gather_models_as_a_service" & job_pids[$!]="maas"
+
+        echo "Waiting for ${#job_pids[@]} jobs to complete..."
+
+        # Wait for all jobs and mark failed one to later report
+        for pid in "${!job_pids[@]}"; do
+            if ! wait "$pid"; then
+                failed_jobs+=("${job_pids[$pid]}")
+            fi
+        done
         ;;
 esac
 
+# wait for all background jobs to complete
+wait
+
 # force disk flush to ensure that all data gathered is accessible in the copy container
 sync
+
+# Generate collection summary report
+echo "=========================================="
+echo "Must-Gather Collection Summary"
+echo "=========================================="
+echo "Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+echo "Kubernetes Distribution: ${K8S_DISTRO}"
+echo "Component: ${component}"
+echo "Destination: ${DST_DIR}"
+
+if [ -n "${failed_jobs[*]}" ]; then
+    echo ""
+    echo "Status: (${#failed_jobs[@]} failures)"
+    echo "Failed components:"
+    printf '  - %s\n' "${failed_jobs[@]}"
+else
+    echo ""
+    echo "Status: SUCCESS"
+fi
 
 echo "=========================================="
 echo "DEBUG: Must-gather collection completed"
