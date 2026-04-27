@@ -62,6 +62,7 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     oc adm inspect $log_collection_args "namespace/$GW_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${GW_NS}"
     oc adm inspect $log_collection_args "namespace/$KUADRANT_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KUADRANT_NS}"
     oc adm inspect $log_collection_args "namespace/$HELM_CHART_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${HELM_CHART_NS}"
+    oc adm inspect $log_collection_args "namespace/$CLOUDMANAGER_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${CLOUDMANAGER_NS}"
 
     # add DSCI, DSC, Auth and service/component/infra CRs
     resources=(
