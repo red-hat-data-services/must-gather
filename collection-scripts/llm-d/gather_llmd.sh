@@ -40,6 +40,14 @@ for pid in "${!pid_to_script[@]}"; do
     wait "$pid" || echo "ERROR: Failed to run ${pid_to_script[$pid]}"
 done
 
+# Full namespace inspection for namespaces where LLMInferenceService CRs are deployed
+# This ensures pods, pod logs, and all resources (including llmisvc CRs) are collected
+llmisvc_namespaces=$(get_all_namespace "llminferenceservices.serving.kserve.io" | \
+    grep -v "^${OPERATOR_NS}$" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${HELM_CHART_NS}$" | tr '\n' ' ')
+for ns in $llmisvc_namespaces; do
+    kubectl_inspect "namespace/$ns" || echo "Error inspecting namespace/${ns}"
+done
+
 resources+=(
     "gatewayconfigs.services.platform.opendatahub.io"
     "kserves.components.platform.opendatahub.io"
@@ -73,7 +81,12 @@ resources+=(
 )
 
 # Get all namespaces where these resources exist, excluding namespaces which have been fully inspected
-nslist=$(get_all_namespace "${resources[@]}" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${OPERATOR_NS}$" | tr '\n' ' ')
+nslist=$(get_all_namespace "${resources[@]}" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${OPERATOR_NS}$" | grep -v "^${HELM_CHART_NS}$")
+# Exclude llmisvc namespaces already fully inspected above
+for ns in $llmisvc_namespaces; do
+    nslist=$(echo "$nslist" | grep -v "^${ns}$")
+done
+nslist=$(echo "$nslist" | tr '\n' ' ')
 
 # Run collection across all identified namespaces (except already fully inspected namespaces)
 run_k8sgather "$nslist" "${resources[@]}"
