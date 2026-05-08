@@ -64,10 +64,8 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     oc adm inspect $log_collection_args "namespace/$KUADRANT_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KUADRANT_NS}"
     oc adm inspect $log_collection_args "namespace/$HELM_CHART_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${HELM_CHART_NS}"
 
-    if command -v helm &>/dev/null; then
-        echo "Collecting Helm release information..."
-        collect_helm_releases "$HELM_CHART_NS" "$HELM_RELEASE_NAME"
-    fi
+    echo "Collecting Helm release information..."
+    collect_helm_releases "$HELM_CHART_NS" "$HELM_RELEASE_NAME"
     # add DSCI, DSC, Auth and service/component/infra CRs
     resources=(
       "dscinitialization"
@@ -117,7 +115,6 @@ else
     )
     component="llm-d"
 fi
-
 
 echo "=========================================="
 echo "DEBUG: Component=${component}"
