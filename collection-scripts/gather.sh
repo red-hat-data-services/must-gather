@@ -24,7 +24,6 @@ get_log_collection_args
 export OPERATOR_NS=${OPERATOR_NAMESPACE:-redhat-ods-operator}
 export APPLICATIONS_NS=${APPLICATIONS_NAMESPACE:-redhat-ods-applications}
 export HELM_CHART_NS=${RHAI_HELM_CHART_NS:-rhai-gitops}
-export HELM_RELEASE_NAME=${RHAI_HELM_RELEASE_NAME:-rhaii}
 export CLOUDMANAGER_NS=${RHAI_CLOUDMANAGER_NS:-rhai-cloudmanager-system}
 
 # OpenShift-specific logic - for RHOAI
@@ -65,6 +64,7 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     oc adm inspect $log_collection_args "namespace/$HELM_CHART_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${HELM_CHART_NS}"
 
     echo "Collecting Helm release information..."
+    export HELM_RELEASE_NAME=${RHAI_HELM_RELEASE_NAME:-rhoai}
     collect_helm_releases "$HELM_CHART_NS" "$HELM_RELEASE_NAME"
     # add DSCI, DSC, Auth and service/component/infra CRs
     resources=(
@@ -108,6 +108,7 @@ else
     fi
 
     echo "Collecting Helm release information..."
+    export HELM_RELEASE_NAME=${RHAI_HELM_RELEASE_NAME:-rhaii}
     collect_helm_releases "$HELM_CHART_NS" "$HELM_RELEASE_NAME"
     resources=(
       "azurekubernetesengines.infrastructure.opendatahub.io"
