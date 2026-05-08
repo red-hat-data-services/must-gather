@@ -2,13 +2,13 @@
 FROM quay.io/openshift/origin-must-gather:4.21.0
 
 # Install kubectl for xKS environments
-ARG KUBECTL_VERSION=v1.31.4
+ARG KUBECTL_VERSION=v1.34.7
 RUN curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
     rm kubectl
 
 # Install helm CLI
-ARG HELM_VERSION=v3.17.1
+ARG HELM_VERSION=v4.1.4
 RUN curl -fsSL "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" | \
     tar xz -C /usr/local/bin --strip-components=1 linux-amd64/helm
 

@@ -5,7 +5,7 @@ FROM registry.redhat.io/openshift4/ose-must-gather-rhel9:v4.20.@sha256:2c7248879
 RUN mv /usr/bin/gather /usr/bin/gather_original
 # Copy kubectl from builder stage
 COPY --from=builder /usr/bin/kubectl /usr/bin/kubectl
-# Copy helm CLI (v3.17.1) from build context (tracked via Git LFS)
+# Copy helm CLI (v4.1.4) from build context (tracked via Git LFS)
 COPY bin/helm /usr/local/bin/helm
 # copy all collection scripts to /usr/bin, including gather and subdirectories
 COPY collection-scripts /usr/bin
