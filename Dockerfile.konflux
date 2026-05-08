@@ -10,7 +10,7 @@ COPY bin/helm /usr/local/bin/helm
 # copy all collection scripts to /usr/bin, including gather and subdirectories
 COPY collection-scripts /usr/bin
 
-ENTRYPOINT ["/usr/bin/gather"]
+ENTRYPOINT ["/usr/bin/gather.sh"]
 
 LABEL com.redhat.component="odh-must-gather" \
       name="odh-must-gather" \
