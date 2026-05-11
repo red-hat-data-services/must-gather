@@ -8,4 +8,8 @@ build-must-gather:
 push-must-gather:
 	${IMAGE_BUILDER} push ${GATHER_IMG}:${GATHER_IMG_VERSION}
 
+all-downstream:
+	${IMAGE_BUILDER} build . -f Dockerfile.konflux -t ${GATHER_IMG}:${GATHER_IMG_VERSION}
+	${IMAGE_BUILDER} push ${GATHER_IMG}:${GATHER_IMG_VERSION}
+
 build-and-push-must-gather: build-must-gather push-must-gather

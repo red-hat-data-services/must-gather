@@ -63,6 +63,9 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     oc adm inspect $log_collection_args "namespace/$KUADRANT_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${KUADRANT_NS}"
     oc adm inspect $log_collection_args "namespace/$HELM_CHART_NS" --dest-dir="$DST_DIR"  || echo "Error getting logs from ${HELM_CHART_NS}"
 
+    echo "Collecting Helm release information..."
+    export HELM_RELEASE_NAME=${RHAI_HELM_RELEASE_NAME:-rhoai}
+    collect_helm_releases "$HELM_CHART_NS" "$HELM_RELEASE_NAME"
     # add DSCI, DSC, Auth and service/component/infra CRs
     resources=(
       "dscinitialization"
@@ -103,6 +106,10 @@ else
     else
         OPERATOR_NS="redhat-ods-operator"
     fi
+
+    echo "Collecting Helm release information..."
+    export HELM_RELEASE_NAME=${RHAI_HELM_RELEASE_NAME:-rhaii}
+    collect_helm_releases "$HELM_CHART_NS" "$HELM_RELEASE_NAME"
     resources=(
       "azurekubernetesengines.infrastructure.opendatahub.io"
       "coreweavekubernetesengines.infrastructure.opendatahub.io"
@@ -116,46 +123,46 @@ echo "=========================================="
 
 case "$component" in
     "dsp")
-        "${SCRIPT_DIR}/gather_data_science_pipelines"
+        "${SCRIPT_DIR}/gather_data_science_pipelines.sh"
         ;;
     "kserve")
-        "${SCRIPT_DIR}/gather_serving"
+        "${SCRIPT_DIR}/gather_serving.sh"
         ;;
     "dashboard")
-        "${SCRIPT_DIR}/gather_dashboard"
+        "${SCRIPT_DIR}/gather_dashboard.sh"
         ;;
     "workbench")
-        "${SCRIPT_DIR}/gather_notebooks"
+        "${SCRIPT_DIR}/gather_notebooks.sh"
         ;;
     "kuberay")
-        "${SCRIPT_DIR}/gather_kuberay"
+        "${SCRIPT_DIR}/gather_kuberay.sh"
         ;;
     "kueue")
-        "${SCRIPT_DIR}/gather_kueue"
+        "${SCRIPT_DIR}/gather_kueue.sh"
         ;;
     "kfto")
-        "${SCRIPT_DIR}/gather_kfto"
+        "${SCRIPT_DIR}/gather_kfto.sh"
         ;;
     "modelregistry")
-        "${SCRIPT_DIR}/gather_mr"
+        "${SCRIPT_DIR}/gather_mr.sh"
         ;;
     "trustyai")
-        "${SCRIPT_DIR}/gather_trustyai"
+        "${SCRIPT_DIR}/gather_trustyai.sh"
         ;;
     "feastoperator")
-        "${SCRIPT_DIR}/gather_feastoperator"
+        "${SCRIPT_DIR}/gather_feastoperator.sh"
         ;;
     "llamastack")
-        "${SCRIPT_DIR}/gather_lls"
+        "${SCRIPT_DIR}/gather_lls.sh"
         ;;
     "mlflow")
-        "${SCRIPT_DIR}/gather_mlflow"
+        "${SCRIPT_DIR}/gather_mlflow.sh"
         ;;
     "sparkoperator")
-        "${SCRIPT_DIR}/gather_sparkoperator"
+        "${SCRIPT_DIR}/gather_sparkoperator.sh"
         ;;
     "maas")
-        "${SCRIPT_DIR}/gather_models_as_a_service"
+        "${SCRIPT_DIR}/gather_models_as_a_service.sh"
         ;;
     "llm-d")
         "${SCRIPT_DIR}/llm-d/gather_llmd.sh"
@@ -173,19 +180,19 @@ case "$component" in
         echo "Starting parallel data collection..."
 
         # Start all gather operations in background and track PIDs
-        "${SCRIPT_DIR}/gather_data_science_pipelines" & job_pids[$!]="dsp"
-        "${SCRIPT_DIR}/gather_serving" & job_pids[$!]="kserve"
-        "${SCRIPT_DIR}/gather_notebooks" & job_pids[$!]="workbench"
-        "${SCRIPT_DIR}/gather_kuberay" & job_pids[$!]="kuberay"
-        "${SCRIPT_DIR}/gather_kueue" & job_pids[$!]="kueue"
-        "${SCRIPT_DIR}/gather_kfto" & job_pids[$!]="kfto"
-        "${SCRIPT_DIR}/gather_mr" & job_pids[$!]="modelregistry"
-        "${SCRIPT_DIR}/gather_trustyai" & job_pids[$!]="trustyai"
-        "${SCRIPT_DIR}/gather_feastoperator" & job_pids[$!]="feastoperator"
-        "${SCRIPT_DIR}/gather_lls" & job_pids[$!]="llamastack"
-        "${SCRIPT_DIR}/gather_mlflow" & job_pids[$!]="mlflow"
-        "${SCRIPT_DIR}/gather_sparkoperator" & job_pids[$!]="spark"
-        "${SCRIPT_DIR}/gather_models_as_a_service" & job_pids[$!]="maas"
+        "${SCRIPT_DIR}/gather_data_science_pipelines.sh" & job_pids[$!]="dsp"
+        "${SCRIPT_DIR}/gather_serving.sh" & job_pids[$!]="kserve"
+        "${SCRIPT_DIR}/gather_notebooks.sh" & job_pids[$!]="workbench"
+        "${SCRIPT_DIR}/gather_kuberay.sh" & job_pids[$!]="kuberay"
+        "${SCRIPT_DIR}/gather_kueue.sh" & job_pids[$!]="kueue"
+        "${SCRIPT_DIR}/gather_kfto.sh" & job_pids[$!]="kfto"
+        "${SCRIPT_DIR}/gather_mr.sh" & job_pids[$!]="modelregistry"
+        "${SCRIPT_DIR}/gather_trustyai.sh" & job_pids[$!]="trustyai"
+        "${SCRIPT_DIR}/gather_feastoperator.sh" & job_pids[$!]="feastoperator"
+        "${SCRIPT_DIR}/gather_lls.sh" & job_pids[$!]="llamastack"
+        "${SCRIPT_DIR}/gather_mlflow.sh" & job_pids[$!]="mlflow"
+        "${SCRIPT_DIR}/gather_sparkoperator.sh" & job_pids[$!]="spark"
+        "${SCRIPT_DIR}/gather_models_as_a_service.sh" & job_pids[$!]="maas"
 
         echo "Waiting for ${#job_pids[@]} jobs to complete..."
 
