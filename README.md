@@ -107,13 +107,14 @@ For Kubernetes platforms running LLM-D inference workloads, must-gather can coll
 Supported platforms:
 - **CKS** (CoreWeave Kubernetes)
 - **AKS** (Azure Kubernetes Service)
+- **EKS** (Amazon Elastic Kubernetes Service)
 - **OpenShift** with RHAII - see [Usage on OpenShift](#usage-on-openshift) above
 
 > **Note for OpenShift RHAII Users:** If you are running on OpenShift with RHAII (Red Hat AI Inference) for inference-only workloads, we recommend using the standard OpenShift approach:
 > ```bash
 > oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=llm-d; gather.sh"
 > ```
-> The Kubernetes Job approach below is primarily intended for non-OpenShift platforms (CKS, AKS).
+> The Kubernetes Job approach below is primarily intended for non-OpenShift platforms (CKS, AKS, EKS).
 
 > **Custom Namespaces:** If you used custom namespaces, add the appropriate environment variables to the Job spec. See the [Developer Guide](#developer-guide) section for the complete list of namespace variables.
 
