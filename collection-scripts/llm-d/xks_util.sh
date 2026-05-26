@@ -136,7 +136,7 @@ function run_k8sgather() {
 
 # Detect xKS distro
 function detect_k8s_distro() {
-    local distro="other" # the rest from ocp, cks and aks for now.
+    local distro="other" # the rest from ocp, cks, aks and eks for now.
 
     # Determine which command to use (take oc proceed at this stage does not really matter which one to use)
     local cmd
@@ -163,6 +163,10 @@ function detect_k8s_distro() {
         # Check provider for AKS
         elif echo "$provider_id" | grep -q "^azure://"; then
             distro="aks"
+        # Check for EKS
+        elif echo "$provider_id" | grep -q "^aws://" && \
+            ${cmd} version -o json 2>/dev/null | grep -q '\-eks-'; then
+            distro="eks"
         else
             # Fallback: check os_image for OpenShift
             os_image=$(${cmd} get nodes -o jsonpath='{.items[0].status.nodeInfo.osImage}' 2>/dev/null)

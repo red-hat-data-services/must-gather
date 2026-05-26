@@ -110,10 +110,12 @@ else
     echo "Collecting Helm release information..."
     export HELM_RELEASE_NAME=${RHAI_HELM_RELEASE_NAME:-rhaii}
     collect_helm_releases "$HELM_CHART_NS" "$HELM_RELEASE_NAME"
-    resources=(
-      "azurekubernetesengines.infrastructure.opendatahub.io"
-      "coreweavekubernetesengines.infrastructure.opendatahub.io"
-    )
+    resources=()
+    case "$K8S_DISTRO" in
+        aks) resources+=("azurekubernetesengines.infrastructure.opendatahub.io") ;;
+        cks) resources+=("coreweavekubernetesengines.infrastructure.opendatahub.io") ;;
+        eks) resources+=("awskubernetesengines.infrastructure.opendatahub.io") ;;
+    esac
     component="llm-d"
 fi
 
