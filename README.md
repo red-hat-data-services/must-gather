@@ -95,6 +95,11 @@ To enable workload-variant-autoscaler for llm-d on xKS (optional):
 oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export ENABLE_WVA=true; gather.sh"
 ```
 
+To enable batch-gateway collection for llm-d (optional):
+```
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export ENABLE_BATCH_GATEWAY=true; gather.sh"
+```
+
 For llm-d running on AKS with Azure Managed Prometheus:
 ```
 oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export AKS_MONITORING_TYPE=managed; gather.sh"
@@ -244,6 +249,8 @@ kubectl delete clusterrole must-gather-reader
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `ENABLE_WVA` | `false` | Enable workload-variant-autoscaler collection |
+| `ENABLE_BATCH_GATEWAY` | `false` | Enable batch-gateway collection |
+| `BATCH_GATEWAY_NAMESPACE` | `batch-gateway` | Namespace where batch-gateway is deployed |
 | `AKS_MONITORING_TYPE` | `self-hosted` | `managed` for Azure Managed Prometheus, `self-hosted` for kube-prometheus-stack |
 | `RHAI_HELM_CHART_NS` | `rhai-gitops` | Ensure this match the namespace where Helm Chart is installed |
 | `RHAI_HELM_RELEASE_NAME` | `rhaii` | The Helm release name used during installation |
@@ -272,6 +279,35 @@ spec:
         - name: COMPONENT
           value: "llm-d"
         - name: ENABLE_WVA
+          value: "true"
+      restartPolicy: Never
+EOF
+```
+
+**Example: Enable batch-gateway collection (opt-in)**
+
+If batch-gateway is deployed in your cluster and you want to collect it:
+```bash
+kubectl apply -f - <<EOF
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: must-gather-job
+  namespace: ${NAMESPACE}
+spec:
+  template:
+    spec:
+      serviceAccountName: must-gather-sa
+      imagePullSecrets:
+      - name: redhat-pull-secret
+      containers:
+      - name: gather
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
+        command: ["/bin/bash", "-c", "cd /tmp && gather.sh && sleep 600"]
+        env:
+        - name: COMPONENT
+          value: "llm-d"
+        - name: ENABLE_BATCH_GATEWAY
           value: "true"
       restartPolicy: Never
 EOF
