@@ -284,35 +284,6 @@ spec:
 EOF
 ```
 
-**Example: Enable batch-gateway collection (opt-in)**
-
-If batch-gateway is deployed in your cluster and you want to collect it:
-```bash
-kubectl apply -f - <<EOF
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: must-gather-job
-  namespace: ${NAMESPACE}
-spec:
-  template:
-    spec:
-      serviceAccountName: must-gather-sa
-      imagePullSecrets:
-      - name: redhat-pull-secret
-      containers:
-      - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
-        command: ["/bin/bash", "-c", "cd /tmp && gather.sh && sleep 600"]
-        env:
-        - name: COMPONENT
-          value: "llm-d"
-        - name: ENABLE_BATCH_GATEWAY
-          value: "true"
-      restartPolicy: Never
-EOF
-```
-
 **Example: AKS with Azure Managed Prometheus**
 
 If using Azure Managed Prometheus instead of self-hosted kube-prometheus-stack:
