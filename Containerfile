@@ -17,5 +17,7 @@ RUN mv /usr/bin/gather /usr/bin/gather_original
 
 # copy all collection scripts to /usr/bin
 COPY collection-scripts /usr/bin
+# oc adm must-gather expects /usr/bin/gather
+RUN mv /usr/bin/gather.sh /usr/bin/gather
 
-ENTRYPOINT ["/usr/bin/gather.sh"]
+ENTRYPOINT ["/usr/bin/gather"]

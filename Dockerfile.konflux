@@ -9,8 +9,10 @@ COPY --from=builder /usr/bin/kubectl /usr/bin/kubectl
 COPY bin/helm /usr/local/bin/helm
 # copy all collection scripts to /usr/bin, including gather and subdirectories
 COPY collection-scripts /usr/bin
+# oc adm must-gather expects /usr/bin/gather
+RUN mv /usr/bin/gather.sh /usr/bin/gather
 
-ENTRYPOINT ["/usr/bin/gather.sh"]
+ENTRYPOINT ["/usr/bin/gather"]
 
 LABEL com.redhat.component="odh-must-gather" \
       name="odh-must-gather" \
