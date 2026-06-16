@@ -11,6 +11,8 @@ resources+=("accounts.nim.opendatahub.io")
 resources+=("llminferenceserviceconfigs" "llminferenceservices" "leaderworkersetoperators" "leaderworkersets" "inferencepools" "variantautoscalings.llmd.ai")
 # Dependent resources MaaS
 resources+=("ratelimitpolicies.kuadrant.io" "kuadrants.kuadrant.io" "tokenratelimitpolicies.kuadrant.io")
+# Module operator
+resources+=("kserves.components.platform.opendatahub.io")
 
 nslist=$(get_all_namespace "${resources[@]}")
 

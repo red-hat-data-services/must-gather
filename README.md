@@ -21,7 +21,7 @@ This script also collects data from all the namespaces that has
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `admissionchecks` `cohorts` `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
 - `mpijobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob` `jaxjobs` `jobsetoperators` `trainjobs.trainer.kubeflow.org` `trainingruntimes.trainer.kubeflow.org` `clustertrainingruntimes.trainer.kubeflow.org` for Kubeflow Training Operator
-- `inferenceservices` `inferencegraphs` `trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` `localmodelnodegroups` `authconfigs` `authorinos` `authpolicies.kuadrant.io` `accounts.nim.opendatahub.io` `llminferenceserviceconfigs` `llminferenceservices` `leaderworkersetoperators` `leaderworkersets` `inferencepools` `variantautoscalings.llmd.ai` `ratelimitpolicies.kuadrant.io` `kuadrants.kuadrant.io` `tokenratelimitpolicies.kuadrant.io` for Kserve component
+- `inferenceservices` `inferencegraphs` `trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` `localmodelnodegroups` `authconfigs` `authorinos` `authpolicies.kuadrant.io` `accounts.nim.opendatahub.io` `llminferenceserviceconfigs` `llminferenceservices` `leaderworkersetoperators` `leaderworkersets` `inferencepools` `variantautoscalings.llmd.ai` `ratelimitpolicies.kuadrant.io` `kuadrants.kuadrant.io` `tokenratelimitpolicies.kuadrant.io`, `kserves.components.platform.opendatahub.io` for Kserve component
 - `notebooks` `imagestreams` for Workbench component
 - `modelregistries.modelregistry.opendatahub.io` for Model Registry component
 - `featurestores` for Feast Operator
@@ -64,7 +64,7 @@ Full list of supported components see table below:
 for example to 'kserve':
 
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=kserve; gather.sh"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=kserve; gather"
 ```
 
 To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
@@ -87,22 +87,22 @@ oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
 
 If you have enabled customized namespaces for installation, below env. variable need to be configured when running "oc adm must-gather", example:
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; gather.sh"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; gather"
 ```
 
 To enable workload-variant-autoscaler for llm-d on xKS (optional):
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export ENABLE_WVA=true; gather.sh"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export ENABLE_WVA=true; gather"
 ```
 
 To enable batch-gateway collection for llm-d (optional):
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export ENABLE_BATCH_GATEWAY=true; gather.sh"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export ENABLE_BATCH_GATEWAY=true; gather"
 ```
 
 For llm-d running on AKS with Azure Managed Prometheus:
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export AKS_MONITORING_TYPE=managed; gather.sh"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export AKS_MONITORING_TYPE=managed; gather"
 ```
 
 ## Usage on Non-OpenShift Kubernetes (xKS)
@@ -117,7 +117,7 @@ Supported platforms:
 
 > **Note for OpenShift RHAII Users:** If you are running on OpenShift with RHAII (Red Hat AI Inference) for inference-only workloads, we recommend using the standard OpenShift approach:
 > ```bash
-> oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=llm-d; gather.sh"
+> oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=llm-d; gather"
 > ```
 > The Kubernetes Job approach below is primarily intended for non-OpenShift platforms (CKS, AKS, EKS).
 
@@ -203,7 +203,7 @@ spec:
       containers:
       - name: gather
         image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
-        command: ["/bin/bash", "-c", "cd /tmp && gather.sh && sleep 600"]
+        command: ["/bin/bash", "-c", "cd /tmp && gather && sleep 600"]
         env:
         - name: COMPONENT
           value: "llm-d"
@@ -274,7 +274,7 @@ spec:
       containers:
       - name: gather
         image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
-        command: ["/bin/bash", "-c", "cd /tmp && gather.sh && sleep 600"]
+        command: ["/bin/bash", "-c", "cd /tmp && gather && sleep 600"]
         env:
         - name: COMPONENT
           value: "llm-d"
@@ -303,7 +303,7 @@ spec:
       containers:
       - name: gather
         image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
-        command: ["/bin/bash", "-c", "cd /tmp && gather.sh && sleep 600"]
+        command: ["/bin/bash", "-c", "cd /tmp && gather && sleep 600"]
         env:
         - name: COMPONENT
           value: "llm-d"
