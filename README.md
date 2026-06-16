@@ -29,6 +29,7 @@ This script also collects data from all the namespaces that has
 - `mlflows.mlflow.opendatahub.io` for MLflow Operator
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
 - `maasmodelrefs` `maasauthpolicies` `maassubscriptions` `externalmodels` `tenants` for Models as a Service
+- `llmbatchgateways` for AI Gateway
 
 ## Usage on OpenShift
 
@@ -60,6 +61,7 @@ Full list of supported components see table below:
 | sparkoperator   | Spark Operator             |
 | maas            | Models as a Service        |
 | llm-d           | LLM-D / RHAII (auto-enabled for xKS)|
+| aigateway       | AI Gateway: batch-gateway etc|
 
 for example to 'kserve':
 
