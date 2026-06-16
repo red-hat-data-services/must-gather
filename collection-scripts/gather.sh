@@ -77,7 +77,6 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
       "dashboards.components.platform.opendatahub.io"
       "datasciencepipelines.components.platform.opendatahub.io"
       "feastoperators.components.platform.opendatahub.io"
-      "kserves.components.platform.opendatahub.io"
       "kueues.components.platform.opendatahub.io"
       "modelcontrollers.components.platform.opendatahub.io"
       "modelregistries.components.platform.opendatahub.io"
