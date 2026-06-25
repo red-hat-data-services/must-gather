@@ -93,6 +93,7 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
       "gatewayclasses"
       "trainers.components.platform.opendatahub.io"
       "sparkoperators.components.platform.opendatahub.io"
+      "aigateways.components.platform.opendatahub.io"
     )
     get_operator_resource "${resources[@]}"
 
@@ -165,6 +166,9 @@ case "$component" in
     "maas")
         "${SCRIPT_DIR}/gather_models_as_a_service.sh"
         ;;
+    "aigateway")
+        "${SCRIPT_DIR}/gather_aigateway.sh"
+        ;;
     "llm-d")
         "${SCRIPT_DIR}/llm-d/gather_llmd.sh"
         # WVA is optional, controlled by ENABLE_WVA env var (default: false)
@@ -198,6 +202,7 @@ case "$component" in
         "${SCRIPT_DIR}/gather_mlflow.sh" & job_pids[$!]="mlflow"
         "${SCRIPT_DIR}/gather_sparkoperator.sh" & job_pids[$!]="spark"
         "${SCRIPT_DIR}/gather_models_as_a_service.sh" & job_pids[$!]="maas"
+        "${SCRIPT_DIR}/gather_aigateway.sh" & job_pids[$!]="aigateway"
 
         echo "Waiting for ${#job_pids[@]} jobs to complete..."
 
