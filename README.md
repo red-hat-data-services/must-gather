@@ -30,6 +30,7 @@ This script also collects data from all the namespaces that has
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
 - `maasmodelrefs` `maasauthpolicies` `maassubscriptions` `externalmodels` `tenants` for Models as a Service
 - `llmbatchgateways` for AI Gateway
+- `mcpservers` for MCP Lifecycle Operator
 
 ## Usage on OpenShift
 
@@ -44,24 +45,25 @@ oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
 To collect for only one component use env variable COMPONENT.
 Full list of supported components see table below:
 
-| COMPONENT value | Comments                   |
-|-----------------|----------------------------|
-| dashboard       | Dashboard                  |
-| dsp             | AI Pipeline (previously: Data Science Pipeline)|
-| kuberay         | KubeRay                    |
-| kueue           | Kueue                      |
-| kfto            | Kubeflow Training Operator |
-| kserve          | Kserve                     |
-| workbench       | Workbench                  |
-| modelregistry   | Model Registry             |
-| trustyai        | TrustyAI                   |
-| feastoperator   | Feast Operator             |
-| llamastack      | Llama-stack Operator       |
-| mlflow          | MLflow Operator            |
-| sparkoperator   | Spark Operator             |
-| maas            | Models as a Service        |
-| llm-d           | LLM-D / RHAII (auto-enabled for xKS)|
-| aigateway       | AI Gateway: batch-gateway etc|
+| COMPONENT value | Comments                                        |
+|-----------------|-------------------------------------------------|
+| dashboard       | Dashboard                                       |
+| dsp             | AI Pipeline (previously: Data Science Pipeline) |
+| kuberay         | KubeRay                                         |
+| kueue           | Kueue                                           |
+| kfto            | Kubeflow Training Operator                      |
+| kserve          | Kserve                                          |
+| workbench       | Workbench                                       |
+| modelregistry   | Model Registry                                  |
+| trustyai        | TrustyAI                                        |
+| feastoperator   | Feast Operator                                  |
+| llamastack      | Llama-stack Operator                            |
+| mlflow          | MLflow Operator                                 |
+| sparkoperator   | Spark Operator                                  |
+| maas            | Models as a Service                             |
+| mcplo           | MCP Lifecycle Operator                          |
+| llm-d           | LLM-D / RHAII (auto-enabled for xKS)            |
+| aigateway       | AI Gateway: batch-gateway etc                   |
 
 for example to 'kserve':
 
