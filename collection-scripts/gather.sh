@@ -164,9 +164,6 @@ case "$component" in
     "sparkoperator")
         "${SCRIPT_DIR}/gather_sparkoperator.sh"
         ;;
-    "maas")
-        "${SCRIPT_DIR}/gather_models_as_a_service.sh"
-        ;;
     "aigateway")
         "${SCRIPT_DIR}/gather_aigateway.sh"
         ;;
@@ -205,7 +202,6 @@ case "$component" in
         "${SCRIPT_DIR}/gather_lls.sh" & job_pids[$!]="llamastack"
         "${SCRIPT_DIR}/gather_mlflow.sh" & job_pids[$!]="mlflow"
         "${SCRIPT_DIR}/gather_sparkoperator.sh" & job_pids[$!]="spark"
-        "${SCRIPT_DIR}/gather_models_as_a_service.sh" & job_pids[$!]="maas"
         "${SCRIPT_DIR}/gather_aigateway.sh" & job_pids[$!]="aigateway"
         "${SCRIPT_DIR}/gather_mcp_lifecycle_operator.sh" & job_pids[$!]="mcplo"
 

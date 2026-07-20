@@ -28,8 +28,7 @@ This script also collects data from all the namespaces that has
 - `llamastackdistributions` for Llama-stack Operator
 - `mlflows.mlflow.opendatahub.io` for MLflow Operator
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
-- `maasmodelrefs` `maasauthpolicies` `maassubscriptions` `externalmodels` `tenants` for Models as a Service
-- `llmbatchgateways` for AI Gateway
+- `aitenants` `configs` `externalmodels` `maasauthpolicies` `maasmodelrefs` `maassubscriptions` `maastenantconfigs` `tenants` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` `llmbatchgateways` for AI Gateway (includes Models as a Service)
 - `mcpservers` for MCP Lifecycle Operator
 
 ## Usage on OpenShift
@@ -60,10 +59,9 @@ Full list of supported components see table below:
 | llamastack      | Llama-stack Operator                            |
 | mlflow          | MLflow Operator                                 |
 | sparkoperator   | Spark Operator                                  |
-| maas            | Models as a Service                             |
+| aigateway       | AI Gateway: batch-gateway, Models as a Service  |
 | mcplo           | MCP Lifecycle Operator                          |
 | llm-d           | LLM-D / RHAII (auto-enabled for xKS)            |
-| aigateway       | AI Gateway: batch-gateway etc                   |
 
 for example to 'kserve':
 
