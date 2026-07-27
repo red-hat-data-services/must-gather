@@ -30,6 +30,7 @@ This script also collects data from all the namespaces that has
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
 - `aitenants` `configs` `externalmodels` `maasauthpolicies` `maasmodelrefs` `maassubscriptions` `maastenantconfigs` `tenants` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` `llmbatchgateways` for AI Gateway (includes Models as a Service)
 - `mcpservers` for MCP Lifecycle Operator
+- `ogxservers` for OGX Operator
 
 ## Usage on OpenShift
 
@@ -61,6 +62,7 @@ Full list of supported components see table below:
 | sparkoperator   | Spark Operator                                  |
 | aigateway       | AI Gateway: batch-gateway, Models as a Service  |
 | mcplo           | MCP Lifecycle Operator                          |
+| ogx             | OGX Operator                                    |
 | llm-d           | LLM-D / RHAII (auto-enabled for xKS)            |
 
 for example to 'kserve':

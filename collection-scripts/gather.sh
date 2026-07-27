@@ -95,6 +95,7 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
       "sparkoperators.components.platform.opendatahub.io"
       "aigateways.components.platform.opendatahub.io"
       "mcplifecycleoperators.components.platform.opendatahub.io"
+      "ogxs.components.platform.opendatahub.io"
     )
     get_operator_resource "${resources[@]}"
 
@@ -170,6 +171,9 @@ case "$component" in
     "mcplo")
         "${SCRIPT_DIR}/gather_mcp_lifecycle_operator.sh"
         ;;
+    "ogx")
+        "${SCRIPT_DIR}/gather_ogx.sh"
+        ;;
     "llm-d")
         "${SCRIPT_DIR}/llm-d/gather_llmd.sh"
         # WVA is optional, controlled by ENABLE_WVA env var (default: false)
@@ -204,6 +208,7 @@ case "$component" in
         "${SCRIPT_DIR}/gather_sparkoperator.sh" & job_pids[$!]="spark"
         "${SCRIPT_DIR}/gather_aigateway.sh" & job_pids[$!]="aigateway"
         "${SCRIPT_DIR}/gather_mcp_lifecycle_operator.sh" & job_pids[$!]="mcplo"
+        "${SCRIPT_DIR}/gather_ogx.sh" & job_pids[$!]="ogx"
 
         echo "Waiting for ${#job_pids[@]} jobs to complete..."
 
