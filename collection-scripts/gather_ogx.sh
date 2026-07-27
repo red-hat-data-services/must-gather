@@ -2,7 +2,7 @@
 # shellcheck disable=SC1091
 : "${SCRIPT_DIR:=$(dirname "$0")}"
 source "${SCRIPT_DIR}/common.sh"
-resources=("llamastackdistributions")
+resources=("ogxservers")
 
 nslist=$(get_all_namespace "${resources[@]}")
 
