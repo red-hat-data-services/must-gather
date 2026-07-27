@@ -84,7 +84,6 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
       "trainingoperators.components.platform.opendatahub.io"
       "trustyais.components.platform.opendatahub.io"
       "workbenches.components.platform.opendatahub.io"
-      "llamastackoperators.components.platform.opendatahub.io"
       "mlflowoperators.components.platform.opendatahub.io"
       "mutatingwebhookconfigurations.admissionregistration.k8s.io"
       "validationwebhookconfigurations.admissionregistration.k8s.io"
@@ -156,9 +155,6 @@ case "$component" in
     "feastoperator")
         "${SCRIPT_DIR}/gather_feastoperator.sh"
         ;;
-    "llamastack")
-        "${SCRIPT_DIR}/gather_lls.sh"
-        ;;
     "mlflow")
         "${SCRIPT_DIR}/gather_mlflow.sh"
         ;;
@@ -203,7 +199,6 @@ case "$component" in
         "${SCRIPT_DIR}/gather_mr.sh" & job_pids[$!]="modelregistry"
         "${SCRIPT_DIR}/gather_trustyai.sh" & job_pids[$!]="trustyai"
         "${SCRIPT_DIR}/gather_feastoperator.sh" & job_pids[$!]="feastoperator"
-        "${SCRIPT_DIR}/gather_lls.sh" & job_pids[$!]="llamastack"
         "${SCRIPT_DIR}/gather_mlflow.sh" & job_pids[$!]="mlflow"
         "${SCRIPT_DIR}/gather_sparkoperator.sh" & job_pids[$!]="spark"
         "${SCRIPT_DIR}/gather_aigateway.sh" & job_pids[$!]="aigateway"

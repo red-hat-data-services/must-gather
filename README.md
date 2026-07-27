@@ -25,7 +25,6 @@ This script also collects data from all the namespaces that has
 - `notebooks` `imagestreams` for Workbench component
 - `modelregistries.modelregistry.opendatahub.io` for Model Registry component
 - `featurestores` for Feast Operator
-- `llamastackdistributions` for Llama-stack Operator
 - `mlflows.mlflow.opendatahub.io` for MLflow Operator
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
 - `aitenants` `configs` `externalmodels` `maasauthpolicies` `maasmodelrefs` `maassubscriptions` `maastenantconfigs` `tenants` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` `llmbatchgateways` for AI Gateway (includes Models as a Service)
@@ -57,7 +56,6 @@ Full list of supported components see table below:
 | modelregistry   | Model Registry                                  |
 | trustyai        | TrustyAI                                        |
 | feastoperator   | Feast Operator                                  |
-| llamastack      | Llama-stack Operator                            |
 | mlflow          | MLflow Operator                                 |
 | sparkoperator   | Spark Operator                                  |
 | aigateway       | AI Gateway: batch-gateway, Models as a Service  |
