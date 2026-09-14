@@ -22,10 +22,12 @@ container=$(podman create --user 0 --entrypoint /bin/sh "$base_image" -ec '
     update-crypto-policies --no-reload --set DEFAULT:PQ
     update-crypto-policies --check
     rpm -q crypto-policies crypto-policies-scripts
+    mkdir -p /tmp/crypto-policies-generated
+    cp -aL /etc/crypto-policies/. /tmp/crypto-policies-generated/
 ')
 podman start --attach "$container"
 test "$(podman inspect --format '{{.State.ExitCode}}' "$container")" = 0
-podman cp "$container:/etc/crypto-policies/." crypto-policies/generated/
+podman cp "$container:/tmp/crypto-policies-generated/." crypto-policies/generated/
 podman rm "$container"
 ```
 
