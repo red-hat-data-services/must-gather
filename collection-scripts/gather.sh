@@ -154,6 +154,7 @@ case "$component" in
         ;;
     "feastoperator")
         "${SCRIPT_DIR}/gather_feastoperator.sh"
+        "${SCRIPT_DIR}/gather_data_registry.sh"
         ;;
     "mlflow")
         "${SCRIPT_DIR}/gather_mlflow.sh"
@@ -199,6 +200,7 @@ case "$component" in
         "${SCRIPT_DIR}/gather_mr.sh" & job_pids[$!]="modelregistry"
         "${SCRIPT_DIR}/gather_trustyai.sh" & job_pids[$!]="trustyai"
         "${SCRIPT_DIR}/gather_feastoperator.sh" & job_pids[$!]="feastoperator"
+        "${SCRIPT_DIR}/gather_data_registry.sh" & job_pids[$!]="dataregistry"
         "${SCRIPT_DIR}/gather_mlflow.sh" & job_pids[$!]="mlflow"
         "${SCRIPT_DIR}/gather_sparkoperator.sh" & job_pids[$!]="spark"
         "${SCRIPT_DIR}/gather_aigateway.sh" & job_pids[$!]="aigateway"
