@@ -1,0 +1,14 @@
+packages:
+  - crypto-policies-scripts
+contentOrigin:
+  repofiles:
+    - ./ubi.repo
+arches:
+  - x86_64
+  - aarch64
+  - ppc64le
+  - s390x
+context:
+  containerfile:
+    file: Dockerfile.konflux
+    stageNum: 2

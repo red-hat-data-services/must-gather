@@ -12,15 +12,8 @@ COPY collection-scripts /usr/bin
 # oc adm must-gather expects /usr/bin/gather
 RUN mv /usr/bin/gather.sh /usr/bin/gather
 
-USER 0
-
-# RHOAIENG-94551: the base image omits crypto-policies-scripts. Use configuration
-# generated with the matching RHEL package so this build needs no RPM downloads.
-# Regenerate crypto-policies/generated when the base crypto-policies RPM changes.
-RUN test "$(rpm -q crypto-policies)" = "crypto-policies-20260224-1.gitea0f072.el9_8.noarch"
-COPY crypto-policies/generated/ /etc/crypto-policies/
-
-USER 1001
+RUN dnf -y install crypto-policies-scripts \
+    && update-crypto-policies --set DEFAULT:PQ --no-reload
 
 ENTRYPOINT ["/usr/bin/gather"]
 
