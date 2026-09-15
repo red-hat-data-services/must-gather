@@ -5,68 +5,44 @@ arches:
 - arch: aarch64
   packages:
   - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/aarch64/baseos/os/Packages/c/crypto-policies-scripts-20260224-1.gitea0f072.el9_8.noarch.rpm
-    repoid: ubi-9-baseos
+    repoid: ubi-9-for-aarch64-baseos
     size: 111065
     checksum: sha256:cec44db94e9132008a7fe4e1aa764a29e9c125989c9ac2411f3cf6f8fb669dfd
     name: crypto-policies-scripts
     evr: 20260224-1.gitea0f072.el9_8
     sourcerpm: crypto-policies-20260224-1.gitea0f072.el9_8.src.rpm
-  source:
-  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/aarch64/baseos/source/SRPMS/Packages/c/crypto-policies-20260224-1.gitea0f072.el9_8.src.rpm
-    repoid: ubi-9-baseos-source
-    size: 112905
-    checksum: sha256:775d926429179caeade6af8dc7dea15a0bea49102c2592d5b712f996a329ec38
-    name: crypto-policies
-    evr: 20260224-1.gitea0f072.el9_8
+  source: []
   module_metadata: []
 - arch: ppc64le
   packages:
   - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/ppc64le/baseos/os/Packages/c/crypto-policies-scripts-20260224-1.gitea0f072.el9_8.noarch.rpm
-    repoid: ubi-9-baseos
+    repoid: ubi-9-for-ppc64le-baseos
     size: 111065
     checksum: sha256:cec44db94e9132008a7fe4e1aa764a29e9c125989c9ac2411f3cf6f8fb669dfd
     name: crypto-policies-scripts
     evr: 20260224-1.gitea0f072.el9_8
     sourcerpm: crypto-policies-20260224-1.gitea0f072.el9_8.src.rpm
-  source:
-  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/ppc64le/baseos/source/SRPMS/Packages/c/crypto-policies-20260224-1.gitea0f072.el9_8.src.rpm
-    repoid: ubi-9-baseos-source
-    size: 112905
-    checksum: sha256:775d926429179caeade6af8dc7dea15a0bea49102c2592d5b712f996a329ec38
-    name: crypto-policies
-    evr: 20260224-1.gitea0f072.el9_8
+  source: []
   module_metadata: []
 - arch: s390x
   packages:
   - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/s390x/baseos/os/Packages/c/crypto-policies-scripts-20260224-1.gitea0f072.el9_8.noarch.rpm
-    repoid: ubi-9-baseos
+    repoid: ubi-9-for-s390x-baseos
     size: 111065
     checksum: sha256:cec44db94e9132008a7fe4e1aa764a29e9c125989c9ac2411f3cf6f8fb669dfd
     name: crypto-policies-scripts
     evr: 20260224-1.gitea0f072.el9_8
     sourcerpm: crypto-policies-20260224-1.gitea0f072.el9_8.src.rpm
-  source:
-  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/s390x/baseos/source/SRPMS/Packages/c/crypto-policies-20260224-1.gitea0f072.el9_8.src.rpm
-    repoid: ubi-9-baseos-source
-    size: 112905
-    checksum: sha256:775d926429179caeade6af8dc7dea15a0bea49102c2592d5b712f996a329ec38
-    name: crypto-policies
-    evr: 20260224-1.gitea0f072.el9_8
+  source: []
   module_metadata: []
 - arch: x86_64
   packages:
   - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/x86_64/baseos/os/Packages/c/crypto-policies-scripts-20260224-1.gitea0f072.el9_8.noarch.rpm
-    repoid: ubi-9-baseos
+    repoid: ubi-9-for-x86_64-baseos
     size: 111065
     checksum: sha256:cec44db94e9132008a7fe4e1aa764a29e9c125989c9ac2411f3cf6f8fb669dfd
     name: crypto-policies-scripts
     evr: 20260224-1.gitea0f072.el9_8
     sourcerpm: crypto-policies-20260224-1.gitea0f072.el9_8.src.rpm
-  source:
-  - url: https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/x86_64/baseos/source/SRPMS/Packages/c/crypto-policies-20260224-1.gitea0f072.el9_8.src.rpm
-    repoid: ubi-9-baseos-source
-    size: 112905
-    checksum: sha256:775d926429179caeade6af8dc7dea15a0bea49102c2592d5b712f996a329ec38
-    name: crypto-policies
-    evr: 20260224-1.gitea0f072.el9_8
+  source: []
   module_metadata: []
