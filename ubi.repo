@@ -1,0 +1,13 @@
+[ubi-9-for-$basearch-baseos]
+name = Red Hat Universal Base Image 9 (RPMs) - BaseOS
+baseurl = https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/$basearch/baseos/os
+enabled = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+gpgcheck = 1
+
+[ubi-9-for-$basearch-baseos-source]
+name = Red Hat Universal Base Image 9 (Source RPMs) - BaseOS
+baseurl = https://cdn-ubi.redhat.com/content/public/ubi/dist/ubi9/9/$basearch/baseos/source/SRPMS
+enabled = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+gpgcheck = 1
