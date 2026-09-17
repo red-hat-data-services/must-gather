@@ -12,6 +12,9 @@ COPY collection-scripts /usr/bin
 # oc adm must-gather expects /usr/bin/gather
 RUN mv /usr/bin/gather.sh /usr/bin/gather
 
+RUN dnf -y install crypto-policies-scripts \
+    && update-crypto-policies --set DEFAULT:PQ --no-reload
+
 ENTRYPOINT ["/usr/bin/gather"]
 
 LABEL com.redhat.component="odh-must-gather" \
