@@ -12,6 +12,7 @@ The must-gather script currently collects data from following default namespaces
 - redhat-ods-applications
 - redhat-ods-monitoring
 - rhoai-model-registries
+- rhoai-data-registries
 
 and datasciencecluster and dscinitialization instances from cluster
 
@@ -25,6 +26,7 @@ This script also collects data from all the namespaces that has
 - `notebooks` `imagestreams` for Workbench component
 - `modelregistries.modelregistry.opendatahub.io` for Model Registry component
 - `featurestores` for Feast Operator
+- `featurestores` annotated with `dataregistry.opendatahub.io/enabled: "true"` for the Data Registry component of Feast Operator
 - `mlflows.mlflow.opendatahub.io` for MLflow Operator
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
 - `aitenants` `configs` `externalmodels` `maasauthpolicies` `maasmodelrefs` `maassubscriptions` `maastenantconfigs` `tenants` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` `llmbatchgateways` for AI Gateway (includes Models as a Service)
@@ -335,6 +337,7 @@ export NOTEBOOKS_NAMESPACE=<name-for-notebooks-namespace>
 export MONITORING_NAMESPACE=<name-for-monitoring-namespace>
 export APPLICATIONS_NAMESPACE=<name-for-applications-namespace>
 export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
+export DATA_REGISTRIES_NAMESPACE=<name-for-data-registries-namespace>
 export MAAS_NAMESPACE=<name-for-maas-namespace>
 export RHAI_HELM_CHART_NS=<name-for-rhai-helm-chart-namespace>
 
