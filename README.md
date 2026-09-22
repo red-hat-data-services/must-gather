@@ -27,7 +27,7 @@ This script also collects data from all the namespaces that has
 - `featurestores` for Feast Operator
 - `mlflows.mlflow.opendatahub.io` for MLflow Operator
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
-- `aitenants` `configs` `externalmodels` `maasauthpolicies` `maasmodelrefs` `maassubscriptions` `maastenantconfigs` `tenants` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` `llmbatchgateways` for AI Gateway (includes Models as a Service)
+- `aigateways.components.platform.opendatahub.io` `aitenants` `configs` `externalmodels` `maasauthpolicies` `maasmodelrefs` `maassubscriptions` `maastenantconfigs` `tenants` `aiguardrails.inference.opendatahub.io` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` `llmbatchgateways` for AI Gateway (includes Models as a Service)
 - `mcpservers` for MCP Lifecycle Operator
 - `ogxservers` for OGX Operator
 
