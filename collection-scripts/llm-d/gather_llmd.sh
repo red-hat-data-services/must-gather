@@ -1,6 +1,5 @@
 #!/bin/bash
-# LLM-D component gathering script - collects Kserve + llm-d related resources
-# No need call gather_serving but running standalone
+# LLM-D resource gathering script, invoked by the KServe collector.
 # shellcheck disable=SC1091
 : "${SCRIPT_DIR:=$(dirname "$0")/..}"
 source "${SCRIPT_DIR}/common.sh"
@@ -26,40 +25,24 @@ if [[ "${K8S_DISTRO}" != "ocp" ]]; then
     kubectl_inspect "namespace/$CLOUDMANAGER_NS" || echo "Error inspecting namespace/${CLOUDMANAGER_NS}"
 fi
 
-# Run dependency collection scripts in parallel (cert-manager, sail, lws)
-echo "Collecting llm-d dependencies(operators) in parallel..."
-declare -A pid_to_script
-for script in "${SCRIPT_DIR}/llm-d/dependency"/*.sh; do
-    if [[ -f "$script" ]]; then
-        echo "Starting $(basename "$script")..."
-        bash "$script" &
-        pid_to_script[$!]="$script"
-    fi
-done
-# Wait for all dependency scripts to complete
-for pid in "${!pid_to_script[@]}"; do
-    wait "$pid" || echo "ERROR: Failed to run ${pid_to_script[$pid]}"
+# Collect LLM-D dependencies, including LWS resources.
+for dependency in cert-manager sail lws; do
+    script="${SCRIPT_DIR}/llm-d/dependency/${dependency}.sh"
+    bash "$script" || echo "ERROR: Failed to run ${script}"
 done
 
-# Full namespace inspection for namespaces where LLMInferenceService CRs are deployed
-# This ensures pods, pod logs, and all resources (including llmisvc CRs) are collected
+# KServe already collected full namespaces containing LLMInferenceServices.
 llmisvc_namespaces=$(get_all_namespace "llminferenceservices.serving.kserve.io" | \
     grep -v "^${OPERATOR_NS}$" | grep -v "^${APPLICATIONS_NS}$" | grep -v "^${HELM_CHART_NS}$" | grep -v "^${CLOUDMANAGER_NS}$" | tr '\n' ' ')
-for ns in $llmisvc_namespaces; do
-    kubectl_inspect "namespace/$ns" || echo "Error inspecting namespace/${ns}"
-done
 
 resources+=(
     "gatewayconfigs.services.platform.opendatahub.io"
-    "kserves.components.platform.opendatahub.io"
     "mutatingwebhookconfigurations.admissionregistration.k8s.io"
     "validatingwebhookconfigurations.admissionregistration.k8s.io"
 )
 
-# Core KServe resources
+# LLM-D monitoring resources
 resources+=(
-    "llminferenceserviceconfigs.serving.kserve.io"
-    "llminferenceservices.serving.kserve.io"
     "servicemonitors.monitoring.coreos.com"
     "podmonitors.monitoring.coreos.com"
 )
@@ -73,12 +56,10 @@ resources+=(
     "referencegrants.gateway.networking.k8s.io"
 )
 
-# Gateway API Inference Extension (inference.networking.x-k8s.io)
-# https://gateway-api-inference-extension.sigs.k8s.io/
+# InferencePool is provided by GIE; Router request APIs are in llm-d.ai.
 resources+=(
-    "inferencepools.inference.networking.k8s.io"
-    # "inferencemodelrewrites.inference.networking.x-k8s.io" enabled for LoRA
-    "inferenceobjectives.inference.networking.x-k8s.io"
+    "inferencemodelrewrites.llm-d.ai"
+    "inferenceobjectives.llm-d.ai"
 )
 
 # Get all namespaces where these resources exist, excluding namespaces which have been fully inspected
@@ -91,6 +72,9 @@ nslist=$(echo "$nslist" | tr '\n' ' ')
 
 # Run collection across all identified namespaces (except already fully inspected namespaces)
 run_k8sgather "$nslist" "${resources[@]}"
+
+# General monitoring collection; this is independent of optional autoscaler support.
+bash "${SCRIPT_DIR}/llm-d/gather_o11y.sh" || echo "WARNING: Failed to collect observability resources"
 
 echo "=========================================="
 echo "DEBUG: LLM-D resource collection completed"

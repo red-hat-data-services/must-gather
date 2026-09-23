@@ -21,13 +21,17 @@ This script also collects data from all the namespaces that has
 - `rayclusters` `rayjobs` `rayservices` for KubeRay component
 - `admissionchecks` `cohorts` `clusterqueues` `localqueues` `multikueueclusters` `multikueueconfigs` `provisioningrequestconfigs` `resourceflavors` `workloads` `workloadpriorityclasses` for Kueue component
 - `mpijobs` `paddlejobs` `pytorchjob` `tfjob` `xgboostjob` `jaxjobs` `jobsetoperators` `trainjobs.trainer.kubeflow.org` `trainingruntimes.trainer.kubeflow.org` `clustertrainingruntimes.trainer.kubeflow.org` for Kubeflow Training Operator
-- `inferenceservices` `inferencegraphs` `trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` `localmodelnodegroups` `authconfigs` `authorinos` `authpolicies.kuadrant.io` `accounts.nim.opendatahub.io` `llminferenceserviceconfigs` `llminferenceservices` `leaderworkersetoperators` `leaderworkersets` `inferencepools` `variantautoscalings.llmd.ai` `ratelimitpolicies.kuadrant.io` `kuadrants.kuadrant.io` `tokenratelimitpolicies.kuadrant.io`, `kserves.components.platform.opendatahub.io` for Kserve component
+- `inferenceservices` `inferencegraphs` `trainedmodels` `servingruntimes` `clusterstoragecontainers` `predictors` `localmodelnodegroups` `authconfigs` `authorinos` `authpolicies.kuadrant.io` `accounts.nim.opendatahub.io` `llminferenceserviceconfigs` `llminferenceservices` `inferencepools` `kserves.components.platform.opendatahub.io` for Kserve component
+- `leaderworkersets.leaderworkerset.x-k8s.io` `disaggregatedsets.disaggregatedset.x-k8s.io` `disaggregatedsetrolescalers.disaggregatedset.x-k8s.io` for LWS; `leaderworkersetoperators.operator.openshift.io` for the LWS Operator on OCP (collected by the LWS dependency collector when LLM-D runs)
+- `modelexpressservers.modelexpress.opendatahub.io` `modelmetadatas.modelexpress.nvidia.com` `modelcacheentries.modelexpress.nvidia.com` for ModelExpress (included with KServe on OCP; opt-in on xKS)
 - `notebooks` `imagestreams` for Workbench component
 - `modelregistries.modelregistry.opendatahub.io` for Model Registry component
 - `featurestores` for Feast Operator
 - `mlflows.mlflow.opendatahub.io` for MLflow Operator
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
-- `aigateways.components.platform.opendatahub.io` `aitenants` `configs` `externalmodels` `maasauthpolicies` `maasmodelrefs` `maassubscriptions` `maastenantconfigs` `tenants` `aiguardrails.inference.opendatahub.io` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` `llmbatchgateways` for AI Gateway (includes Models as a Service)
+- `aigateways.components.platform.opendatahub.io` `aiguardrails.inference.opendatahub.io` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` for AI Gateway
+- `aitenants.maas.opendatahub.io` `configs.maas.opendatahub.io` `externalmodels.maas.opendatahub.io` `maasauthpolicies.maas.opendatahub.io` `maasmodelrefs.maas.opendatahub.io` `maassubscriptions.maas.opendatahub.io` `maastenantconfigs.maas.opendatahub.io` `tenants.maas.opendatahub.io` `ratelimitpolicies.kuadrant.io` `kuadrants.kuadrant.io` `tokenratelimitpolicies.kuadrant.io` for MaaS (included by default on OCP; opt-in on xKS with `ENABLE_MAAS=true`)
+- `llmbatchgateways.batch.llm-d.ai` for Batch Gateway (included by default on OCP; opt-in on xKS with `ENABLE_BATCH_GATEWAY=true`)
 - `mcpservers` for MCP Lifecycle Operator
 - `ogxservers` for OGX Operator
 
@@ -35,10 +39,10 @@ This script also collects data from all the namespaces that has
 
 Refer to KCS: https://access.redhat.com/solutions/7061604 
 
-To collect all for RHOAI release 3.4
+To collect all for RHOAI release 3.6
 
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0
 ```
 
 To collect for only one component use env variable COMPONENT.
@@ -51,22 +55,21 @@ Full list of supported components see table below:
 | kuberay         | KubeRay                                         |
 | kueue           | Kueue                                           |
 | kfto            | Kubeflow Training Operator                      |
-| kserve          | Kserve                                          |
+| kserve          | KServe and LLM-D resources; LLM-D runs the LWS dependency collector |
 | workbench       | Workbench                                       |
 | modelregistry   | Model Registry                                  |
 | trustyai        | TrustyAI                                        |
 | feastoperator   | Feast Operator                                  |
 | mlflow          | MLflow Operator                                 |
 | sparkoperator   | Spark Operator                                  |
-| aigateway       | AI Gateway: batch-gateway, Models as a Service  |
+| aigateway       | AI Gateway; optional Batch Gateway and MaaS     |
 | mcplo           | MCP Lifecycle Operator                          |
 | ogx             | OGX Operator                                    |
-| llm-d           | LLM-D / RHAII (auto-enabled for xKS)            |
 
 for example to 'kserve':
 
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=kserve; gather"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0 -- "export COMPONENT=kserve; gather"
 ```
 
 To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
@@ -76,7 +79,7 @@ If this value precedes the time a pod was started, only logs since the pod start
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 --since-time=2024-05-02T14:01:23Z
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0 --since-time=2024-05-02T14:01:23Z
 ```
 
 To collect logs newer than a relative duration like 5s, 2m, or 3h. This feature only support oc 4.16+
@@ -84,27 +87,19 @@ Defaults to all logs.
 Only one of MUST_GATHER_SINCE_TIME / MUST_GATHER_SINCE may be used
 
 ```cmd
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 --since=3h
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0 --since=3h
 ```
 
 If you have enabled customized namespaces for installation, below env. variable need to be configured when running "oc adm must-gather", example:
 ```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; gather"
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; gather"
 ```
 
-To enable batch-gateway collection for llm-d (optional):
-```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export ENABLE_BATCH_GATEWAY=true; gather"
-```
-
-For llm-d running on AKS with Azure Managed Prometheus:
-```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export AKS_MONITORING_TYPE=managed; gather"
-```
+On OpenShift, KServe collects ModelExpress, and its LLM-D collector gathers LWS resources. AI Gateway collects MaaS and Batch Gateway by default; no `ENABLE_*` flags are needed.
 
 ## Usage on Non-OpenShift Kubernetes (xKS)
 
-For Kubernetes platforms running LLM-D inference workloads, must-gather can collect LLM-D-specific resources.
+On xKS, the default gather runs KServe and LLM-D; LLM-D invokes the LWS dependency collector. AI Gateway also runs by default. Use `ENABLE_MODELEXPRESS=true`, `ENABLE_BATCH_GATEWAY=true`, and `ENABLE_MAAS=true` to opt into those additional resources.
 
 Supported platforms:
 - **CKS** (CoreWeave Kubernetes)
@@ -112,10 +107,7 @@ Supported platforms:
 - **EKS** (Amazon Elastic Kubernetes Service)
 - **OpenShift** with RHAII - see [Usage on OpenShift](#usage-on-openshift) above
 
-> **Note for OpenShift RHAII Users:** If you are running on OpenShift with RHAII (Red Hat AI Inference) for inference-only workloads, we recommend using the standard OpenShift approach:
-> ```bash
-> oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0 -- "export COMPONENT=llm-d; gather"
-> ```
+> **Note for OpenShift RHAII Users:** The default full OpenShift gather collects all components. The KServe component includes LLM-D resource collection.
 > The Kubernetes Job approach below is primarily intended for non-OpenShift platforms (CKS, AKS, EKS).
 
 > **Custom Namespaces:** If you used custom namespaces, add the appropriate environment variables to the Job spec. See the [Developer Guide](#developer-guide) section for the complete list of namespace variables.
@@ -171,7 +163,7 @@ EOF
 podman login registry.redhat.io
 
 # Verify you can pull the must-gather image
-podman pull registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
+podman pull registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0
 
 # Create Kubernetes secret from podman auth
 # This uses ~/.config/containers/auth.json for podman (persistent across sessions)
@@ -199,11 +191,8 @@ spec:
       - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0
         command: ["/bin/bash", "-c", "cd /tmp && gather && sleep 600"]
-        env:
-        - name: COMPONENT
-          value: "llm-d"
       restartPolicy: Never
 EOF
 ```
@@ -245,16 +234,19 @@ kubectl delete clusterrole must-gather-reader
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `ENABLE_BATCH_GATEWAY` | `false` | Enable batch-gateway collection |
-| `BATCH_GATEWAY_NAMESPACE` | `batch-gateway` | Namespace where batch-gateway is deployed |
+| `ENABLE_MODELEXPRESS` | `false` on xKS; always on OCP | Include ModelExpress with KServe |
+| `ENABLE_MAAS` | `false` on xKS; always on OCP | Include MaaS with AI Gateway |
+| `ENABLE_BATCH_GATEWAY` | `false` on xKS; always on OCP | Include Batch Gateway with AI Gateway |
 | `AKS_MONITORING_TYPE` | `self-hosted` | `managed` for Azure Managed Prometheus, `self-hosted` for kube-prometheus-stack |
+| `BATCH_GATEWAY_NAMESPACE` | `batch-gateway` | Namespace where batch-gateway is deployed |
 | `RHAI_HELM_CHART_NS` | `rhai-gitops` | Ensure this match the namespace where Helm Chart is installed |
 | `RHAI_HELM_RELEASE_NAME` | `rhaii` | The Helm release name used during installation |
 
 
 **Example: AKS with Azure Managed Prometheus**
 
-If using Azure Managed Prometheus instead of self-hosted kube-prometheus-stack:
+Set `AKS_MONITORING_TYPE=managed` in the must-gather Job to collect Azure Managed Prometheus data:
+
 ```bash
 kubectl apply -f - <<EOF
 apiVersion: batch/v1
@@ -270,11 +262,9 @@ spec:
       - name: redhat-pull-secret
       containers:
       - name: gather
-        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.4.0
+        image: registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0
         command: ["/bin/bash", "-c", "cd /tmp && gather && sleep 600"]
         env:
-        - name: COMPONENT
-          value: "llm-d"
         - name: AKS_MONITORING_TYPE
           value: "managed"
       restartPolicy: Never

@@ -5,20 +5,25 @@
 source "${SCRIPT_DIR}/common.sh"
 source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 
-# Leader Worker Set resources
-# https://github.com/kubernetes-sigs/lws
+# LWS APIs are used on both OpenShift and xKS.
 resources=(
     "leaderworkersets.leaderworkerset.x-k8s.io"
-    "leaderworkersetoperators.operator.openshift.io"
+    "disaggregatedsets.disaggregatedset.x-k8s.io"
+    "disaggregatedsetrolescalers.disaggregatedset.x-k8s.io"
 )
-
-# Get all namespaces where these resources exist
 nslist=$(get_all_namespace "${resources[@]}")
-
-# Run collection across all identified namespaces
 run_k8sgather "$nslist" "${resources[@]}"
 
-# Collect LWS operator namespace
-# User can override or fallback to openshift-lws-operator
-LWS_NS=${LWS_NAMESPACE:-openshift-lws-operator}
+# The LWS Operator API exists only on OpenShift.
+if [[ "${K8S_DISTRO}" == "ocp" ]]; then
+    get_operator_resource "leaderworkersetoperators.operator.openshift.io"
+fi
+
+# Collect the LWS controller namespace. The namespace differs by distro.
+if [[ "${K8S_DISTRO}" == "ocp" ]]; then
+    DEFAULT_LWS_NS="openshift-lws-operator"
+else
+    DEFAULT_LWS_NS="lws-system"
+fi
+LWS_NS=${LWS_NAMESPACE:-${DEFAULT_LWS_NS}}
 kubectl_inspect "namespace/$LWS_NS" || echo "WARNING: Namespace ${LWS_NS} not found"
