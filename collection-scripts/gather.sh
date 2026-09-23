@@ -172,10 +172,6 @@ case "$component" in
         ;;
     "llm-d")
         "${SCRIPT_DIR}/llm-d/gather_llmd.sh"
-        # WVA is optional, controlled by ENABLE_WVA env var (default: false)
-        if [[ "${ENABLE_WVA:-false}" == "true" ]]; then
-            "${SCRIPT_DIR}/llm-d/gather_wva.sh"
-        fi
         # Batch gateway is optional, controlled by ENABLE_BATCH_GATEWAY env var (default: false)
         if [[ "${ENABLE_BATCH_GATEWAY:-false}" == "true" ]]; then
             "${SCRIPT_DIR}/llm-d/gather_batch_gateway.sh"
