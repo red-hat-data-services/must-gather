@@ -1,3 +1,4 @@
+#!/bin/bash
 # Shared resource list for KServe collection on OpenShift and xKS.
 # shellcheck disable=SC2034
 resources=("inferenceservices" "inferencegraphs" "trainedmodels" "servingruntimes" "clusterstoragecontainers" "predictors" "localmodelnodegroups")
