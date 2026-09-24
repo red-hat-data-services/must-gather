@@ -3,8 +3,12 @@
 : "${SCRIPT_DIR:=$(dirname "$0")}"
 source "${SCRIPT_DIR}/common.sh"
 
-# MaaS core CRDs (maas.opendatahub.io)
+# AI Gateway operator CRD (components.platform.opendatahub.io)
 resources=(
+  "aigateways.components.platform.opendatahub.io"
+)
+# MaaS core CRDs (maas.opendatahub.io)
+resources+=(
   "aitenants.maas.opendatahub.io"
   "configs.maas.opendatahub.io"
   "externalmodels.maas.opendatahub.io"
@@ -14,8 +18,9 @@ resources=(
   "maastenantconfigs.maas.opendatahub.io"
   "tenants.maas.opendatahub.io"
 )
-# Inference CRDs (inference.opendatahub.io) — from ai-gateway-payload-processing
+# Inference CRDs (inference.opendatahub.io) — from ai-gateway-controller and ai-gateway-payload-processing
 resources+=(
+  "aiguardrails.inference.opendatahub.io"
   "externalmodels.inference.opendatahub.io"
   "externalproviders.inference.opendatahub.io"
 )
