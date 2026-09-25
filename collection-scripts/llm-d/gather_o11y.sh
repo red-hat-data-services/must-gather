@@ -3,6 +3,7 @@
 # shellcheck disable=SC1091
 : "${SCRIPT_DIR:=$(dirname "$0")/..}"
 source "${SCRIPT_DIR}/common.sh"
+source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 
 echo "=========================================="
 echo "DEBUG: gather_o11y.sh is being executed"
