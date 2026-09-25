@@ -44,7 +44,8 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     fi
 
     NOTEBOOKS_NS=${NOTEBOOK_NAMESPACE:-rhods-notebooks}
-    MONITORING_NS=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
+    export MONITORING_NAMESPACE=${MONITORING_NAMESPACE:-redhat-ods-monitoring}
+    MONITORING_NS=${MONITORING_NAMESPACE}
     MODELREG_NS=${MODEL_REGISTRIES_NAMESPACE:-rhoai-model-registries}
     KUADRANT_NS="kuadrant-system"
     # dependent operator namespace
@@ -98,8 +99,7 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     )
     get_operator_resource "${resources[@]}"
 
-    # set component or default based on distribution
-    # For non-OpenShift, we only run with llm-d; for OpenShift, default to all
+    # RHOAI defaults to all components; xKS uses the KServe + AI Gateway default below.
     component=${COMPONENT:-all}
 else
     if [ -n "${OPERATOR_NAMESPACE}" ]; then
@@ -117,7 +117,11 @@ else
         cks) resources+=("coreweavekubernetesengines.infrastructure.opendatahub.io") ;;
         eks) resources+=("awskubernetesengines.infrastructure.opendatahub.io") ;;
     esac
-    component="llm-d"
+    # xKS defaults to KServe and AI Gateway; "all" means all xKS-supported components.
+    component=${COMPONENT:-xks-default}
+    if [[ "${component}" == "all" ]]; then
+        component="xks-default"
+    fi
 fi
 
 echo "=========================================="
@@ -129,7 +133,10 @@ case "$component" in
         "${SCRIPT_DIR}/gather_data_science_pipelines.sh"
         ;;
     "kserve")
-        "${SCRIPT_DIR}/gather_serving.sh"
+        "${SCRIPT_DIR}/gather_kserve.sh"
+        ;;
+    "xks-default")
+        "${SCRIPT_DIR}/gather_xks.sh"
         ;;
     "dashboard")
         "${SCRIPT_DIR}/gather_dashboard.sh"
@@ -170,24 +177,14 @@ case "$component" in
     "ogx")
         "${SCRIPT_DIR}/gather_ogx.sh"
         ;;
-    "llm-d")
-        "${SCRIPT_DIR}/llm-d/gather_llmd.sh"
-        # Batch gateway is optional, controlled by ENABLE_BATCH_GATEWAY env var (default: false)
-        if [[ "${ENABLE_BATCH_GATEWAY:-false}" == "true" ]]; then
-            "${SCRIPT_DIR}/llm-d/gather_batch_gateway.sh"
-        fi
-        ;;
-    *) # for all except llm-d
-
-        # Track PIDs and job names for error reporting
+    "all")
+        # Track component jobs and report failures.
         declare -A job_pids
         declare -a failed_jobs
 
         echo "Starting parallel data collection..."
-
-        # Start all gather operations in background and track PIDs
         "${SCRIPT_DIR}/gather_data_science_pipelines.sh" & job_pids[$!]="dsp"
-        "${SCRIPT_DIR}/gather_serving.sh" & job_pids[$!]="kserve"
+        "${SCRIPT_DIR}/gather_kserve.sh" & job_pids[$!]="kserve"
         "${SCRIPT_DIR}/gather_notebooks.sh" & job_pids[$!]="workbench"
         "${SCRIPT_DIR}/gather_kuberay.sh" & job_pids[$!]="kuberay"
         "${SCRIPT_DIR}/gather_kueue.sh" & job_pids[$!]="kueue"
@@ -202,13 +199,15 @@ case "$component" in
         "${SCRIPT_DIR}/gather_ogx.sh" & job_pids[$!]="ogx"
 
         echo "Waiting for ${#job_pids[@]} jobs to complete..."
-
-        # Wait for all jobs and mark failed one to later report
         for pid in "${!job_pids[@]}"; do
             if ! wait "$pid"; then
                 failed_jobs+=("${job_pids[$pid]}")
             fi
         done
+        ;;
+    *)
+        echo "ERROR: Unsupported COMPONENT=${component}" >&2
+        exit 1
         ;;
 esac
 
