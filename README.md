@@ -31,6 +31,7 @@ This script also collects data from all the namespaces that has
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
 - `aigateways.components.platform.opendatahub.io` `aiguardrails.inference.opendatahub.io` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` for AI Gateway
 - `aitenants.maas.opendatahub.io` `configs.maas.opendatahub.io` `externalmodels.maas.opendatahub.io` `maasauthpolicies.maas.opendatahub.io` `maasmodelrefs.maas.opendatahub.io` `maassubscriptions.maas.opendatahub.io` `maastenantconfigs.maas.opendatahub.io` `tenants.maas.opendatahub.io` `ratelimitpolicies.kuadrant.io` `kuadrants.kuadrant.io` `tokenratelimitpolicies.kuadrant.io` for MaaS (included by default on OCP; opt-in on xKS with `ENABLE_MAAS=true`)
+- `siteinvites.grid.praxis.fast` `inferenceproviders.grid.praxis.fast` `gridsites.grid.praxis.fast` `gridnetworks.grid.praxis.fast` `agenttoolproviders.grid.praxis.fast` for Grid (included by default on OCP; opt-in on xKS with `ENABLE_GRID=true`)
 - `llmbatchgateways.batch.llm-d.ai` for Batch Gateway (included by default on OCP; opt-in on xKS with `ENABLE_BATCH_GATEWAY=true`)
 - `mcpservers` for MCP Lifecycle Operator
 - `ogxservers` for OGX Operator
@@ -45,10 +46,9 @@ To collect all for RHOAI release 3.6
 oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0
 ```
 
-To collect for only one component use env variable COMPONENT.
-Full list of supported components see table below:
+On OpenShift, the collector gathers all supported components:
 
-| COMPONENT value | Comments                                        |
+| Component       | Comments                                        |
 |-----------------|-------------------------------------------------|
 | dashboard       | Dashboard                                       |
 | dsp             | AI Pipeline (previously: Data Science Pipeline) |
@@ -62,15 +62,11 @@ Full list of supported components see table below:
 | feastoperator   | Feast Operator                                  |
 | mlflow          | MLflow Operator                                 |
 | sparkoperator   | Spark Operator                                  |
-| aigateway       | AI Gateway; optional Batch Gateway and MaaS     |
+| aigateway       | AI Gateway; optional Batch Gateway, MaaS, Grid  |
 | mcplo           | MCP Lifecycle Operator                          |
 | ogx             | OGX Operator                                    |
 
-for example to 'kserve':
-
-```
-oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0 -- "export COMPONENT=kserve; gather"
-```
+On non-OpenShift Kubernetes, the collector gathers KServe and AI Gateway.
 
 To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
 Defaults to all logs.
@@ -95,11 +91,11 @@ If you have enabled customized namespaces for installation, below env. variable 
 oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0 -- "export OPERATOR_NAMESPACE=<your-operator-namespace>;export APPLICATIONS_NAMESPACE=<your-application-namespace>; gather"
 ```
 
-On OpenShift, KServe collects ModelExpress, and its LLM-D collector gathers LWS resources. AI Gateway collects MaaS and Batch Gateway by default; no `ENABLE_*` flags are needed.
+On OpenShift, KServe collects ModelExpress, and its LLM-D collector gathers LWS resources. AI Gateway collects MaaS, Grid, and Batch Gateway by default; no `ENABLE_*` flags are needed.
 
 ## Usage on Non-OpenShift Kubernetes (xKS)
 
-On xKS, the default gather runs KServe and LLM-D; LLM-D invokes the LWS dependency collector. AI Gateway also runs by default. Use `ENABLE_MODELEXPRESS=true`, `ENABLE_BATCH_GATEWAY=true`, and `ENABLE_MAAS=true` to opt into those additional resources.
+On xKS, the gather runs KServe and LLM-D; LLM-D invokes the LWS dependency collector. AI Gateway also runs. Use `ENABLE_MODELEXPRESS=true`, `ENABLE_BATCH_GATEWAY=true`, `ENABLE_MAAS=true`, and `ENABLE_GRID=true` to opt into those additional resources.
 
 Supported platforms:
 - **CKS** (CoreWeave Kubernetes)
@@ -236,6 +232,7 @@ kubectl delete clusterrole must-gather-reader
 |----------|---------|-------------|
 | `ENABLE_MODELEXPRESS` | `false` on xKS; always on OCP | Include ModelExpress with KServe |
 | `ENABLE_MAAS` | `false` on xKS; always on OCP | Include MaaS with AI Gateway |
+| `ENABLE_GRID` | `false` on xKS; always on OCP | Include Grid with AI Gateway |
 | `ENABLE_BATCH_GATEWAY` | `false` on xKS; always on OCP | Include Batch Gateway with AI Gateway |
 | `AKS_MONITORING_TYPE` | `self-hosted` | `managed` for Azure Managed Prometheus, `self-hosted` for kube-prometheus-stack |
 | `BATCH_GATEWAY_NAMESPACE` | `batch-gateway` | Namespace where batch-gateway is deployed |
