@@ -98,8 +98,8 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
     )
     get_operator_resource "${resources[@]}"
 
-    # OCP always collects every supported component.
-    component="all"
+    # RHOAI defaults to all components; COMPONENT selects a single component.
+    component=${COMPONENT:-all}
 else
     if [ -n "${OPERATOR_NAMESPACE}" ]; then
         OPERATOR_NS="${OPERATOR_NAMESPACE}"
@@ -116,8 +116,11 @@ else
         cks) resources+=("coreweavekubernetesengines.infrastructure.opendatahub.io") ;;
         eks) resources+=("awskubernetesengines.infrastructure.opendatahub.io") ;;
     esac
-    # xKS always collects KServe and AI Gateway.
-    component="xks-default"
+    # xKS defaults to KServe and AI Gateway; COMPONENT selects a single component.
+    component=${COMPONENT:-xks-default}
+    if [[ "${component}" == "all" ]]; then
+        component="xks-default"
+    fi
 fi
 
 echo "=========================================="

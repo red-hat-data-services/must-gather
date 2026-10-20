@@ -46,9 +46,10 @@ To collect all for RHOAI release 3.6
 oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0
 ```
 
-On OpenShift, the collector gathers all supported components:
+To collect for only one component use env variable COMPONENT.
+Full list of supported components see table below:
 
-| Component       | Comments                                        |
+| COMPONENT value | Comments                                        |
 |-----------------|-------------------------------------------------|
 | dashboard       | Dashboard                                       |
 | dsp             | AI Pipeline (previously: Data Science Pipeline) |
@@ -66,7 +67,13 @@ On OpenShift, the collector gathers all supported components:
 | mcplo           | MCP Lifecycle Operator                          |
 | ogx             | OGX Operator                                    |
 
-On non-OpenShift Kubernetes, the collector gathers KServe and AI Gateway.
+for example to 'kserve':
+
+```
+oc adm must-gather --image=registry.redhat.io/rhoai/odh-must-gather-rhel9:v3.6.0 -- "export COMPONENT=kserve; gather"
+```
+
+On non-OpenShift Kubernetes, the default gather runs KServe and AI Gateway. COMPONENT can also select a single supported component.
 
 To collect logs after a specific date (RFC3339). This feature only support oc 4.16+
 Defaults to all logs.

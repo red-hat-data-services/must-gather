@@ -45,23 +45,21 @@ if [[ "${K8S_DISTRO}" == "ocp" || "${ENABLE_GRID:-false}" == "true" ]]; then
   )
 fi
 
-if [[ ${#cluster_scoped_resources[@]} -gt 0 ]]; then
-  if [[ "${K8S_DISTRO}" == "ocp" ]]; then
-    get_operator_resource "${cluster_scoped_resources[@]}"
-  else
-    for resource in "${cluster_scoped_resources[@]}"; do
-      resource_group="${resource#*.}"
-      resource_dir="${DST_DIR}/cluster-scoped-resources/${resource_group}"
-      resource_name="${resource%%.*}"
-      resource_output=$(mktemp)
-      if $KUBECTL get "$resource" -o yaml > "$resource_output" 2>/dev/null; then
-        mkdir -p "${resource_dir}"
-        mv "$resource_output" "${resource_dir}/${resource_name}.yaml"
-      else
-        rm -f "$resource_output"
-      fi
-    done
-  fi
+if [[ "${K8S_DISTRO}" == "ocp" ]]; then
+  get_operator_resource "${cluster_scoped_resources[@]}"
+else
+  for resource in "${cluster_scoped_resources[@]}"; do
+    resource_group="${resource#*.}"
+    resource_dir="${DST_DIR}/cluster-scoped-resources/${resource_group}"
+    resource_name="${resource%%.*}"
+    resource_output=$(mktemp)
+    if $KUBECTL get "$resource" -o yaml > "$resource_output" 2>/dev/null; then
+      mkdir -p "${resource_dir}"
+      mv "$resource_output" "${resource_dir}/${resource_name}.yaml"
+    else
+      rm -f "$resource_output"
+    fi
+  done
 fi
 
 nslist=$(get_all_namespace "${resources[@]}")
