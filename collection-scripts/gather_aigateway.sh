@@ -4,15 +4,6 @@
 source "${SCRIPT_DIR}/common.sh"
 source "${SCRIPT_DIR}/llm-d/xks_util.sh"
 
-if [[ "${K8S_DISTRO}" != "ocp" && "${COMPONENT:-}" == "aigateway" ]]; then
-  component_resource="aigateways.components.platform.opendatahub.io"
-  if $KUBECTL get "$component_resource" --no-headers 2>/dev/null | grep -q .; then
-    component_resource_dir="${DST_DIR}/cluster-scoped-resources/components.platform.opendatahub.io"
-    mkdir -p "$component_resource_dir"
-    $KUBECTL get "$component_resource" -o yaml > "${component_resource_dir}/aigateways.yaml" 2>/dev/null
-  fi
-fi
-
 # AI Gateway controller and payload-processing CRDs.
 resources=(
   "aiguardrails.inference.opendatahub.io"
@@ -21,10 +12,16 @@ resources=(
 )
 
 # MaaS is optional within the AI Gateway component.
+cluster_scoped_resources=()
+cluster_scoped_resources+=(
+  "aigateways.components.platform.opendatahub.io"
+)
 if [[ "${K8S_DISTRO}" == "ocp" || "${ENABLE_MAAS:-false}" == "true" ]]; then
+  cluster_scoped_resources+=(
+    "configs.maas.opendatahub.io"
+  )
   resources+=(
     "aitenants.maas.opendatahub.io"
-    "configs.maas.opendatahub.io"
     "externalmodels.maas.opendatahub.io"
     "maasauthpolicies.maas.opendatahub.io"
     "maasmodelrefs.maas.opendatahub.io"
@@ -35,6 +32,34 @@ if [[ "${K8S_DISTRO}" == "ocp" || "${ENABLE_MAAS:-false}" == "true" ]]; then
     "kuadrants.kuadrant.io"
     "tokenratelimitpolicies.kuadrant.io"
   )
+fi
+
+# Grid CRDs are cluster-scoped and optional within the AI Gateway component.
+if [[ "${K8S_DISTRO}" == "ocp" || "${ENABLE_GRID:-false}" == "true" ]]; then
+  cluster_scoped_resources+=(
+    "siteinvites.grid.praxis.fast"
+    "inferenceproviders.grid.praxis.fast"
+    "gridsites.grid.praxis.fast"
+    "gridnetworks.grid.praxis.fast"
+    "agenttoolproviders.grid.praxis.fast"
+  )
+fi
+
+if [[ "${K8S_DISTRO}" == "ocp" ]]; then
+  get_operator_resource "${cluster_scoped_resources[@]}"
+else
+  for resource in "${cluster_scoped_resources[@]}"; do
+    resource_group="${resource#*.}"
+    resource_dir="${DST_DIR}/cluster-scoped-resources/${resource_group}"
+    resource_name="${resource%%.*}"
+    resource_output=$(mktemp)
+    if $KUBECTL get "$resource" -o yaml > "$resource_output" 2>/dev/null; then
+      mkdir -p "${resource_dir}"
+      mv "$resource_output" "${resource_dir}/${resource_name}.yaml"
+    else
+      rm -f "$resource_output"
+    fi
+  done
 fi
 
 nslist=$(get_all_namespace "${resources[@]}")
