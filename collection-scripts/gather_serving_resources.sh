@@ -13,5 +13,5 @@ resources+=(
   "inferencepools.inference.networking.k8s.io"
 )
 
-# Module operator
-resources+=("kserves.components.platform.opendatahub.io")
+# KServe module operator CRD is cluster-scoped.
+cluster_scoped_resources=("kserves.components.platform.opendatahub.io")
