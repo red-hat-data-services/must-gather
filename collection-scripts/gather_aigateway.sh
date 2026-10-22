@@ -31,6 +31,7 @@ if [[ "${K8S_DISTRO}" == "ocp" || "${ENABLE_MAAS:-false}" == "true" ]]; then
     "ratelimitpolicies.kuadrant.io"
     "kuadrants.kuadrant.io"
     "tokenratelimitpolicies.kuadrant.io"
+    "limitadors.limitador.kuadrant.io"
   )
 fi
 
