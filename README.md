@@ -12,6 +12,7 @@ The must-gather script currently collects data from following default namespaces
 - redhat-ods-applications
 - redhat-ods-monitoring
 - rhoai-model-registries
+- rhoai-data-registry
 
 and datasciencecluster and dscinitialization instances from cluster
 
@@ -295,6 +296,7 @@ export NOTEBOOKS_NAMESPACE=<name-for-notebooks-namespace>
 export MONITORING_NAMESPACE=<name-for-monitoring-namespace>
 export APPLICATIONS_NAMESPACE=<name-for-applications-namespace>
 export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
+export DATA_REGISTRY_NS=<name-for-data-registry-namespace>
 export MAAS_NAMESPACE=<name-for-maas-namespace>
 export RHAI_HELM_CHART_NS=<name-for-rhai-helm-chart-namespace>
 
