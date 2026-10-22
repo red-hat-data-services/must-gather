@@ -12,6 +12,7 @@ The must-gather script currently collects data from following default namespaces
 - redhat-ods-applications
 - redhat-ods-monitoring
 - rhoai-model-registries
+- rhoai-data-registry
 
 and datasciencecluster and dscinitialization instances from cluster
 
@@ -30,7 +31,7 @@ This script also collects data from all the namespaces that has
 - `mlflows.mlflow.opendatahub.io` for MLflow Operator
 - `sparkapplications` `scheduledsparkapplications` `sparkconnects` for Spark Operator
 - `aigateways.components.platform.opendatahub.io` `aiguardrails.inference.opendatahub.io` `externalmodels.inference.opendatahub.io` `externalproviders.inference.opendatahub.io` for AI Gateway
-- `aitenants.maas.opendatahub.io` `configs.maas.opendatahub.io` `externalmodels.maas.opendatahub.io` `maasauthpolicies.maas.opendatahub.io` `maasmodelrefs.maas.opendatahub.io` `maassubscriptions.maas.opendatahub.io` `maastenantconfigs.maas.opendatahub.io` `tenants.maas.opendatahub.io` `ratelimitpolicies.kuadrant.io` `kuadrants.kuadrant.io` `tokenratelimitpolicies.kuadrant.io` for MaaS (included by default on OCP; opt-in on xKS with `ENABLE_MAAS=true`)
+- `aitenants.maas.opendatahub.io` `configs.maas.opendatahub.io` `externalmodels.maas.opendatahub.io` `maasauthpolicies.maas.opendatahub.io` `maasmodelrefs.maas.opendatahub.io` `maassubscriptions.maas.opendatahub.io` `maastenantconfigs.maas.opendatahub.io` `tenants.maas.opendatahub.io` `ratelimitpolicies.kuadrant.io` `kuadrants.kuadrant.io` `tokenratelimitpolicies.kuadrant.io` `limitadors.limitador.kuadrant.io` for MaaS (included by default on OCP; opt-in on xKS with `ENABLE_MAAS=true`)
 - `siteinvites.grid.praxis.fast` `inferenceproviders.grid.praxis.fast` `gridsites.grid.praxis.fast` `gridnetworks.grid.praxis.fast` `agenttoolproviders.grid.praxis.fast` for Grid (included by default on OCP; opt-in on xKS with `ENABLE_GRID=true`)
 - `llmbatchgateways.batch.llm-d.ai` for Batch Gateway (included by default on OCP; opt-in on xKS with `ENABLE_BATCH_GATEWAY=true`)
 - `mcpservers` for MCP Lifecycle Operator
@@ -295,6 +296,7 @@ export NOTEBOOKS_NAMESPACE=<name-for-notebooks-namespace>
 export MONITORING_NAMESPACE=<name-for-monitoring-namespace>
 export APPLICATIONS_NAMESPACE=<name-for-applications-namespace>
 export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
+export DATA_REGISTRY_NS=<name-for-data-registry-namespace>
 export MAAS_NAMESPACE=<name-for-maas-namespace>
 export RHAI_HELM_CHART_NS=<name-for-rhai-helm-chart-namespace>
 
