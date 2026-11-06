@@ -6,6 +6,9 @@ source "${SCRIPT_DIR}/common.sh"
 # shellcheck source=gather_serving_resources.sh
 source "${SCRIPT_DIR}/gather_serving_resources.sh"
 
+# shellcheck disable=SC2154
+get_operator_resource "${cluster_scoped_resources[@]}"
+
 # resources is assigned by the sourced shared-resource file.
 # shellcheck disable=SC2154
 nslist=$(get_all_namespace "${resources[@]}")

@@ -75,6 +75,11 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
       "monitorings.services.platform.opendatahub.io"
       "gatewayconfigs.services.platform.opendatahub.io"
       "hardwareprofiles.infrastructure.opendatahub.io"
+      "mutatingwebhookconfigurations.admissionregistration.k8s.io"
+      "validationwebhookconfigurations.admissionregistration.k8s.io"
+      "validatingadmissionpolicy"
+      "validatingadmissionpolicybinding"
+      "gatewayclasses"
       "dashboards.components.platform.opendatahub.io"
       "datasciencepipelines.components.platform.opendatahub.io"
       "feastoperators.components.platform.opendatahub.io"
@@ -86,20 +91,14 @@ if [[ "${K8S_DISTRO}" == "ocp" ]]; then
       "trustyais.components.platform.opendatahub.io"
       "workbenches.components.platform.opendatahub.io"
       "mlflowoperators.components.platform.opendatahub.io"
-      "mutatingwebhookconfigurations.admissionregistration.k8s.io"
-      "validationwebhookconfigurations.admissionregistration.k8s.io"
-      "validatingadmissionpolicy"
-      "validatingadmissionpolicybinding"
-      "gatewayclasses"
       "trainers.components.platform.opendatahub.io"
       "sparkoperators.components.platform.opendatahub.io"
-      "aigateways.components.platform.opendatahub.io"
       "mcplifecycleoperators.components.platform.opendatahub.io"
       "ogxs.components.platform.opendatahub.io"
     )
     get_operator_resource "${resources[@]}"
 
-    # RHOAI defaults to all components; xKS uses the KServe + AI Gateway default below.
+    # RHOAI defaults to all components; COMPONENT selects a single component.
     component=${COMPONENT:-all}
 else
     if [ -n "${OPERATOR_NAMESPACE}" ]; then
@@ -117,7 +116,7 @@ else
         cks) resources+=("coreweavekubernetesengines.infrastructure.opendatahub.io") ;;
         eks) resources+=("awskubernetesengines.infrastructure.opendatahub.io") ;;
     esac
-    # xKS defaults to KServe and AI Gateway; "all" means all xKS-supported components.
+    # xKS defaults to KServe and AI Gateway; COMPONENT selects a single component.
     component=${COMPONENT:-xks-default}
     if [[ "${component}" == "all" ]]; then
         component="xks-default"
@@ -161,6 +160,7 @@ case "$component" in
         ;;
     "feastoperator")
         "${SCRIPT_DIR}/gather_feastoperator.sh"
+        "${SCRIPT_DIR}/gather_data_registry.sh"
         ;;
     "mlflow")
         "${SCRIPT_DIR}/gather_mlflow.sh"
@@ -192,6 +192,7 @@ case "$component" in
         "${SCRIPT_DIR}/gather_mr.sh" & job_pids[$!]="modelregistry"
         "${SCRIPT_DIR}/gather_trustyai.sh" & job_pids[$!]="trustyai"
         "${SCRIPT_DIR}/gather_feastoperator.sh" & job_pids[$!]="feastoperator"
+        "${SCRIPT_DIR}/gather_data_registry.sh" & job_pids[$!]="dataregistry"
         "${SCRIPT_DIR}/gather_mlflow.sh" & job_pids[$!]="mlflow"
         "${SCRIPT_DIR}/gather_sparkoperator.sh" & job_pids[$!]="spark"
         "${SCRIPT_DIR}/gather_aigateway.sh" & job_pids[$!]="aigateway"
