@@ -1,7 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC1091
 : "${SCRIPT_DIR:=$(dirname "$0")}"
-source "${SCRIPT_DIR}/common.sh"
 : "${KUBECTL:=kubectl}"
 set -o pipefail
 if ! command -v jq >/dev/null 2>&1; then
@@ -9,6 +8,14 @@ if ! command -v jq >/dev/null 2>&1; then
     exit 1
 fi
 redactor="${SCRIPT_DIR}/openshell/redact.jq"
+# Fail before creating artifacts or querying the cluster if either mode cannot
+# run. Optional APIs and unavailable previous logs remain nonfatal below.
+if ! printf '%s\n' '{}' | jq -e --argjson logs false -f "$redactor" >/dev/null 2>&1 ||
+    ! printf '%s\n' 'redaction startup check' | jq -Rer --argjson logs true -f "$redactor" >/dev/null 2>&1; then
+    echo "ERROR: OpenShell redactor validation failed" >&2
+    exit 1
+fi
+source "${SCRIPT_DIR}/common.sh"
 
 # Never write raw API responses or logs to disk, including command errors.
 collect_json() {

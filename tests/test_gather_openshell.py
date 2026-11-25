@@ -1,6 +1,7 @@
 """Run with python3 -m unittest discover -s tests."""
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -9,6 +10,7 @@ import unittest
 
 COLLECTOR = Path(__file__).resolve().parents[1] / 'collection-scripts/gather_openshell.sh'
 REDACTOR = COLLECTOR.parent / 'openshell/redact.jq'
+JQ = shutil.which('jq')
 MOCK = r'''
 import json, os, sys
 from pathlib import Path
@@ -21,7 +23,10 @@ if args[0] == 'api-resources':
     if 'kataconfiguration.openshift.io' in ' '.join(args) and os.environ['KATA_API'] == 'yes':
         print('kataconfigs.kataconfiguration.openshift.io')
 elif args[0] == 'logs':
+    if '--previous' in args:
+        sys.exit('previous container does not exist')
     print('gateway diagnostic https://alice:secret-userinfo@example.com/bot12345:bot-secret/send?token=query-secret&access_token=access-secret')
+    print('https://bucket.example/file?X-Amz-Signature=signing-secret')
     print('Authorization: Bearer bearer-secret')
     print('jwt eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.signature')
 elif args[0] == 'get':
@@ -42,7 +47,8 @@ elif args[0] == 'get':
             {'name': 'TOKEN', 'valueFrom': {'secretKeyRef': {'name': 'ref', 'key': 'token'}}}]}],
             'runtimeClassName': 'kata'}
         items = [{'kind': 'Pod', 'metadata': {'name': 'gateway', 'labels': {'app.kubernetes.io/name': 'openshell'},
-                  'annotations': {'kubectl.kubernetes.io/last-applied-configuration': 'last-applied-secret'}},
+                  'annotations': {'kubectl.kubernetes.io/last-applied-configuration': 'last-applied-secret',
+                                  'custom': 'opaque-annotation-secret'}},
                   'spec': template},
                  {'kind': 'Pod', 'metadata': {'name': 'workload', 'labels': {
                      'app.kubernetes.io/name': 'openshell', 'openshell.ai/boundary-role': 'workload'}}, 'spec': template},
@@ -51,7 +57,7 @@ elif args[0] == 'get':
                  {'kind': 'Pod', 'metadata': {'name': 'dashboard', 'labels': {
                      'app.kubernetes.io/name': 'dashboard'}}, 'spec': template}]
         if resource == 'configmaps':
-            items = [{'kind': 'ConfigMap', 'data': {'arbitrary.toml': 'opaque-config-secret'},
+            items = [{'kind': 'ConfigMap', 'data': {'arbitrary.toml': 'opaque-config-secret', 'metadata': 'opaque metadata'},
                       'binaryData': {'key': 'binary-secret'}}]
         elif resource == 'sandboxes.agents.x-k8s.io':
             items = [{'kind': 'Sandbox', 'spec': {'podTemplate': {'spec': template}},
@@ -70,6 +76,8 @@ class OpenShellGatherTest(unittest.TestCase):
         root = Path(temp.name)
         binaries = root / 'bin'
         binaries.mkdir()
+        self.assertIsNotNone(JQ, 'Install jq to run collector tests')
+        (binaries / 'jq').symlink_to(JQ)
         binary = binaries / client
         binary.write_text(f'#!{sys.executable}\n' + MOCK)
         binary.chmod(0o755)
@@ -97,9 +105,11 @@ class OpenShellGatherTest(unittest.TestCase):
                 output = '\n'.join(p.read_text() for p in bundle.rglob('*') if p.is_file())
                 for secret in ['literal-env-secret', 'last-applied-secret', 'opaque-config-secret',
                                'binary-secret', 'secret-userinfo', 'bot-secret', 'query-secret',
-                               'access-secret', 'bearer-secret', 'eyJhbGciOiJIUzI1NiJ9']:
+                               'access-secret', 'bearer-secret', 'eyJhbGciOiJIUzI1NiJ9',
+                               'signing-secret', 'opaque-annotation-secret']:
                     self.assertNotIn(secret, output)
                 self.assertIn('gateway diagnostic', output)
+                self.assertTrue((bundle / 'namespaces/team-a/openshell/configmaps.json').is_file())
                 sandbox = json.loads((bundle / 'namespaces/team-a/openshell/sandboxes.agents.x-k8s.io.json').read_text())
                 spec = sandbox['items'][0]['spec']['podTemplate']['spec']
                 self.assertEqual(spec['runtimeClassName'], 'kata')
@@ -152,6 +162,57 @@ class OpenShellGatherTest(unittest.TestCase):
         spec = json.loads(result.stdout)['spec']['template']['spec']
         for containers in spec.values():
             self.assertEqual(containers[0]['env'], [{'name': 'TOKEN'}])
+
+    def test_invalid_redactors_fail_before_collection(self):
+        for content in [None, 'invalid jq syntax!',
+                        'if $logs then error("logs broken") else . end',
+                        'if $logs then . else error("resources broken") end']:
+            with self.subTest(content=content), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                (root / 'openshell').mkdir()
+                if content is not None:
+                    (root / 'openshell/redact.jq').write_text(content)
+                shutil.copy(COLLECTOR.parent / 'common.sh', root / 'common.sh')
+                result = subprocess.run(['/bin/bash', str(COLLECTOR)], cwd=root,
+                                        env=dict(os.environ, SCRIPT_DIR=str(root), KUBECTL='/does-not-exist'),
+                                        text=True, capture_output=True, timeout=10)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('redactor validation failed', result.stderr)
+                self.assertNotIn('/does-not-exist', result.stderr)
+                self.assertFalse((root / 'must-gather').exists())
+
+    def test_signed_urls_lose_all_query_parameters_and_fragments(self):
+        lines = ['https://bucket.example/file?X-Amz-Signature=signing-secret&X-Amz-Credential=credential-secret',
+                 'https://host/path?sig=azure-secret&unknown=opaque-secret#fragment-secret',
+                 'https://host/other#fragment-only-secret']
+        result = subprocess.run([JQ, '-Rr', '--argjson', 'logs', 'true', '-f', str(REDACTOR)],
+                                input='\n'.join(lines), text=True, capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.splitlines(), ['https://bucket.example/file[REDACTED]',
+                                                      'https://host/path[REDACTED]',
+                                                      'https://host/other[REDACTED]'])
+
+    def test_configmap_payloads_and_nested_annotations_are_omitted(self):
+        document = {'kind': 'List', 'items': [
+            {'kind': 'ConfigMap', 'metadata': {'name': 'first'},
+             'data': {'metadata': 'opaque text', 'env': 'opaque env'},
+             'binaryData': {'credentials': 'opaque encoded text'}},
+            {'kind': 'ConfigMap', 'metadata': {'name': 'second'}, 'data': {'safe': 'text'}},
+            {'kind': 'Deployment', 'metadata': {'name': 'gateway', 'annotations': {'custom': 'opaque-secret'}},
+             'spec': {'template': {'metadata': {'annotations': {'custom': 'nested-secret'}}}}},
+            {'metadata': 'opaque metadata', 'other': 'diagnostic text'}]}
+        result = subprocess.run([JQ, '--argjson', 'logs', 'false', '-f', str(REDACTOR)],
+                                input=json.dumps(document), text=True, capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        items = json.loads(result.stdout)['items']
+        self.assertEqual(len(items), 4)
+        for item in items[:2]:
+            self.assertNotIn('data', item)
+            self.assertNotIn('binaryData', item)
+        self.assertEqual(items[2]['metadata'], {'name': 'gateway'})
+        self.assertEqual(items[2]['spec']['template']['metadata'], {})
+        self.assertEqual(items[3]['metadata'], 'opaque metadata')
+        self.assertEqual(items[3]['other'], 'diagnostic text')
 
 
 if __name__ == '__main__':
