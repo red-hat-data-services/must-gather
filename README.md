@@ -36,6 +36,13 @@ This script also collects data from all the namespaces that has
 - `llmbatchgateways.batch.llm-d.ai` for Batch Gateway (included by default on OCP; opt-in on xKS with `ENABLE_BATCH_GATEWAY=true`)
 - `mcpservers` for MCP Lifecycle Operator
 - `ogxservers` for OGX Operator
+- OpenShell gateway, supervisor, and sandbox namespaces discovered using `app.kubernetes.io/name` (`openshell` or `openshell-supervisor`) and `openshell.ai/managed-by=openshell` labels. It also discovers workload pods using `openshell.ai/boundary-role=workload` and Agent Sandbox controller/router namespaces using their `app` labels. Set `OPENSHELL_NAMESPACE` to include an additional namespace with custom labels.
+
+OpenShell collection uses the selected `KUBECTL` client (`oc` or `kubectl`) to query explicit resource types. Sanitized JSON under `must-gather/namespaces/<namespace>/openshell/` includes pod and workload specifications, services, PVCs, network policies, events, ConfigMap metadata, and optional `sandboxes.agents.x-k8s.io` resources. It does not query Secrets or use namespace inspection. Literal environment values, all metadata annotations, managed fields, and all ConfigMap data values are omitted before writing files.
+
+Only the `openshell-gateway` container in pods labeled `app.kubernetes.io/name=openshell` is eligible for current and previous log collection, respecting the requested log time range. Pods carrying sandbox/workload markers are excluded. Supervisor, sandbox workload, dashboard, OAuth proxy, and Agent Sandbox controller logs are not collected. Gateway logs and resource strings redact URL userinfo, bot-token URL paths, Authorization/Bearer values, all HTTP(S) URL query strings and fragments (including signed URL credentials), token/access_token values, and JWT-looking strings. These filters cover known formats; review the bundle before sharing because arbitrary application text may contain other sensitive data.
+
+`must-gather/openshell/runtime/` contains RuntimeClass definitions and KataConfig installation status when that API is available. Pod specifications identify the selected runtime and node; Sandbox status and events help diagnose missing runtimes or startup failures. Selecting `kata` does not prove a pod ran under Kata. Collection is limited to Kubernetes resources and gateway logs; it does not include Docker, Podman, standalone VM, Kata guest, hypervisor, or node-side runtime logs. This collector requires `jq` and validates both redactor modes before querying the cluster or creating artifacts. A missing or broken redactor fails collection; unavailable optional APIs, failed resource queries, and missing previous logs remain nonfatal. Raw responses and command errors are not saved.
 
 ## Usage on OpenShift
 
@@ -67,6 +74,7 @@ Full list of supported components see table below:
 | aigateway       | AI Gateway; optional Batch Gateway, MaaS, Grid  |
 | mcplo           | MCP Lifecycle Operator                          |
 | ogx             | OGX Operator                                    |
+| openshell       | OpenShell                                       |
 
 for example to 'kserve':
 
@@ -298,6 +306,7 @@ export APPLICATIONS_NAMESPACE=<name-for-applications-namespace>
 export MODEL_REGISTRIES_NAMESPACE=<name-for-model-registries-namespace>
 export DATA_REGISTRY_NS=<name-for-data-registry-namespace>
 export MAAS_NAMESPACE=<name-for-maas-namespace>
+export OPENSHELL_NAMESPACE=<name-for-openshell-namespace>
 export RHAI_HELM_CHART_NS=<name-for-rhai-helm-chart-namespace>
 
 ```

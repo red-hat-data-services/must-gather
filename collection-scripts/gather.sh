@@ -174,6 +174,9 @@ case "$component" in
     "mcplo")
         "${SCRIPT_DIR}/gather_mcp_lifecycle_operator.sh"
         ;;
+    "openshell")
+        "${SCRIPT_DIR}/gather_openshell.sh"
+        ;;
     "ogx")
         "${SCRIPT_DIR}/gather_ogx.sh"
         ;;
@@ -198,6 +201,8 @@ case "$component" in
         "${SCRIPT_DIR}/gather_aigateway.sh" & job_pids[$!]="aigateway"
         "${SCRIPT_DIR}/gather_mcp_lifecycle_operator.sh" & job_pids[$!]="mcplo"
         "${SCRIPT_DIR}/gather_ogx.sh" & job_pids[$!]="ogx"
+
+        "${SCRIPT_DIR}/gather_openshell.sh" & job_pids[$!]="openshell"
 
         echo "Waiting for ${#job_pids[@]} jobs to complete..."
         for pid in "${!job_pids[@]}"; do
